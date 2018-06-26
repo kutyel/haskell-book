@@ -46,3 +46,11 @@ mult4 = z / x + y
   where x = 7
         y = negate x
         z = y * 10
+
+-- More fun with functions.
+waxOn = x * 5
+  where z = 7
+        y = z + 8
+        x = y ^ 2
+
+waxOff x = triple x ^ 2 / 10
