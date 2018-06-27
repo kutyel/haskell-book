@@ -1,7 +1,7 @@
-module Print3 where
+module Print3Flipped where
 
 myGreeting :: String
-myGreeting = "hello" ++ " world!"
+myGreeting = (++) "hello" " world!"
 
 hello :: String
 hello = "hello"
@@ -14,4 +14,4 @@ main = do
   putStrLn myGreeting
   putStrLn secondGreeting
   where secondGreeting =
-          concat [hello, " ", world]
+          (++) hello ((++) " " world)
