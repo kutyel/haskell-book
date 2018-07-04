@@ -9,5 +9,6 @@ topLevelFunction x =
 topLevelValue :: Integer
 topLevelValue = 5
 
+area :: Floating a => a -> a
 area d = pi * (r * r)
   where r = d / 2
