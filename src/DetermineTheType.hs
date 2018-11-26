@@ -82,3 +82,41 @@ functionC x y =
 -- 3
 functionS :: (a, b) -> b
 functionS (x, y) = y
+
+-- Given a type, write the function
+
+-- 0
+myFunc :: (x -> y) -> (y -> z) -> c -> (a, x) -> (a, z)
+myFunc xToY yToZ _ (a, x) = (a, yToZ $ xToY $ x)
+
+-- 1
+i :: a -> a
+i x = x
+
+-- 2
+c2 :: a -> b -> a
+c2 a b = a
+
+-- 3
+c'' :: b -> a -> b
+c'' b a = b
+
+-- 4
+c' :: a -> b -> b
+c' a b = b
+
+-- 5
+r :: [a] -> [a]
+r x = x ++ x
+
+-- 6
+co :: (b -> c) -> (a -> b) -> a -> c
+co bToC aToB a = (bToC (aToB a))
+
+-- 7
+a3 :: (a -> c) -> a -> a
+a3 _ x = x
+
+-- 8
+a' :: (a -> b) -> a -> b
+a' aToB a = aToB a
