@@ -62,3 +62,54 @@ nums x =
     LT -> -1
     GT -> 1
     EQ -> 0
+
+-- Artful Dodgy
+
+dodgy x y = x + y * 10
+oneIsOne = dodgy 1
+oneIsTwo = (flip dodgy) 2
+
+-- 1) 1 ✅
+-- 2) 11 ✅
+-- 3) 22 ✅
+-- 4) 21 ✅
+-- 5) 12 ✅
+-- 6) 11 ✅
+-- 7) 12 ❌ 21!
+-- 8) 21 ✅
+-- 9) 22 ✅
+-- 10) 13 ❌ 31!
+-- 11) 23 ✅
+
+-- Guard Duty
+
+avgGrade :: (Fractional a, Ord a) => a -> Char
+avgGrade x
+  | y >= 0.9 = 'A'
+  | y >= 0.8 = 'B'
+  | y >= 0.7 = 'C'
+  | y >= 0.6 = 'D'
+  | y >= 0.59 = 'E'
+  | y <  0.59 = 'F'
+  where y = x / 100
+
+-- 1) always returns 'F' (| otherwise = 'F')
+-- 2) does not work correctly (order matters!)
+-- 3)
+pal :: Eq a => [a] -> Bool
+pal xs
+  | xs == reverse xs = True
+  | otherwise        = False
+-- b) True when xs is a palindrome!
+
+-- 4) Lists!
+-- 5) Eq a => [a] -> Bool
+-- 6)
+numbers :: (Ord a, Num a, Num b) => a -> b
+numbers x
+  | x < 0  = -1
+  | x == 0 = 0
+  | x > 0  = 1
+-- d) binary machine language!
+-- 7) Any type that implements `Ord` and `Num`!
+-- 8) numbers :: (Ord a, Num a, Num b) => a -> b
