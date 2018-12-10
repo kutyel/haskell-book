@@ -113,3 +113,56 @@ numbers x
 -- d) binary machine language!
 -- 7) Any type that implements `Ord` and `Num`!
 -- 8) numbers :: (Ord a, Num a, Num b) => a -> b
+
+-- Chapter Exercises
+
+-- 1) A polymorphic funcion...
+-- d) ...may resolve to values of different types, depending on inputs!
+
+-- 2) f :: Char -> String . g :: String -> [String]?
+-- b) g . f :: Char -> [String]
+
+-- 3) f :: Ord a => a -> a -> a -> Bool
+-- d) (Ord a, Num a) => a -> Bool
+
+-- 4) (a -> b) -> c
+-- b) is a higher order function!
+
+-- 5) what is the type of f True?
+ft :: a -> a
+ft x = x
+-- a) f True :: Bool
+
+-- Let's write code
+
+-- 1)
+tensDigit :: Integral a => a -> a
+tensDigit x = d
+  where xLast = fst $ div x
+        d     = snd $ div xLast
+        div   = (flip divMod) 10
+-- a) refactor using `divMod`!
+-- b) obviously, it has the same type!
+-- d) get the hundreds instead...
+hunsD x = d2
+  where d  = fst $ x `divMod` 100
+        d2 = snd $ d `divMod` 10
+
+-- 2)
+-- with case expressions
+foldBool :: a -> a -> Bool -> a
+foldBool x y z =
+  case z of
+    True -> y
+    False -> x
+-- with guards!
+foldBool' :: a -> a -> Bool -> a
+foldBool' x y z
+  | z == True = y
+  | z == False = x
+
+-- 3)
+g :: (a -> b) -> (a, c) -> (b, c)
+g f (x, y) = (f x, y)
+
+-- 4, 5, 6) see -> Arith4.hs!

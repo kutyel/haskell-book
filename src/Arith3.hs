@@ -1,4 +1,4 @@
-module Arith3Broken where
+module Arith3 where
 
 main :: IO ()
 main = do
