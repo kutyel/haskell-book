@@ -98,6 +98,19 @@ mult x y = go x x y
           | count == 1 = acc
           | otherwise = go (acc + m) m (count - 1)
 
--- TODO: Fixing dividedBy
+-- Fixing dividedBy
 
--- TODO: McCarthy 91 function
+dividedBy' :: Integral a => a -> a -> Maybe a
+dividedBy' _ 0 = Nothing
+dividedBy' num denom = Just result
+  where value
+          | num < 0 || denom < 0 = negate result
+          | otherwise            = result
+        result = div num denom
+
+-- McCarthy 91 function
+
+mc91 :: Integral a => a -> a
+mc91 n
+  | n > 100 = n - 10
+  | otherwise = mc91(mc91(n + 11))
