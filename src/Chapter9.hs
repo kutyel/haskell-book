@@ -1,5 +1,7 @@
 module Chapter9 where
 
+import Data.Bool (bool)
+
 safeHead :: [a] -> Maybe a
 safeHead [] = Nothing
 safeHead (x:_) = Just x
@@ -70,3 +72,34 @@ ex1 = length [ (x, y) | x <- mySqur,
 -- 5) sum (enumFromTo 1 10) -> WHNF
 -- 6) ['a'..'m'] ++ ['n'..'z'] -> neither
 -- 7) (_, 'b') -> WHNF
+
+-- More Bottoms
+
+-- 1) take 1 $ map (+1) [undefined, 2, 3] -> bottom! ✅
+-- 2) take 1 $ map (+1) [1, undefined, 3] -> value ✅
+-- 3) take 2 $ map (+1) [1, undefined, 3] -> bottom! ✅
+-- 4) will return an array of true for every vowel and false otherwise ✅
+itIsMistery :: String -> [Bool]
+itIsMistery xs =
+  map (\x -> elem x "aeiou") xs
+-- 5)
+-- a) map (^2) [1..10] -> [1, 4, 9, 16, 25, 36, 49, 64, 81, 100] ✅
+-- b) map minimum [[1..10], [10..20], [20..30]] -> [1, 10, 20] ✅
+-- c) map sum [[1..5], [1..5], [1..5]] -> [15, 15, 15] ✅
+-- 6)
+negateThree :: [Integer] -> [Integer]
+negateThree = map (\x -> bool x (-x) (x == 3))
+
+-- Filtering
+
+-- 1)
+allMultsOfThree :: [Integer] -> [Integer]
+allMultsOfThree = filter ((==0) . (flip rem 3))
+
+-- 2)
+howManyMults :: Int
+howManyMults = (length . allMultsOfThree) [1..30]
+
+-- 3)
+myFilter :: String -> [String]
+myFilter = filter (not . (flip elem ["the", "a", "an"])) . words
