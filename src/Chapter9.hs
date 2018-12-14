@@ -38,3 +38,12 @@ q3 :: [(Integer, Integer)]
 q3 = take 5 [(x, y) | x <- mySqr,
                       y <- mySqr,
                       x < 50, y > 50] -- [(1,64), (1,81), (1,100), (4,64), (4,81)] ❌
+
+-- Square Cube
+
+mySqur = [x^2 | x <- [1..5]]
+myCube = [x^3 | x <- [1..5]]
+
+ex1 = length [ (x, y) | x <- mySqur,
+                        y <- myCube,
+                        x < 50, y < 50] -- > 15
