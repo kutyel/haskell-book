@@ -103,3 +103,17 @@ howManyMults = (length . allMultsOfThree) [1..30]
 -- 3)
 myFilter :: String -> [String]
 myFilter = filter (not . (flip elem ["the", "a", "an"])) . words
+
+-- Zipping exercises
+
+-- 1)
+zip' :: [a] -> [b] -> [(a, b)]
+zip' = zipWith' (,)
+
+-- 2)
+zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
+zipWith' _ _ []  = []
+zipWith' _ [] _  = []
+zipWith' f (x:xs) (y:ys) = f x y : zipWith' f xs ys
+
+-- 3) done!
