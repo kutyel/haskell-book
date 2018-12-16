@@ -1,5 +1,6 @@
 module Chapter9 where
 
+import Data.Char
 import Data.Bool (bool)
 
 safeHead :: [a] -> Maybe a
@@ -117,3 +118,21 @@ zipWith' _ [] _  = []
 zipWith' f (x:xs) (y:ys) = f x y : zipWith' f xs ys
 
 -- 3) done!
+
+-- Data.Char
+
+-- 1) Char -> Bool && Char -> Char
+-- 2) filterCaps "HbEfLrLxO" > "HELLO"
+filterCaps :: String -> String
+filterCaps = filter isUpper
+-- 3)
+capitalize :: String -> String
+capitalize (h:t) = toUpper h : t
+-- 4)
+caps :: String -> String
+caps [] = []
+caps (h:t) = toUpper h : caps t
+-- 5)
+capHead :: String -> Char
+capHead = toUpper . head
+-- 6) done!!
