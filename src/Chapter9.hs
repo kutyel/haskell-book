@@ -136,3 +136,59 @@ caps (h:t) = toUpper h : caps t
 capHead :: String -> Char
 capHead = toUpper . head
 -- 6) done!!
+
+-- Writing my own standard functions
+
+-- 1)
+myOr :: [Bool] -> Bool
+myOr [] = False
+myOr (x:xs) = x || myOr xs
+
+-- 2)
+myAny :: (a -> Bool) -> [a] -> Bool
+myAny _ [] = False
+myAny f (x:xs) = f x || myAny f xs
+
+-- 3)
+myElem :: Eq a => a -> [a] -> Bool
+myElem _ [] = False
+myElem x' (x:xs) = x == x' || myElem x' xs
+
+myElem' :: Eq a => a -> [a] -> Bool
+myElem' x xs = any (==x) xs
+
+-- 4)
+myReverse :: [a] -> [a]
+myReverse [] = []
+myReverse (x:xs) = myReverse xs ++ [x]
+
+-- 5)
+squish :: [[a]] -> [a]
+squish [] = []
+squish (xs:ys) = xs ++ squish ys
+
+-- 6)
+squishMap :: (a -> [b]) -> [a] -> [b]
+squishMap _ [] = []
+squishMap f xs = squish (map f xs)
+
+-- 7)
+squishAgain :: [[a]] -> [a]
+squishAgain = squishMap id
+
+-- 8)
+myMaximumBy :: (a -> a -> Ordering) -> [a] -> a
+myMaximumBy f (x:y:[]) = if f x y == GT then x else y
+myMaximumBy f (x:y:xs) = myMaximumBy f (if f x y == GT then (x:xs) else (y:xs))
+
+-- 9)
+myMinimumBy :: (a -> a -> Ordering) -> [a] -> a
+myMinimumBy f (x:y:[]) = if f x y == LT then x else y
+myMinimumBy f (x:y:xs) = myMinimumBy f (if f x y == LT then (x:xs) else (y:xs))
+
+-- 10)
+myMaximum :: (Ord a) => [a] -> a
+myMaximum = myMaximumBy compare
+
+myMinimum :: (Ord a) => [a] -> a
+myMinimum = myMinimumBy compare
