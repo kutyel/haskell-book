@@ -4,7 +4,7 @@ import Data.Char
 
 encrypt :: Int -> Char -> Char
 encrypt n c = (chr . (+a) . (flip mod 26) . (+n) . (subtract a) . ord) c
-  where a = if isUpper c then ord 'A' else ord 'a'
+  where a = ord (if isUpper c then 'A' else 'a')
 
 toCaesar :: String -> String
 toCaesar = map $ encrypt 3
