@@ -155,7 +155,7 @@ myElem _ [] = False
 myElem x' (x:xs) = x == x' || myElem x' xs
 
 myElem' :: Eq a => a -> [a] -> Bool
-myElem' x xs = any (==x) xs
+myElem' x = any (==x)
 
 -- 4)
 myReverse :: [a] -> [a]
@@ -178,13 +178,15 @@ squishAgain = squishMap id
 
 -- 8)
 myMaximumBy :: (a -> a -> Ordering) -> [a] -> a
-myMaximumBy f (x:y:[]) = if f x y == GT then x else y
-myMaximumBy f (x:y:xs) = myMaximumBy f (if f x y == GT then (x:xs) else (y:xs))
+myMaximumBy _ (x:[]) = x
+myMaximumBy f (x:y:[]) = bool y x (f x y == GT)
+myMaximumBy f (x:y:xs) = myMaximumBy f (bool y x (f x y == GT):xs)
 
 -- 9)
 myMinimumBy :: (a -> a -> Ordering) -> [a] -> a
-myMinimumBy f (x:y:[]) = if f x y == LT then x else y
-myMinimumBy f (x:y:xs) = myMinimumBy f (if f x y == LT then (x:xs) else (y:xs))
+myMinimumBy _ (x:[]) = x
+myMinimumBy f (x:y:[]) = bool y x (f x y == LT)
+myMinimumBy f (x:y:xs) = myMinimumBy f (bool y x (f x y == LT):xs)
 
 -- 10)
 myMaximum :: (Ord a) => [a] -> a
