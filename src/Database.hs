@@ -22,15 +22,15 @@ theDatabase =
 
 -- 1)
 filterDbDate :: [DatabaseItem] -> [UTCTime]
-filterDbDate = foldr (\x xs -> case x of
-  DbDate x -> x : xs
-  _        -> xs) []
+filterDbDate = foldr f []
+  where f (DbDate x) xs = x : xs
+        f _ xs = xs
 
 -- 2)
 filterDbNumber :: [DatabaseItem] -> [Integer]
-filterDbNumber = foldr (\x xs -> case x of
-  DbNumber x -> x : xs
-  _          -> xs) []
+filterDbNumber = foldr f []
+  where f (DbNumber x) xs = x : xs
+        f _ xs = xs
 
 -- 3)
 mostRecent :: [DatabaseItem] -> UTCTime
