@@ -87,7 +87,7 @@ ex xs ys = [(x, y, z) | x <- xs, y <- ys, z <- xs]
 
 -- 1)
 a1 = ex stops vowels
-b1 = [('p', x, y) | x <- vowels, y <- stops]
+b1 = [(x, y, z) | x <- stops, y <- vowels, z <- stops, x == 'p']
 c1 = ex nouns verbs
 
 -- 2)
