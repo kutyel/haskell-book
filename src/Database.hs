@@ -2,6 +2,7 @@ module Database where
 
 import Data.Bool
 import Data.Time
+import Control.Applicative
 
 data DatabaseItem = DbString String
                   | DbNumber Integer
@@ -43,4 +44,4 @@ sumDb = (foldr (+) 0) . filterDbNumber
 
 -- 5)
 avgDb :: [DatabaseItem] -> Double
-avgDb xs = (fromIntegral (sumDb xs)) / (fromIntegral (length (filterDbNumber xs)))
+avgDb = liftA2 (/) (fromIntegral . sumDb) (fromIntegral . length . filterDbNumber)
