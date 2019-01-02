@@ -3,6 +3,8 @@
 
 module Chapter11 where
 
+import Data.Int
+
 data DogueDeBordeaux dogue = DogueDeBordeaux dogue
 
 data Doggies a =
@@ -118,3 +120,22 @@ instance TooMany (Int, Int) where
 -- 3)
 instance (Num a, TooMany a) => TooMany (a, a) where
   tooMany (x, y) = tooMany x || tooMany y
+
+-- Pity the Bool
+
+data BigSmall =
+    Big Bool
+  | Small Bool
+  deriving (Eq, Show)
+
+-- 1) cardinality -> 2 + 2 = 4
+
+data NumberOrBool =
+  Numba Int8
+  | BoolyBool Bool
+  deriving (Eq, Show)
+
+-- 2) cardinality -> 256 + 2 = 258
+-- Literal 128 is out of the Int8 range -128..127
+-- Literal -129 is out of the Int8 range -128..127
+myNumba = Numba (-128) -- no warning here!
