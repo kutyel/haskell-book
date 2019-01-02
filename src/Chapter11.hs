@@ -1,3 +1,6 @@
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+
 module Chapter11 where
 
 data DogueDeBordeaux dogue = DogueDeBordeaux dogue
@@ -61,7 +64,7 @@ areCars = map isCar
 -- 3)
 getManu :: Vehicle -> Maybe Manufacturer
 getManu (Car a _) = Just a
-getManu _ = Nothing
+getManu _         = Nothing
 
 -- 4) bottom! (fixed with Maybe)
 
@@ -76,7 +79,42 @@ data PugType = PugData
 
 -- 3) Int8 -> 256, Int16 -> 65.536
 
--- 4) Int must be some type alias for a huge Int number and
--- Integer is a typeclass, so no lower or upper boundaries!!
+-- 4) Int is a type alias for Int32 or Int64 whereas
+-- Integer is limited only by your machine's memory!
 
 -- 5) 256 is 2^8 so Int8 is an 8 bit-signed integer!
+
+-- For Example
+
+data Example = MakeExample deriving Show
+
+-- 1) MakeExample :: Example. :t Example -> constructor not in scope!
+
+-- 2) It works, has an instance of the Show typeclass.
+
+data Example2 = MakeExample2 Int deriving Show
+
+-- 3) :t MakeExample2 :: Int -> Example 2. It changed the kind!
+
+-- Logic Goats
+
+class TooMany a where
+  tooMany :: a -> Bool
+
+instance TooMany Int where
+  tooMany n = n > 42
+
+newtype Goats =
+  Goats Int deriving (Eq, Show, TooMany)
+
+-- 1)
+instance TooMany (Int, String) where
+  tooMany (n, _) = n > 42
+
+-- 2)
+instance TooMany (Int, Int) where
+  tooMany (x, y) = x + y > 42
+
+-- 3)
+instance (Num a, TooMany a) => TooMany (a, a) where
+  tooMany (x, y) = tooMany x || tooMany y
