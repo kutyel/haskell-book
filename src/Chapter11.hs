@@ -139,3 +139,13 @@ data NumberOrBool =
 -- Literal 128 is out of the Int8 range -128..127
 -- Literal -129 is out of the Int8 range -128..127
 myNumba = Numba (-128) -- no warning here!
+
+-- How Does Your Garden Grow?
+
+type Gardener = String
+
+data Garden = Gardenia Gardener
+            | Daisy Gardener
+            | Rose Gardener
+            | Lilac Gardener
+            deriving Show
