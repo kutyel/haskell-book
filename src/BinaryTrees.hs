@@ -1,7 +1,7 @@
 module BinaryTrees where
 
 data BinaryTree a =
-  Leaf
+    Leaf
   | Node (BinaryTree a) a (BinaryTree a)
   deriving (Eq, Ord, Show)
 
@@ -16,6 +16,13 @@ inorder (Node left x right) = inorder left ++ x : inorder right
 postorder :: BinaryTree a -> [a]
 postorder Leaf = []
 postorder (Node left x right) = postorder left ++ postorder right ++ [x]
+
+foldTree :: (a -> b -> b)
+          -> b
+          -> BinaryTree a
+          -> b
+foldTree _ x Leaf = x
+foldTree f z (Node left x right) = f x (foldTree f (foldTree f z left) right)
 
 testTree :: BinaryTree Integer
 testTree =
@@ -45,8 +52,15 @@ testPostorder =
   then putStrLn "Postorder fine!"
   else putStrLn "Bad news bears."
 
+testFold :: IO ()
+testFold =
+  if foldTree (+) 0 bigTree == 15
+  then putStrLn "FoldTree fine! 🎉"
+  else putStrLn "Bad news bears."
+
 main :: IO ()
 main = do
   testPreorder
   testInorder
   testPostorder
+  testFold
