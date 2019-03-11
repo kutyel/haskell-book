@@ -304,3 +304,27 @@ mapOkay =
   if mapTree (+1) testTree' == mapExpected
   then print "yup okay!"
   else error "test failed!"
+
+-- Chapter exercises
+
+data Weekday =
+    Monday
+  | Tuesday
+  | Wednesday
+  | Thursday
+  | Friday
+
+-- 1) we can say...
+-- a) `Weekday` is a type with five data constructors
+
+-- 2) what is the type of f? c)
+f :: Weekday -> String
+f Friday = "Miller Time"
+
+-- 3) types defined with the `data` keyword...
+-- b) must begin with a capital letter
+
+-- 4) the function g xs = xs !! (length xs - 1)
+g :: [a] -> a
+g xs = xs !! (length xs - 1)
+-- c) delivers the final element of xs
