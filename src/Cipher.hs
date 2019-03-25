@@ -1,8 +1,7 @@
 module Cipher where
 
 import Data.Bool (bool)
-import Data.Char
-import Data.List.Index (indexed)
+import Data.Char (chr, ord, isUpper)
 
 cipher :: Int -> Char -> Char
 cipher n c = chr $ mod (ord c - a + n) 26 + a
@@ -14,9 +13,11 @@ toCaesar = map $ cipher 3
 unCaesar :: String -> String
 unCaesar = map $ cipher (-3)
 
-getShift :: Char -> Int
-getShift x = ord x - a
-  where a = ord $ bool 'a' 'A' (isUpper x)
+shift :: Char -> Int
+shift x = ord x - (ord $ bool 'a' 'A' (isUpper x))
 
 toVigenere :: String -> String -> String
-toVigenere key = map (\(i, x) -> cipher (getShift (key !! i)) x) . indexed
+toVigenere secret = zipWith (cipher . shift) (cycle secret) . concat . words
+
+fromVigenere :: String -> String -> String
+fromVigenere secret = zipWith (cipher . negate . shift) (cycle secret) . concat . words
