@@ -4,6 +4,7 @@
 module Chapter11 where
 
 import Data.Int
+import Data.Char (toUpper)
 
 data DogueDeBordeaux dogue = DogueDeBordeaux dogue
 
@@ -328,3 +329,15 @@ f Friday = "Miller Time"
 g :: [a] -> a
 g xs = xs !! (length xs - 1)
 -- c) delivers the final element of xs
+
+-- As-patterns
+
+-- 1
+isSubseqOf :: Eq a => [a] -> [a] -> Bool
+isSubseqOf [] _ = True
+isSubseqOf s@(x:xs) t@(_:ys) = elem x t && isSubseqOf xs ys
+
+-- 2
+capitalizeWords :: String -> [(String, String)]
+capitalizeWords = map toTuple . words
+  where toTuple s@(x:xs) = (s, toUpper x : xs)
