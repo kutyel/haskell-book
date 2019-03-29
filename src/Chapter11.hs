@@ -5,6 +5,8 @@ module Chapter11 where
 
 import Data.Int
 import Data.Char (toUpper)
+import Data.List (intersperse)
+import Data.List.Split (splitOn)
 
 data DogueDeBordeaux dogue = DogueDeBordeaux dogue
 
@@ -335,9 +337,19 @@ g xs = xs !! (length xs - 1)
 -- 1
 isSubseqOf :: Eq a => [a] -> [a] -> Bool
 isSubseqOf [] _ = True
-isSubseqOf s@(x:xs) t@(_:ys) = elem x t && isSubseqOf xs ys
+isSubseqOf (x:xs) y@(_:ys) = elem x y && isSubseqOf xs ys
 
 -- 2
 capitalizeWords :: String -> [(String, String)]
 capitalizeWords = map toTuple . words
   where toTuple s@(x:xs) = (s, toUpper x : xs)
+
+-- Language exercises
+
+-- 1
+capitalizeWord :: String -> String
+capitalizeWord (x:xs) = toUpper x : xs
+
+-- 2
+capitalizeParagraph :: String -> String
+capitalizeParagraph = concat . (intersperse ". ") . map capitalizeWord . (splitOn ". ")
