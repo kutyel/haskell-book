@@ -1,10 +1,13 @@
 module Phone where
 
+import Data.Char (isUpper, toUpper)
+import Data.List (elemIndex)
+import Data.Maybe (fromJust)
+
 type Digit = Char
 type Presses = Int
 type Values = String
 
-data Taps = Taps [(Digit, Presses)]
 data DaPhone = DaPhone [(Digit, Values)]
 
 phone :: DaPhone
@@ -19,7 +22,7 @@ phone = DaPhone [
   , ('8', "TUV")
   , ('9', "WXYZ")
   , ('*', "^")
-  , ('0', "*_")
+  , ('0', " +_")
   , ('#', ".,")
   ]
 
@@ -36,14 +39,20 @@ convo =
   "Just making sure rofl ur turn"
   ]
 
-reverseTaps :: DaPhone -> Char -> Taps
-reverseTaps = undefined
+-- TODO: control numbers as well!
 
-cellPhonesDead :: DaPhone -> String -> Taps
-cellPhonesDead = undefined
+reverseTaps :: DaPhone -> Char -> [(Digit, Presses)]
+reverseTaps (DaPhone xs) x = alt x ++ foldr find [] xs
+  where
+    alt c           = if isUpper c then [('*', 1)] else []
+    indexOf x xs    = (+1) $ fromJust $ elemIndex (toUpper x) xs
+    find (s, str) b = if elem (toUpper x) str then (s, indexOf x str) : b else b
 
-fingerTaps :: Taps -> Presses
-fingerTaps = undefined
+cellPhonesDead :: DaPhone -> String -> [(Digit, Presses)]
+cellPhonesDead p = concatMap (reverseTaps p)
+
+fingerTaps :: [(Digit, Presses)] -> Presses
+fingerTaps = foldr ((+) . snd) 0
 
 mostPopularLetter :: String -> Char
 mostPopularLetter = undefined
