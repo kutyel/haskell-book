@@ -1,8 +1,9 @@
 module Phone where
 
 import Data.Char (isUpper, toUpper)
-import Data.List (elemIndex)
+import Data.List (elemIndex, maximumBy, sort, group)
 import Data.Maybe (fromJust)
+import Data.Ord (comparing)
 
 type Digit = Char
 type Presses = Int
@@ -53,10 +54,13 @@ fingerTaps :: [(Digit, Presses)] -> Presses
 fingerTaps = foldr ((+) . snd) 0
 
 mostPopularLetter :: String -> Char
-mostPopularLetter = undefined
+mostPopularLetter = maximumBy $ comparing $ fingerTaps . (reverseTaps phone)
+
+coolest :: Ord a => [a] -> a
+coolest = head . maximumBy (comparing length) . group . sort
 
 coolestLtr :: [String] -> Char
-coolestLtr = undefined
+coolestLtr = coolest . concat
 
 coolestWord :: [String] -> String
-coolestWord = undefined
+coolestWord =  coolest . (concatMap words)
