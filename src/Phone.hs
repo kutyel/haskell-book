@@ -39,14 +39,12 @@ convo =
   "Just making sure rofl ur turn"
   ]
 
--- TODO: control numbers as well!
+indexOf :: Char -> String -> Int
+indexOf x xs = (+1) $ fromJust $ elemIndex (toUpper x) xs
 
 reverseTaps :: DaPhone -> Char -> [(Digit, Presses)]
-reverseTaps (DaPhone xs) x = alt x ++ foldr find [] xs
-  where
-    alt c           = if isUpper c then [('*', 1)] else []
-    indexOf x xs    = (+1) $ fromJust $ elemIndex (toUpper x) xs
-    find (s, str) b = if elem (toUpper x) str then (s, indexOf x str) : b else b
+reverseTaps (DaPhone xs) x = (if isUpper x then [('*', 1)] else []) ++ foldr find [] xs
+  where find (s, str) t = if elem (toUpper x) str then (s, indexOf x str) : t else t
 
 cellPhonesDead :: DaPhone -> String -> [(Digit, Presses)]
 cellPhonesDead p = concatMap (reverseTaps p)
