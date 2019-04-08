@@ -149,12 +149,14 @@ hunsD x = d2
         d2 = snd $ d `divMod` 10
 
 -- 2)
+
 -- with case expressions
 foldBool :: a -> a -> Bool -> a
 foldBool x y z =
   case z of
     True -> y
     False -> x
+
 -- with guards!
 foldBool' :: a -> a -> Bool -> a
 foldBool' x y z

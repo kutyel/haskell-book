@@ -63,4 +63,4 @@ coolestLtr :: [String] -> Char
 coolestLtr = coolest . concat
 
 coolestWord :: [String] -> String
-coolestWord =  coolest . (concatMap words)
+coolestWord = coolest . (concatMap words)
