@@ -1,5 +1,7 @@
 module Chapter12 where
 
+import Data.Char (toLower)
+
 -- Determine the kinds
 
 -- 1) id :: a -> a ? * -> *
@@ -9,9 +11,7 @@ module Chapter12 where
 
 -- 1
 notThe :: String -> Maybe String
-notThe s
-  | s == "the" = Nothing
-  | otherwise  = Just s
+notThe s = if s == "the" then Nothing else Just s
 
 replaceThe :: String -> String
 replaceThe = unwords . (map replace) . words
@@ -21,10 +21,18 @@ replaceThe = unwords . (map replace) . words
 
 -- 2
 
+isVowel :: Char -> Bool
+isVowel = flip elem "aeiou" . toLower
+
+startsWithVowel :: String -> Bool
+startsWithVowel = isVowel . head
+
 countTheBeforeVowel :: String -> Integer
-countTheBeforeVowel = undefined
+countTheBeforeVowel str = go (words str) 0
+  where go (_:[]) count = count
+        go (x:y:xs) count = go (y:xs) (if x == "the" && startsWithVowel y then count + 1 else count)
 
 -- 3
 
 countVowels :: String -> Integer
-countVowels = undefined
+countVowels = fromIntegral . length . filter isVowel
