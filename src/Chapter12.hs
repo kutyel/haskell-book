@@ -55,3 +55,25 @@ mkWord s
   | otherwise = Just (Word' s)
   where
     (vs, cs) = partition isVowel s
+
+-- It's only Natural
+data Nat
+  = Zero
+  | Succ Nat
+  deriving (Eq, Show)
+
+natToInteger :: Nat -> Integer
+natToInteger n =
+  case n of
+    Zero -> 0
+    Succ n -> 1 + natToInteger n
+
+integerToNat :: Integer -> Maybe Nat
+integerToNat x
+  | x < 0 = Nothing
+  | otherwise = Just (toNat x)
+  where
+    toNat n =
+      case n of
+        0 -> Zero
+        n -> Succ (toNat (n - 1))
