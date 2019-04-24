@@ -73,3 +73,39 @@ integerToNat x
   where
     toNat 0 = Zero
     toNat n = Succ (toNat (n - 1))
+
+-- Small library for Maybe
+-- 1
+isJust :: Maybe a -> Bool
+isJust (Just _) = True
+isJust Nothing = False
+
+isNothing :: Maybe a -> Bool
+isNothing Nothing = True
+isNothing (Just _) = False
+
+-- 2
+mayybee :: b -> (a -> b) -> Maybe a -> b
+mayybee x _ Nothing = x
+mayybee _ f (Just x) = f x
+
+-- 3
+fromMaybe :: a -> Maybe a -> a
+fromMaybe = flip mayybee id
+
+-- 4
+listToMaybe :: [a] -> Maybe a
+listToMaybe [] = Nothing
+listToMaybe (x:_) = Just x
+
+maybeToList :: Maybe a -> [a]
+maybeToList Nothing = []
+maybeToList (Just x) = [x]
+
+-- 5
+catMaybes :: [Maybe a] -> [a]
+catMaybes = concatMap maybeToList
+
+-- 6
+flipMaybe :: [Maybe a] -> Maybe [a]
+flipMaybe = undefined -- listToMaybe . catMaybes
