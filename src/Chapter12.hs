@@ -9,10 +9,9 @@ import Data.List (partition)
 -- String processing
 -- 1
 notThe :: String -> Maybe String
-notThe s =
-  if s == "the"
-    then Nothing
-    else Just s
+notThe s
+  | s == "the" = Nothing
+  | otherwise = Just s
 
 replaceThe :: String -> String
 replaceThe = unwords . (map replace) . words
@@ -81,8 +80,7 @@ isJust (Just _) = True
 isJust Nothing = False
 
 isNothing :: Maybe a -> Bool
-isNothing Nothing = True
-isNothing (Just _) = False
+isNothing = not . isJust
 
 -- 2
 mayybee :: b -> (a -> b) -> Maybe a -> b
@@ -108,4 +106,6 @@ catMaybes = concatMap maybeToList
 
 -- 6
 flipMaybe :: [Maybe a] -> Maybe [a]
-flipMaybe = undefined -- listToMaybe . catMaybes
+flipMaybe xs
+  | any isNothing xs = Nothing
+  | otherwise = Just (catMaybes xs)
