@@ -109,3 +109,36 @@ flipMaybe :: [Maybe a] -> Maybe [a]
 flipMaybe xs
   | any isNothing xs = Nothing
   | otherwise = Just (catMaybes xs)
+
+-- Small library for Either
+-- 1
+lefts' :: [Either a b] -> [a]
+lefts' = foldr f []
+  where
+    f (Left x) xs = x : xs
+    f _ xs = xs
+
+-- 2
+rights' :: [Either a b] -> [b]
+rights' = foldr f []
+  where
+    f (Right x) xs = x : xs
+    f _ xs = xs
+
+-- 3
+partitionEithers' :: [Either a b] -> ([a], [b])
+partitionEithers' xs = (lefts' xs, rights' xs)
+
+-- 4
+eitherMaybe' :: (b -> c) -> Either a b -> Maybe c
+eitherMaybe' _ (Left _) = Nothing
+eitherMaybe' f (Right x) = Just (f x)
+
+-- 5
+either' :: (a -> c) -> (b -> c) -> Either a b -> c
+either' f _ (Left x) = f x
+either' _ g (Right x) = g x
+
+-- 6
+eitherMaybe'' :: (b -> c) -> Either a b -> Maybe c
+eitherMaybe'' f = either' (const Nothing) (Just . f)
