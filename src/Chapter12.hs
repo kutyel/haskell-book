@@ -151,10 +151,35 @@ myIterate f x = x : myIterate f (f x)
 -- 2
 myUnfoldr :: (b -> Maybe (a, b)) -> b -> [a]
 myUnfoldr f x =
-  case (f x) of
+  case f x of
     Nothing -> []
     Just (a, b) -> a : myUnfoldr f b
 
 -- 3
 betterIterate :: (a -> a) -> a -> [a]
 betterIterate f = myUnfoldr (\x -> Just (x, f x))
+
+-- Finally something other than a list!
+data BinaryTree a
+  = Leaf
+  | Node (BinaryTree a)
+         a
+         (BinaryTree a)
+  deriving (Eq, Ord, Show)
+
+-- 1
+unfold :: (a -> Maybe (a, b, a)) -> a -> BinaryTree b
+unfold f x =
+  case f x of
+    Nothing -> Leaf
+    Just (a, b, c) -> Node (unfold f a) b (unfold f c)
+
+-- 2
+treeBuild :: Integer -> BinaryTree Integer
+treeBuild n =
+  unfold
+    (\x ->
+       if x == n
+         then Nothing
+         else Just (x + 1, x, x + 1))
+    0
