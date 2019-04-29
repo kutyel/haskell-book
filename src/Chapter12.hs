@@ -142,3 +142,19 @@ either' _ g (Right x) = g x
 -- 6
 eitherMaybe'' :: (b -> c) -> Either a b -> Maybe c
 eitherMaybe'' f = either' (const Nothing) (Just . f)
+
+-- Write your own iterate and unfoldr
+-- 1
+myIterate :: (a -> a) -> a -> [a]
+myIterate f x = x : myIterate f (f x)
+
+-- 2
+myUnfoldr :: (b -> Maybe (a, b)) -> b -> [a]
+myUnfoldr f x =
+  case (f x) of
+    Nothing -> []
+    Just (a, b) -> a : myUnfoldr f b
+
+-- 3
+betterIterate :: (a -> a) -> a -> [a]
+betterIterate f = myUnfoldr (\x -> Just (x, f x))
