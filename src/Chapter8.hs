@@ -82,7 +82,7 @@ recSum n = n + recSum (n - 1)
 
 -- recSum 5 -> 15 🎉
 -- 3) mult with recursive summation
-mult :: Integral a => a -> a -> a
+mult :: (Eq a, Num a) => a -> a -> a
 mult x y = go x x y
   where
     go acc m count

@@ -37,3 +37,5 @@ tests:
       - -with-rtsopts=-N
     dependencies:
       - haskell-book
+      - hspec
+      - QuickCheck

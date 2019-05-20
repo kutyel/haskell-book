@@ -42,9 +42,9 @@ palindrome :: IO ()
 palindrome =
   forever $ do
     line <- getLine
-    case (isPalindrome line) of
-      True  -> putStrLn "It's a palindrome!"
-      False -> exitSuccess
+    if isPalindrome line
+      then putStrLn "It's a palindrome!"
+      else exitSuccess
 
 -- 4)
 type Name = String
