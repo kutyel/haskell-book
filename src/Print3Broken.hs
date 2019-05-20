@@ -12,7 +12,6 @@ main = do
   printSecond
 
 -- Exercises!
-
 -- a)
 exclamate :: String -> String
 exclamate x = x ++ "!"

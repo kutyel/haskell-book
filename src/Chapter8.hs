@@ -1,11 +1,9 @@
 module Chapter8 where
 
 -- Intermission
-
 applyTimes :: (Eq a, Num a) => a -> (b -> b) -> b -> b
 applyTimes 0 f b = b
-applyTimes n f b =
-  (f . applyTimes (n - 1) f) b
+applyTimes n f b = (f . applyTimes (n - 1) f) b
 
 -- applyTimes 5 (+1) 5 <- start!
 -- applyTimes 4 (+1) 6 <- 1st iteration
@@ -13,9 +11,7 @@ applyTimes n f b =
 -- applyTimes 2 (+1) 8 <- 3rd iteration
 -- applyTimes 1 (+1) 9 <- 4th iteration
 -- applyTimes 0 (+1) 10 -> returns 10 (pattern match)
-
 -- Chapter Exercises
-
 -- Review of types
 -- 1) typeof [[True, False], [True, True], [False, True]]
 -- d) [[Bool]]
@@ -24,12 +20,11 @@ applyTimes n f b =
 -- 3) which of the following is true?
 func :: [a] -> [a] -> [a]
 func x y = x ++ y
+
 -- d) all of the above!
 -- 4) which is a valid application of `func`?
 -- a) func "Hello" "World"
-
 -- Reviewing Curry
-
 cattyConny :: String -> String -> String
 cattyConny x y = x ++ " mrow " ++ y
 
@@ -49,15 +44,13 @@ frappe = flippy "haha"
 -- 5) cattyConny (frappe "pink") (cattyConny "green" (appedCatty "blue"))
 -- -> "pink mrow haha mrow green mrow woops mrow blue" ✅
 -- 6) cattyConny (flippy "Pugs" "are") "awesome" -> "are mrow Pugs mrow awesome" ✅
-
 -- Recursion
-
 dividedBy :: Integral a => a -> a -> (a, a)
 dividedBy num denom = go num denom 0
-  where go n d count
-          | n < d = (count, n)
-          | otherwise =
-            go (n - d) d (count + 1)
+  where
+    go n d count
+      | n < d = (count, n)
+      | otherwise = go (n - d) d (count + 1)
 
 -- dividedBy 15 2
 -- go 15 2 0
@@ -82,35 +75,32 @@ dividedBy num denom = go num denom 0
 -- go (3 - 2) 2 (6 + 1)
 -- (n == 1, d == 2, count == 7)
 -- | 1 < 2 = (7, 1) 🚀
-
 -- 2) recursicely sum all numbers
-
 recSum :: (Eq a, Num a) => a -> a
 recSum 0 = 0
 recSum n = n + recSum (n - 1)
+
 -- recSum 5 -> 15 🎉
-
 -- 3) mult with recursive summation
-
 mult :: Integral a => a -> a -> a
 mult x y = go x x y
-  where go acc m count
-          | count == 1 = acc
-          | otherwise = go (acc + m) m (count - 1)
+  where
+    go acc m count
+      | count == 1 = acc
+      | otherwise = go (acc + m) m (count - 1)
 
 -- Fixing dividedBy
-
 dividedBy' :: Integral a => a -> a -> Maybe a
 dividedBy' _ 0 = Nothing
 dividedBy' num denom = Just result
-  where value
-          | num < 0 || denom < 0 = negate result
-          | otherwise            = result
-        result = div num denom
+  where
+    value
+      | num < 0 || denom < 0 = negate result
+      | otherwise = result
+    result = div num denom
 
 -- McCarthy 91 function
-
 mc91 :: Integral a => a -> a
 mc91 n
-  | n > 100   = n - 10
-  | otherwise = mc91(mc91(n + 11))
+  | n > 100 = n - 10
+  | otherwise = mc91 (mc91 (n + 11))

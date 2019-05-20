@@ -8,9 +8,13 @@ myWords :: String -> [String]
 myWords = split ' '
 
 firstSen = "Tyger Tyger, burn it bright\n"
+
 secondSen = "In the forests of the night\n"
+
 thirdSen = "What immortal hand or eye\n"
+
 fourthSen = "Could frame thy fearful symmetry?"
+
 sentences = firstSen ++ secondSen ++ thirdSen ++ fourthSen
 
 myLines :: String -> [String]
@@ -24,7 +28,4 @@ shouldEqual =
   ]
 
 main :: IO ()
-main =
-  print $
-  "Are they equal? "
-  ++ show (myLines sentences == shouldEqual)
+main = print $ "Are they equal? " ++ show (myLines sentences == shouldEqual)

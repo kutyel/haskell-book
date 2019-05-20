@@ -4,7 +4,6 @@ greetIfCool :: String -> IO ()
 greetIfCool coolness =
   if cool
     then putStrLn "eyyyy. What's shakin'?"
-  else
-    putStrLn "pshhhh."
-  where cool =
-          coolness == "downright frosty yo"
+    else putStrLn "pshhhh."
+  where
+    cool = coolness == "downright frosty yo"

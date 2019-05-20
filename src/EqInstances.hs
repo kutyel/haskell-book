@@ -15,12 +15,12 @@ instance Eq TwoIntegers where
   (==) (Two x y) (Two x' y') = x == x' && y == y'
 
 -- 3
-data StringOrInt =
-    TisAnInt   Int
+data StringOrInt
+  = TisAnInt Int
   | TisAString String
 
 instance Eq StringOrInt where
-  (==) (TisAnInt x) (TisAnInt x') = x == x'
+  (==) (TisAnInt x) (TisAnInt x')     = x == x'
   (==) (TisAString y) (TisAString y') = y == y'
 
 -- 4
@@ -38,8 +38,8 @@ instance (Eq a, Eq b) => Eq (Tuple a b) where
   (==) (Tuple x y) (Tuple x' y') = x == x' && y == y'
 
 -- 6
-data Which a =
-    ThisOne a
+data Which a
+  = ThisOne a
   | ThatOne a
 
 instance Eq a => Eq (Which a) where
@@ -47,10 +47,10 @@ instance Eq a => Eq (Which a) where
   (==) (ThatOne x) (ThatOne x') = x == x'
 
 -- 7
-data EitherOr a b =
-    Hello a
+data EitherOr a b
+  = Hello a
   | Goodbye b
 
 instance (Eq a, Eq b) => Eq (EitherOr a b) where
-  (==) (Hello x) (Hello x') = x == x'
+  (==) (Hello x) (Hello x')     = x == x'
   (==) (Goodbye x) (Goodbye x') = x == x'
