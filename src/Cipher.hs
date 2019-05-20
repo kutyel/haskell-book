@@ -1,9 +1,8 @@
 module Cipher where
 
 import           Data.Char (chr, isUpper, ord)
+import           System.IO
 
--- TODO: Open you Ciphers module and modify it so that
--- the Caesar and Vigenére ciphers work with user input
 offset :: Char -> Int
 offset x =
   ord $
@@ -29,3 +28,32 @@ toVigenere secret = zipWith (cipher . shift) (cycle secret) . concat . words
 fromVigenere :: String -> String -> String
 fromVigenere secret =
   zipWith (cipher . negate . shift) (cycle secret) . concat . words
+
+-- IO
+toCaesarIO :: IO ()
+toCaesarIO = do
+  line <- getLine
+  putStrLn $ toCaesar line
+
+fromCaesarIO :: IO ()
+fromCaesarIO = do
+  line <- getLine
+  putStrLn $ fromCaesar line
+
+toVigenereIO :: IO ()
+toVigenereIO = do
+  hSetBuffering stdout NoBuffering
+  putStrLn $ "Enter a secret:"
+  secret <- getLine
+  putStrLn $ "Enter a message to encrypt:"
+  message <- getLine
+  putStrLn $ toVigenere secret message
+
+fromVigenereIO :: IO ()
+fromVigenereIO = do
+  hSetBuffering stdout NoBuffering
+  putStrLn $ "Enter a secret:"
+  secret <- getLine
+  putStrLn $ "Enter a message to decrypt:"
+  message <- getLine
+  putStrLn $ fromVigenere secret message
