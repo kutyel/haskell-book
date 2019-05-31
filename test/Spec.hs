@@ -7,5 +7,5 @@ main :: IO ()
 main =
   hspec $ do
     Chapter8.spec
-    Chapter14.spec
     WordNumber.spec
+    Chapter14.spec
