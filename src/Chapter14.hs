@@ -24,3 +24,24 @@ quotAndRem x y = (quot x y) * y + (rem x y) == x
 
 divAndMod :: Integral a => a -> a -> Bool
 divAndMod x y = (div x y) * y + (mod x y) == x
+
+prop_half :: (Eq a, Fractional a) => a -> Bool
+prop_half x = half x * 2 == x
+
+prop_halfIdentity :: (Eq a, Fractional a) => a -> Bool
+prop_halfIdentity x = halfIdentity x == x
+
+prop_reverseTwice :: Eq a => [a] -> Bool
+prop_reverseTwice x = (reverse . reverse) x == id x
+
+prop_applyOperator :: Eq a => a -> Bool
+prop_applyOperator x = id $ x == id x
+
+prop_composition :: Eq a => a -> Bool
+prop_composition x = (id . id) x == id (id x)
+
+prop_roundTrip :: (Eq a, Read a, Show a) => a -> Bool
+prop_roundTrip x = (read . show) x == x
+
+uncurry3 :: (a -> b -> c -> d) -> (a, b, c) -> d
+uncurry3 f (a, b, c) = f a b c
