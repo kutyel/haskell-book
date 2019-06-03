@@ -28,19 +28,19 @@ spec :: Spec
 spec = do
   describe "Property Testing" $ do
     it "half of n should work for fractional numbers" $
-      quickCheck (prop_half :: Double -> Bool)
+      property (prop_half :: Double -> Bool)
     it "the half identity should hold" $
-      quickCheck (prop_halfIdentity :: Double -> Bool)
+      property (prop_halfIdentity :: Double -> Bool)
     it "for any list you apply sort to" $
-      quickCheck ((listOrdered . sort) :: [Int] -> Bool)
+      property ((listOrdered . sort) :: [Int] -> Bool)
     it "addition should be associative" $
-      quickCheck (associative (+) :: Int -> Int -> Int -> Bool)
+      property (associative (+) :: Int -> Int -> Int -> Bool)
     it "addition should be commutative" $
-      quickCheck (commutative (+) :: Int -> Int -> Bool)
+      property (commutative (+) :: Int -> Int -> Bool)
     it "multiplication should be associative" $
-      quickCheck (associative (*) :: Int -> Int -> Int -> Bool)
+      property (associative (*) :: Int -> Int -> Int -> Bool)
     it "multiplication should be commutative" $
-      quickCheck (commutative (*) :: Int -> Int -> Bool)
+      property (commutative (*) :: Int -> Int -> Bool)
     it "quot and rem should be related" $
       forAll (genTuple :: Gen (Int, Int)) (uncurry $ quotAndRem)
     it "div and mod should be related" $
@@ -52,10 +52,10 @@ spec = do
       expectFailure $
       forAll (gen2Pos :: Gen (Int, Int)) (uncurry $ commutative (^))
     it "reversing a list twice is the identity of the list" $
-      quickCheck (prop_reverseTwice :: [Int] -> Bool)
+      property (prop_reverseTwice :: [Int] -> Bool)
     it "apply operator ($) should work correctly" $
-      quickCheck (prop_applyOperator :: Int -> Bool)
+      property (prop_applyOperator :: Int -> Bool)
     it "composition operator (.) should work correctly" $
-      quickCheck (prop_composition :: String -> Bool)
+      property (prop_composition :: String -> Bool)
     it "read is the inverse of show" $
-      quickCheck (prop_roundTrip :: String -> Bool)
+      property (prop_roundTrip :: String -> Bool)
