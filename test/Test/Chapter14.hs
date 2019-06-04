@@ -5,24 +5,20 @@ import           Data.List       (sort)
 import           Test.Hspec
 import           Test.QuickCheck
 
-genTuple :: (Arbitrary a, Num a, Eq a) => Gen (a, a)
-genTuple = do
-  x <- arbitrary `suchThat` (/= 0)
-  y <- arbitrary `suchThat` (/= 0)
-  return (x, y)
+prop_quotAndRem :: Integral a => NonZero a -> NonZero a -> Bool
+prop_quotAndRem (NonZero x) (NonZero y) = (quot x y) * y + (rem x y) == x
 
-gen2Pos :: (Arbitrary a, Num a, Ord a) => Gen (a, a)
-gen2Pos = do
-  x <- arbitrary `suchThat` (> 1)
-  y <- arbitrary `suchThat` (> 1)
-  return (x, y)
+prop_divAndMod :: Integral a => NonZero a -> NonZero a -> Bool
+prop_divAndMod (NonZero x) (NonZero y) = (div x y) * y + (mod x y) == x
 
-gen3Pos :: (Arbitrary a, Num a, Ord a) => Gen (a, a, a)
-gen3Pos = do
-  x <- arbitrary `suchThat` (> 1)
-  y <- arbitrary `suchThat` (> 1)
-  z <- arbitrary `suchThat` (> 1)
-  return (x, y, z)
+prop_squareId :: (Eq a, Floating a) => a -> Bool
+prop_squareId x = squareIdentity x == x
+
+assocExp :: Integral a => Positive a -> Positive a -> Positive a -> Bool
+assocExp (Positive x) (Positive y) (Positive z) = x ^ (y ^ z) == (x ^ y) ^ z
+
+commuExp :: Integral a => Positive a -> Positive a -> Bool
+commuExp (Positive x) (Positive y) = x ^ y == y ^ x
 
 spec :: Spec
 spec = do
@@ -42,15 +38,16 @@ spec = do
     it "multiplication should be commutative" $
       property (commutative (*) :: Int -> Int -> Bool)
     it "quot and rem should be related" $
-      forAll (genTuple :: Gen (Int, Int)) (uncurry $ quotAndRem)
+      property (prop_quotAndRem :: NonZero Int -> NonZero Int -> Bool)
     it "div and mod should be related" $
-      forAll (genTuple :: Gen (Int, Int)) (uncurry $ divAndMod)
+      property (prop_divAndMod :: NonZero Int -> NonZero Int -> Bool)
     it "exponentiation should *not* be associative" $
       expectFailure $
-      forAll (gen3Pos :: Gen (Int, Int, Int)) (uncurry3 $ associative (^))
+      property
+        (assocExp :: Positive Int -> Positive Int -> Positive Int -> Bool)
     it "exponentiation should *not* be commutative" $
       expectFailure $
-      forAll (gen2Pos :: Gen (Int, Int)) (uncurry $ commutative (^))
+      property (commuExp :: Positive Int -> Positive Int -> Bool)
     it "reversing a list twice is the identity of the list" $
       property (prop_reverseTwice :: [Int] -> Bool)
     it "apply operator ($) should work correctly" $
@@ -59,3 +56,11 @@ spec = do
       property (prop_composition :: String -> Bool)
     it "read is the inverse of show" $
       property (prop_roundTrip :: String -> Bool)
+    it "folding by cons shoud *not* concat" $
+      expectFailure $ property (prop_foldrPlusPlus :: [Int] -> [Int] -> Bool)
+    it "folding by concat with empty list should equal concat" $
+      property (prop_foldrConcat :: [[Int]] -> Bool)
+    it "take and length of n should not hold" $
+      expectFailure $ property (prop_takeLength :: Int -> [Int] -> Bool)
+    it "floating point arithmetic should fail -.-" $
+      expectFailure $ property (prop_squareId :: Double -> Bool)

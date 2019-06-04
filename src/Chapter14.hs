@@ -3,6 +3,12 @@ module Chapter14 where
 half :: Fractional a => a -> a
 half = (/ 2)
 
+square :: Num a => a -> a
+square x = x * x
+
+squareIdentity :: Floating a => a -> a
+squareIdentity = square . sqrt
+
 halfIdentity :: Fractional a => a -> a
 halfIdentity = (* 2) . half
 
@@ -18,12 +24,6 @@ associative f x y z = x `f` (y `f` z) == (x `f` y) `f` z
 
 commutative :: (Eq a) => (a -> a -> a) -> a -> a -> Bool
 commutative f x y = x `f` y == y `f` x
-
-quotAndRem :: Integral a => a -> a -> Bool
-quotAndRem x y = (quot x y) * y + (rem x y) == x
-
-divAndMod :: Integral a => a -> a -> Bool
-divAndMod x y = (div x y) * y + (mod x y) == x
 
 prop_half :: (Eq a, Fractional a) => a -> Bool
 prop_half x = half x * 2 == x
@@ -43,5 +43,11 @@ prop_composition x = (id . id) x == id (id x)
 prop_roundTrip :: (Eq a, Read a, Show a) => a -> Bool
 prop_roundTrip x = (read . show) x == x
 
-uncurry3 :: (a -> b -> c -> d) -> (a, b, c) -> d
-uncurry3 f (a, b, c) = f a b c
+prop_foldrPlusPlus :: Eq a => [a] -> [a] -> Bool
+prop_foldrPlusPlus x y = foldr (:) x y == (++) x y
+
+prop_foldrConcat :: (Eq a, Foldable t) => t [a] -> Bool
+prop_foldrConcat x = foldr (++) [] x == concat x
+
+prop_takeLength :: Int -> [a] -> Bool
+prop_takeLength n xs = length (take n xs) == n
