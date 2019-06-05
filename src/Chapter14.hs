@@ -1,5 +1,8 @@
 module Chapter14 where
 
+import           Chapter11 (capitalizeWord)
+import           Data.List (sort)
+
 half :: Fractional a => a -> a
 half = (/ 2)
 
@@ -18,6 +21,12 @@ listOrdered xs = snd $ foldr go (Nothing, True) xs
     go _ status@(_, False) = status
     go y (Nothing, t)      = (Just y, t)
     go y (Just x, t)       = (Just y, x >= y)
+
+twice :: (a -> a) -> a -> a
+twice f = f . f
+
+fourTimes :: (a -> a) -> a -> a
+fourTimes = twice . twice
 
 associative :: (Eq a) => (a -> a -> a) -> a -> a -> a -> Bool
 associative f x y z = x `f` (y `f` z) == (x `f` y) `f` z
@@ -51,3 +60,11 @@ prop_foldrConcat x = foldr (++) [] x == concat x
 
 prop_takeLength :: Int -> [a] -> Bool
 prop_takeLength n xs = length (take n xs) == n
+
+prop_idemCapitalize :: String -> Bool
+prop_idemCapitalize x =
+  (capitalizeWord x == twice capitalizeWord x) &&
+  (capitalizeWord x == fourTimes capitalizeWord x)
+
+prop_idemSort :: Ord a => [a] -> Bool
+prop_idemSort x = (sort x == twice sort x) && (sort x == fourTimes sort x)

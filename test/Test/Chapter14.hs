@@ -15,10 +15,10 @@ prop_squareId :: (Eq a, Floating a) => a -> Bool
 prop_squareId x = squareIdentity x == x
 
 assocExp :: Integral a => Positive a -> Positive a -> Positive a -> Bool
-assocExp (Positive x) (Positive y) (Positive z) = x ^ (y ^ z) == (x ^ y) ^ z
+assocExp (Positive x) (Positive y) (Positive z) = associative (^) x y z
 
 commuExp :: Integral a => Positive a -> Positive a -> Bool
-commuExp (Positive x) (Positive y) = x ^ y == y ^ x
+commuExp (Positive x) (Positive y) = commutative (^) x y
 
 spec :: Spec
 spec = do
@@ -64,3 +64,7 @@ spec = do
       expectFailure $ property (prop_takeLength :: Int -> [Int] -> Bool)
     it "floating point arithmetic should fail -.-" $
       expectFailure $ property (prop_squareId :: Double -> Bool)
+    it "idempotence should work for capitalizing" $
+      property (prop_idemCapitalize :: String -> Bool)
+    it "idempotence should work for sorting" $
+      property (prop_idemSort :: [Int] -> Bool)

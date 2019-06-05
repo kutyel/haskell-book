@@ -323,6 +323,7 @@ capitalizeWords = map toTuple . words
 -- 1
 capitalizeWord :: String -> String
 capitalizeWord (x:xs) = toUpper x : xs
+capitalizeWord x      = x
 
 -- 2
 capitalizeParagraph :: String -> String
