@@ -5,6 +5,17 @@ import           Data.List       (sort)
 import           Test.Hspec
 import           Test.QuickCheck
 
+data Fool
+  = Fulse
+  | Frue
+  deriving (Eq, Show)
+
+genFoolEqual :: Gen Fool
+genFoolEqual = oneof [return Fulse, return Frue]
+
+genFool :: Gen Fool
+genFool = frequency [(3, return Fulse), (1, return Frue)]
+
 prop_quotAndRem :: Integral a => NonZero a -> NonZero a -> Bool
 prop_quotAndRem (NonZero x) (NonZero y) = (quot x y) * y + (rem x y) == x
 
