@@ -11,7 +11,7 @@ data Fool
   deriving (Eq, Show)
 
 genFoolEqual :: Gen Fool
-genFoolEqual = oneof [return Fulse, return Frue]
+genFoolEqual = elements [Fulse, Frue]
 
 genFool :: Gen Fool
 genFool = frequency [(3, return Fulse), (1, return Frue)]
