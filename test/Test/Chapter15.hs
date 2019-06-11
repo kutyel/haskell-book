@@ -12,7 +12,7 @@ data Bull
   deriving (Eq, Show)
 
 instance Arbitrary Bull where
-  arbitrary = frequency [(1, return Fools), (1, return Twoo)]
+  arbitrary = elements [Fools, Twoo]
 
 instance Semigroup Bull where
   (<>) _ _ = Fools
