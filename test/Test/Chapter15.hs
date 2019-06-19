@@ -82,9 +82,6 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Two a b) where
 semigroupAssoc :: (Eq s, Semigroup s) => s -> s -> s -> Bool
 semigroupAssoc a b c = (a <> (b <> c)) == ((a <> b) <> c)
 
-monoidAssoc :: (Eq m, Monoid m) => m -> m -> m -> Bool
-monoidAssoc a b c = (a <> (b <> c)) == ((a <> b) <> c)
-
 monoidLeftIdentity :: (Eq m, Monoid m) => m -> Bool
 monoidLeftIdentity a = (mempty <> a) == a
 
@@ -116,14 +113,14 @@ spec = do
   describe "Monoids" $ do
     describe "Bull" $ do
       it "monoid associativity should work" $
-        property (monoidAssoc :: Bull -> Bull -> Bull -> Bool)
+        property (semigroupAssoc :: Bull -> Bull -> Bull -> Bool)
       it "monoid left identity should fail" $
         expectFailure $ property (monoidLeftIdentity :: Bull -> Bool)
       it "monoid right identity should fail" $
         expectFailure $ property (monoidRightIdentity :: Bull -> Bool)
     describe "First'" $ do
       it "monoid associativity should work" $
-        property (monoidAssoc :: FirstStr -> FirstStr -> FirstStr -> Bool)
+        property (semigroupAssoc :: FirstStr -> FirstStr -> FirstStr -> Bool)
       it "monoid left identity should work" $
         property (monoidLeftIdentity :: FirstStr -> Bool)
       it "monoid right identity should work" $
