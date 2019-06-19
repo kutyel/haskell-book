@@ -16,7 +16,7 @@ instance Arbitrary Bull where
   arbitrary = elements [Fools, Twoo]
 
 instance Semigroup Bull where
-  (<>) _ _ = Fools
+  _ <> _ = Fools
 
 instance Monoid Bull where
   mempty = Fools
@@ -29,7 +29,7 @@ newtype First' a =
   deriving (Eq, Show)
 
 instance Semigroup (First' a) where
-  (<>) a b =
+  a <> b =
     case (getFirst' a, getFirst' b) of
       (Nada, Nada) -> First' Nada
       (Only x, _)  -> First' (Only x)
@@ -64,6 +64,20 @@ instance Semigroup a => Semigroup (Identity a) where
 instance Arbitrary a => Arbitrary (Identity a) where
   arbitrary = liftM Identity arbitrary
 
+-- Two
+data Two a b =
+  Two a b
+  deriving (Eq, Show)
+
+instance (Semigroup a, Semigroup b) => Semigroup (Two a b) where
+  (Two x y) <> (Two a b) = Two (x <> a) (y <> b)
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Two a b) where
+  arbitrary = do
+    x <- arbitrary
+    y <- arbitrary
+    return $ Two x y
+
 -- Properties
 semigroupAssoc :: (Eq s, Semigroup s) => s -> s -> s -> Bool
 semigroupAssoc a b c = (a <> (b <> c)) == ((a <> b) <> c)
@@ -84,6 +98,8 @@ type FirstStr = First' String
 
 type IdentStr = Identity String
 
+type TwoStr = Two String String
+
 -- Tests
 spec :: Spec
 spec = do
@@ -94,6 +110,9 @@ spec = do
     describe "Identity" $ do
       it "semigroup associativity should work" $
         property (semigroupAssoc :: IdentStr -> IdentStr -> IdentStr -> Bool)
+    describe "Two" $ do
+      it "semigroup associativity should work" $
+        property (semigroupAssoc :: TwoStr -> TwoStr -> TwoStr -> Bool)
   describe "Monoids" $ do
     describe "Bull" $ do
       it "monoid associativity should work" $
