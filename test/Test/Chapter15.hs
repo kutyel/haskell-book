@@ -6,6 +6,7 @@ import           Data.Monoid
 import           Test.Hspec
 import           Test.QuickCheck
 
+-- Bull
 data Bull
   = Fools
   | Twoo
@@ -20,6 +21,7 @@ instance Semigroup Bull where
 instance Monoid Bull where
   mempty = Fools
 
+-- First'
 newtype First' a =
   First'
     { getFirst' :: Optional a
@@ -40,6 +42,32 @@ instance Arbitrary a => Arbitrary (First' a) where
   arbitrary =
     frequency [(1, return $ First' Nada), (3, liftM (First' . Only) arbitrary)]
 
+-- Trivial
+data Trivial =
+  Trivial
+  deriving (Eq, Show)
+
+instance Semigroup Trivial where
+  _ <> _ = Trivial
+
+instance Arbitrary Trivial where
+  arbitrary = return Trivial
+
+-- Identity
+data Identity a =
+  Identity a
+  deriving (Eq, Show)
+
+instance Semigroup a => Semigroup (Identity a) where
+  (Identity x) <> (Identity y) = Identity (x <> y)
+
+instance Arbitrary a => Arbitrary (Identity a) where
+  arbitrary = liftM Identity arbitrary
+
+-- Properties
+semigroupAssoc :: (Eq s, Semigroup s) => s -> s -> s -> Bool
+semigroupAssoc a b c = (a <> (b <> c)) == ((a <> b) <> c)
+
 monoidAssoc :: (Eq m, Monoid m) => m -> m -> m -> Bool
 monoidAssoc a b c = (a <> (b <> c)) == ((a <> b) <> c)
 
@@ -54,8 +82,18 @@ firstMappend = mappend
 
 type FirstStr = First' String
 
+type IdentStr = Identity String
+
+-- Tests
 spec :: Spec
 spec = do
+  describe "Semigroups" $ do
+    describe "Trivial" $ do
+      it "semigroup associativity should work" $
+        property (semigroupAssoc :: Trivial -> Trivial -> Trivial -> Bool)
+    describe "Identity" $ do
+      it "semigroup associativity should work" $
+        property (semigroupAssoc :: IdentStr -> IdentStr -> IdentStr -> Bool)
   describe "Monoids" $ do
     describe "Bull" $ do
       it "monoid associativity should work" $
