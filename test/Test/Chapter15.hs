@@ -78,6 +78,41 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Two a b) where
     y <- arbitrary
     return $ Two x y
 
+-- Three
+data Three a b c =
+  Three a b c
+  deriving (Eq, Show)
+
+instance (Semigroup a, Semigroup b, Semigroup c) =>
+         Semigroup (Three a b c) where
+  (Three x y z) <> (Three a b c) = Three (x <> a) (y <> b) (z <> c)
+
+instance (Arbitrary a, Arbitrary b, Arbitrary c) =>
+         Arbitrary (Three a b c) where
+  arbitrary = do
+    x <- arbitrary
+    y <- arbitrary
+    z <- arbitrary
+    return $ Three x y z
+
+-- Four
+data Four a b c d =
+  Four a b c d
+  deriving (Eq, Show)
+
+instance (Semigroup a, Semigroup b, Semigroup c, Semigroup d) =>
+         Semigroup (Four a b c d) where
+  (Four w x y z) <> (Four a b c d) = Four (w <> a) (x <> b) (y <> c) (z <> d)
+
+instance (Arbitrary a, Arbitrary b, Arbitrary c, Arbitrary d) =>
+         Arbitrary (Four a b c d) where
+  arbitrary = do
+    w <- arbitrary
+    x <- arbitrary
+    y <- arbitrary
+    z <- arbitrary
+    return $ Four w x y z
+
 -- Properties
 semigroupAssoc :: (Eq s, Semigroup s) => s -> s -> s -> Bool
 semigroupAssoc a b c = (a <> (b <> c)) == ((a <> b) <> c)
@@ -97,6 +132,10 @@ type IdentStr = Identity String
 
 type TwoStr = Two String String
 
+type ThreeStr = Three String String String
+
+type FourStr = Four String String String String
+
 -- Tests
 spec :: Spec
 spec = do
@@ -110,6 +149,12 @@ spec = do
     describe "Two" $ do
       it "semigroup associativity should work" $
         property (semigroupAssoc :: TwoStr -> TwoStr -> TwoStr -> Bool)
+    describe "Three" $ do
+      it "semigroup associativity should work" $
+        property (semigroupAssoc :: ThreeStr -> ThreeStr -> ThreeStr -> Bool)
+    describe "Four" $ do
+      it "semigroup associativity should work" $
+        property (semigroupAssoc :: FourStr -> FourStr -> FourStr -> Bool)
   describe "Monoids" $ do
     describe "Bull" $ do
       it "monoid associativity should work" $
