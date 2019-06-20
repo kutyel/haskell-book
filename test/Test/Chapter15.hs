@@ -113,6 +113,35 @@ instance (Arbitrary a, Arbitrary b, Arbitrary c, Arbitrary d) =>
     z <- arbitrary
     return $ Four w x y z
 
+-- BoolConj (and)
+newtype BoolConj =
+  BoolConj Bool
+  deriving (Eq, Show)
+
+instance Semigroup BoolConj where
+  (BoolConj x) <> (BoolConj y) =
+    case (x, y) of
+      (True, True) -> BoolConj True
+      (_, _)       -> BoolConj False
+
+instance Arbitrary BoolConj where
+  arbitrary = liftM BoolConj arbitrary
+
+-- BoolDisj (or)
+newtype BoolDisj =
+  BoolDisj Bool
+  deriving (Eq, Show)
+
+instance Semigroup BoolDisj where
+  (BoolDisj x) <> (BoolDisj y) =
+    case (x, y) of
+      (_, True) -> BoolDisj True
+      (True, _) -> BoolDisj True
+      (_, _)    -> BoolDisj False
+
+instance Arbitrary BoolDisj where
+  arbitrary = liftM BoolDisj arbitrary
+
 -- Properties
 semigroupAssoc :: (Eq s, Semigroup s) => s -> s -> s -> Bool
 semigroupAssoc a b c = (a <> (b <> c)) == ((a <> b) <> c)
@@ -126,6 +155,7 @@ monoidRightIdentity a = (a <> mempty) == a
 firstMappend :: First' a -> First' a -> First' a
 firstMappend = mappend
 
+-- Aliases
 type FirstStr = First' String
 
 type IdentStr = Identity String
@@ -155,6 +185,12 @@ spec = do
     describe "Four" $ do
       it "semigroup associativity should work" $
         property (semigroupAssoc :: FourStr -> FourStr -> FourStr -> Bool)
+    describe "BoolConj" $ do
+      it "semigroup associativity should work" $
+        property (semigroupAssoc :: BoolConj -> BoolConj -> BoolConj -> Bool)
+    describe "BoolDisj" $ do
+      it "semigroup associativity should work" $
+        property (semigroupAssoc :: BoolDisj -> BoolDisj -> BoolDisj -> Bool)
   describe "Monoids" $ do
     describe "Bull" $ do
       it "monoid associativity should work" $
