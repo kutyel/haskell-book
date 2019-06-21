@@ -142,6 +142,26 @@ instance Semigroup BoolDisj where
 instance Arbitrary BoolDisj where
   arbitrary = liftM BoolDisj arbitrary
 
+-- Or
+data Or a b
+  = Fst a
+  | Snd b
+  deriving (Eq, Show)
+
+instance Semigroup (Or a b) where
+  x <> y =
+    case (x, y) of
+      (Fst _, Snd x) -> Snd x
+      (Fst _, Fst x) -> Fst x
+      (Snd x, Fst _) -> Snd x
+      (Snd x, Snd _) -> Snd x
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Or a b) where
+  arbitrary = do
+    x <- arbitrary
+    y <- arbitrary
+    elements [Fst x, Snd y]
+
 -- Properties
 semigroupAssoc :: (Eq s, Semigroup s) => s -> s -> s -> Bool
 semigroupAssoc a b c = (a <> (b <> c)) == ((a <> b) <> c)
@@ -165,6 +185,8 @@ type TwoStr = Two String String
 type ThreeStr = Three String String String
 
 type FourStr = Four String String String String
+
+type StrOrStr = Or String String
 
 -- Tests
 spec :: Spec
@@ -191,6 +213,9 @@ spec = do
     describe "BoolDisj" $ do
       it "semigroup associativity should work" $
         property (semigroupAssoc :: BoolDisj -> BoolDisj -> BoolDisj -> Bool)
+    describe "Or" $ do
+      it "semigroup associativity should work" $
+        property (semigroupAssoc :: StrOrStr -> StrOrStr -> StrOrStr -> Bool)
   describe "Monoids" $ do
     describe "Bull" $ do
       it "monoid associativity should work" $
