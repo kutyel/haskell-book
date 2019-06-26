@@ -162,6 +162,23 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Or a b) where
     y <- arbitrary
     elements [Fst x, Snd y]
 
+-- Combine
+newtype Combine a b =
+  Combine
+    { unCombine :: (a -> b)
+    }
+
+-- TODO: instance Eq b => Eq (Combine a b) where
+--   (Combine f) == (Combine g) = \x -> f x == g x
+instance Show (Combine a b) where
+  show _ = "Combine (a -> b)"
+
+instance Semigroup b => Semigroup (Combine a b) where
+  (Combine f) <> (Combine g) = Combine (f <> g)
+
+instance (CoArbitrary a, Arbitrary b) => Arbitrary (Combine a b) where
+  arbitrary = liftM Combine arbitrary
+
 -- Properties
 semigroupAssoc :: (Eq s, Semigroup s) => s -> s -> s -> Bool
 semigroupAssoc a b c = (a <> (b <> c)) == ((a <> b) <> c)
@@ -187,6 +204,8 @@ type ThreeStr = Three String String String
 type FourStr = Four String String String String
 
 type StrOrStr = Or String String
+
+type CombStr = Combine Int String
 
 -- Tests
 spec :: Spec
@@ -216,6 +235,9 @@ spec = do
     describe "Or" $ do
       it "semigroup associativity should work" $
         property (semigroupAssoc :: StrOrStr -> StrOrStr -> StrOrStr -> Bool)
+    -- TODO: describe "Combine" $ do
+    --   it "semigroup associativity should work" $
+    --     property (semigroupAssoc :: CombStr -> CombStr -> CombStr -> Bool)
   describe "Monoids" $ do
     describe "Bull" $ do
       it "monoid associativity should work" $
