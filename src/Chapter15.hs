@@ -48,7 +48,7 @@ newtype Combine a b =
     }
 
 instance Semigroup b => Semigroup (Combine a b) where
-  (Combine f) <> (Combine g) = Combine (f <> g)
+  Combine f <> Combine g = Combine (f <> g)
 
 -- Comp
 newtype Comp a =
@@ -57,7 +57,7 @@ newtype Comp a =
     }
 
 instance Semigroup (Comp a) where
-  (Comp f) <> (Comp g) = Comp (f . g)
+  Comp f <> Comp g = Comp (f . g)
 
 -- Look familiar? -> Either!
 data Validation a b
@@ -66,7 +66,7 @@ data Validation a b
   deriving (Eq, Show)
 
 instance Semigroup a => Semigroup (Validation a b) where
-  (<>) a b =
+  a <> b =
     case (a, b) of
       (Success x, Failure _) -> Success x
       (Failure _, Success x) -> Success x
