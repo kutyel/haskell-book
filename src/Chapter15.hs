@@ -40,3 +40,45 @@ madlibbin e adv noun adj =
     , adj
     , " wife."
     ]
+
+-- Combine
+newtype Combine a b =
+  Combine
+    { unCombine :: (a -> b)
+    }
+
+instance Semigroup b => Semigroup (Combine a b) where
+  (Combine f) <> (Combine g) = Combine (f <> g)
+
+-- Comp
+newtype Comp a =
+  Comp
+    { unComp :: (a -> a)
+    }
+
+instance Semigroup (Comp a) where
+  (Comp f) <> (Comp g) = Comp (f . g)
+
+-- Look familiar? -> Either!
+data Validation a b
+  = Failure a
+  | Success b
+  deriving (Eq, Show)
+
+instance Semigroup a => Semigroup (Validation a b) where
+  (<>) a b =
+    case (a, b) of
+      (Success x, Failure _) -> Success x
+      (Failure _, Success x) -> Success x
+      (Success x, Success _) -> Success x
+      (Failure x, Failure y) -> Failure (x <> y)
+
+main = do
+  let failure :: String -> Validation String Int
+      failure = Failure
+      success :: Int -> Validation String Int
+      success = Success
+  print $ success 1 <> failure "blah"
+  print $ failure "woot" <> failure "blah"
+  print $ success 1 <> success 2
+  print $ failure "woot" <> success 2
