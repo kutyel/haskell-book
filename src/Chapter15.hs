@@ -50,6 +50,9 @@ newtype Combine a b =
 instance Semigroup b => Semigroup (Combine a b) where
   Combine f <> Combine g = Combine (f <> g)
 
+instance Monoid b => Monoid (Combine a b) where
+  mempty = Combine mempty
+
 -- Comp
 newtype Comp a =
   Comp
@@ -58,6 +61,9 @@ newtype Comp a =
 
 instance Semigroup (Comp a) where
   Comp f <> Comp g = Comp (f . g)
+
+instance Monoid a => Monoid (Comp a) where
+  mempty = Comp mempty
 
 -- Look familiar? -> Either!
 data Validation a b
@@ -73,12 +79,38 @@ instance Semigroup a => Semigroup (Validation a b) where
       (Success x, Success _) -> Success x
       (Failure x, Failure y) -> Failure (x <> y)
 
+-- Mem
+newtype Mem s a =
+  Mem
+    { runMem :: s -> (a, s)
+    }
+
+instance Semigroup a => Semigroup (Mem s a) where
+  Mem f <> Mem g =
+    Mem $ \x ->
+      let (a, b) = g x
+          (c, d) = f b
+       in (a <> c, d)
+
+instance Monoid a => Monoid (Mem s a) where
+  mempty = Mem $ \x -> (mempty, x)
+
 main = do
   let failure :: String -> Validation String Int
       failure = Failure
       success :: Int -> Validation String Int
       success = Success
+      f' = Mem $ \s -> ("hi", s + 1)
+      rmzero = runMem mempty 0
+      rmleft = runMem (f' <> mempty) 0
+      rmright = runMem (mempty <> f') 0
   print $ success 1 <> failure "blah"
   print $ failure "woot" <> failure "blah"
   print $ success 1 <> success 2
   print $ failure "woot" <> success 2
+  print $ "Mem ----------------------"
+  print $ rmleft
+  print $ rmright
+  print $ (rmzero :: (String, Int))
+  print $ rmleft == runMem f' 0
+  print $ rmright == runMem f' 0
