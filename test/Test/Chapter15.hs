@@ -50,6 +50,9 @@ data Trivial =
 instance Semigroup Trivial where
   _ <> _ = Trivial
 
+instance Monoid Trivial where
+  mempty = Trivial
+
 instance Arbitrary Trivial where
   arbitrary = return Trivial
 
@@ -61,6 +64,9 @@ data Identity a =
 instance Semigroup a => Semigroup (Identity a) where
   (Identity x) <> (Identity y) = Identity (x <> y)
 
+instance Monoid a => Monoid (Identity a) where
+  mempty = Identity mempty
+
 instance Arbitrary a => Arbitrary (Identity a) where
   arbitrary = liftM Identity arbitrary
 
@@ -71,6 +77,9 @@ data Two a b =
 
 instance (Semigroup a, Semigroup b) => Semigroup (Two a b) where
   (Two x y) <> (Two a b) = Two (x <> a) (y <> b)
+
+instance (Monoid a, Monoid b) => Monoid (Two a b) where
+  mempty = Two mempty mempty
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Two a b) where
   arbitrary = do
@@ -124,6 +133,9 @@ instance Semigroup BoolConj where
       (True, True) -> BoolConj True
       (_, _)       -> BoolConj False
 
+instance Monoid BoolConj where
+  mempty = BoolConj True
+
 instance Arbitrary BoolConj where
   arbitrary = liftM BoolConj arbitrary
 
@@ -138,6 +150,9 @@ instance Semigroup BoolDisj where
       (_, True) -> BoolDisj True
       (True, _) -> BoolDisj True
       (_, _)    -> BoolDisj False
+
+instance Monoid BoolDisj where
+  mempty = BoolDisj False
 
 instance Arbitrary BoolDisj where
   arbitrary = liftM BoolDisj arbitrary
@@ -231,3 +246,28 @@ spec = do
         property (monoidLeftIdentity :: FirstStr -> Bool)
       it "monoid right identity should work" $
         property (monoidRightIdentity :: FirstStr -> Bool)
+    describe "Trivial" $ do
+      it "monoid left identity should work" $
+        property (monoidLeftIdentity :: Trivial -> Bool)
+      it "monoid right identity should work" $
+        property (monoidRightIdentity :: Trivial -> Bool)
+    describe "Identity" $ do
+      it "monoid left identity should work" $
+        property (monoidLeftIdentity :: IdentStr -> Bool)
+      it "monoid right identity should work" $
+        property (monoidRightIdentity :: IdentStr -> Bool)
+    describe "Two" $ do
+      it "monoid left identity should work" $
+        property (monoidLeftIdentity :: TwoStr -> Bool)
+      it "monoid right identity should work" $
+        property (monoidRightIdentity :: TwoStr -> Bool)
+    describe "BoolConj" $ do
+      it "monoid left identity should work" $
+        property (monoidLeftIdentity :: BoolConj -> Bool)
+      it "monoid right identity should work" $
+        property (monoidRightIdentity :: BoolConj -> Bool)
+    describe "BoolDisj" $ do
+      it "monoid left identity should work" $
+        property (monoidLeftIdentity :: BoolDisj -> Bool)
+      it "monoid right identity should work" $
+        property (monoidRightIdentity :: BoolDisj -> Bool)
