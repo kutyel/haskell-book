@@ -1,7 +1,7 @@
 module Test.Chapter15 where
 
-import           Chapter15       (Optional (..))
-import           Control.Monad   (liftM)
+import           Chapter15                      ( Optional(..) )
+import           Control.Monad                  ( liftM )
 import           Data.Monoid
 import           Test.Hspec
 import           Test.QuickCheck
@@ -29,11 +29,10 @@ newtype First' a =
   deriving (Eq, Show)
 
 instance Semigroup (First' a) where
-  a <> b =
-    case (getFirst' a, getFirst' b) of
-      (Nada, Nada) -> First' Nada
-      (Only x, _)  -> First' (Only x)
-      (_, Only x)  -> First' (Only x)
+  a <> b = case (getFirst' a, getFirst' b) of
+    (Nada  , Nada  ) -> First' Nada
+    (Only x, _     ) -> First' (Only x)
+    (_     , Only x) -> First' (Only x)
 
 instance Monoid (First' a) where
   mempty = First' Nada
@@ -128,10 +127,9 @@ newtype BoolConj =
   deriving (Eq, Show)
 
 instance Semigroup BoolConj where
-  (BoolConj x) <> (BoolConj y) =
-    case (x, y) of
-      (True, True) -> BoolConj True
-      (_, _)       -> BoolConj False
+  BoolConj x <> BoolConj y = case (x, y) of
+    (True, True) -> BoolConj True
+    (_   , _   ) -> BoolConj False
 
 instance Monoid BoolConj where
   mempty = BoolConj True
@@ -145,11 +143,10 @@ newtype BoolDisj =
   deriving (Eq, Show)
 
 instance Semigroup BoolDisj where
-  (BoolDisj x) <> (BoolDisj y) =
-    case (x, y) of
-      (_, True) -> BoolDisj True
-      (True, _) -> BoolDisj True
-      (_, _)    -> BoolDisj False
+  (BoolDisj x) <> (BoolDisj y) = case (x, y) of
+    (_   , True) -> BoolDisj True
+    (True, _   ) -> BoolDisj True
+    (_   , _   ) -> BoolDisj False
 
 instance Monoid BoolDisj where
   mempty = BoolDisj False
@@ -164,12 +161,11 @@ data Or a b
   deriving (Eq, Show)
 
 instance Semigroup (Or a b) where
-  x <> y =
-    case (x, y) of
-      (Fst _, Snd x) -> Snd x
-      (Fst _, Fst x) -> Fst x
-      (Snd x, Fst _) -> Snd x
-      (Snd x, Snd _) -> Snd x
+  x <> y = case (x, y) of
+    (Fst _, Snd x) -> Snd x
+    (Fst _, Fst x) -> Fst x
+    (Snd x, Fst _) -> Snd x
+    (Snd x, Snd _) -> Snd x
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Or a b) where
   arbitrary = do
@@ -208,66 +204,66 @@ spec :: Spec
 spec = do
   describe "Semigroups" $ do
     describe "Trivial" $ do
-      it "semigroup associativity should work" $
-        property (semigroupAssoc :: Trivial -> Trivial -> Trivial -> Bool)
+      it "semigroup associativity should work"
+        $ property (semigroupAssoc :: Trivial -> Trivial -> Trivial -> Bool)
     describe "Identity" $ do
-      it "semigroup associativity should work" $
-        property (semigroupAssoc :: IdentStr -> IdentStr -> IdentStr -> Bool)
+      it "semigroup associativity should work" $ property
+        (semigroupAssoc :: IdentStr -> IdentStr -> IdentStr -> Bool)
     describe "Two" $ do
-      it "semigroup associativity should work" $
-        property (semigroupAssoc :: TwoStr -> TwoStr -> TwoStr -> Bool)
+      it "semigroup associativity should work"
+        $ property (semigroupAssoc :: TwoStr -> TwoStr -> TwoStr -> Bool)
     describe "Three" $ do
-      it "semigroup associativity should work" $
-        property (semigroupAssoc :: ThreeStr -> ThreeStr -> ThreeStr -> Bool)
+      it "semigroup associativity should work" $ property
+        (semigroupAssoc :: ThreeStr -> ThreeStr -> ThreeStr -> Bool)
     describe "Four" $ do
-      it "semigroup associativity should work" $
-        property (semigroupAssoc :: FourStr -> FourStr -> FourStr -> Bool)
+      it "semigroup associativity should work"
+        $ property (semigroupAssoc :: FourStr -> FourStr -> FourStr -> Bool)
     describe "BoolConj" $ do
-      it "semigroup associativity should work" $
-        property (semigroupAssoc :: BoolConj -> BoolConj -> BoolConj -> Bool)
+      it "semigroup associativity should work" $ property
+        (semigroupAssoc :: BoolConj -> BoolConj -> BoolConj -> Bool)
     describe "BoolDisj" $ do
-      it "semigroup associativity should work" $
-        property (semigroupAssoc :: BoolDisj -> BoolDisj -> BoolDisj -> Bool)
+      it "semigroup associativity should work" $ property
+        (semigroupAssoc :: BoolDisj -> BoolDisj -> BoolDisj -> Bool)
     describe "Or" $ do
-      it "semigroup associativity should work" $
-        property (semigroupAssoc :: StrOrStr -> StrOrStr -> StrOrStr -> Bool)
+      it "semigroup associativity should work" $ property
+        (semigroupAssoc :: StrOrStr -> StrOrStr -> StrOrStr -> Bool)
   describe "Monoids" $ do
     describe "Bull" $ do
-      it "monoid associativity should work" $
-        property (semigroupAssoc :: Bull -> Bull -> Bull -> Bool)
-      it "monoid left identity should fail" $
-        expectFailure $ property (monoidLeftIdentity :: Bull -> Bool)
-      it "monoid right identity should fail" $
-        expectFailure $ property (monoidRightIdentity :: Bull -> Bool)
+      it "monoid associativity should work"
+        $ property (semigroupAssoc :: Bull -> Bull -> Bull -> Bool)
+      it "monoid left identity should fail" $ expectFailure $ property
+        (monoidLeftIdentity :: Bull -> Bool)
+      it "monoid right identity should fail" $ expectFailure $ property
+        (monoidRightIdentity :: Bull -> Bool)
     describe "First'" $ do
-      it "monoid associativity should work" $
-        property (semigroupAssoc :: FirstStr -> FirstStr -> FirstStr -> Bool)
-      it "monoid left identity should work" $
-        property (monoidLeftIdentity :: FirstStr -> Bool)
-      it "monoid right identity should work" $
-        property (monoidRightIdentity :: FirstStr -> Bool)
+      it "monoid associativity should work" $ property
+        (semigroupAssoc :: FirstStr -> FirstStr -> FirstStr -> Bool)
+      it "monoid left identity should work"
+        $ property (monoidLeftIdentity :: FirstStr -> Bool)
+      it "monoid right identity should work"
+        $ property (monoidRightIdentity :: FirstStr -> Bool)
     describe "Trivial" $ do
-      it "monoid left identity should work" $
-        property (monoidLeftIdentity :: Trivial -> Bool)
-      it "monoid right identity should work" $
-        property (monoidRightIdentity :: Trivial -> Bool)
+      it "monoid left identity should work"
+        $ property (monoidLeftIdentity :: Trivial -> Bool)
+      it "monoid right identity should work"
+        $ property (monoidRightIdentity :: Trivial -> Bool)
     describe "Identity" $ do
-      it "monoid left identity should work" $
-        property (monoidLeftIdentity :: IdentStr -> Bool)
-      it "monoid right identity should work" $
-        property (monoidRightIdentity :: IdentStr -> Bool)
+      it "monoid left identity should work"
+        $ property (monoidLeftIdentity :: IdentStr -> Bool)
+      it "monoid right identity should work"
+        $ property (monoidRightIdentity :: IdentStr -> Bool)
     describe "Two" $ do
-      it "monoid left identity should work" $
-        property (monoidLeftIdentity :: TwoStr -> Bool)
-      it "monoid right identity should work" $
-        property (monoidRightIdentity :: TwoStr -> Bool)
+      it "monoid left identity should work"
+        $ property (monoidLeftIdentity :: TwoStr -> Bool)
+      it "monoid right identity should work"
+        $ property (monoidRightIdentity :: TwoStr -> Bool)
     describe "BoolConj" $ do
-      it "monoid left identity should work" $
-        property (monoidLeftIdentity :: BoolConj -> Bool)
-      it "monoid right identity should work" $
-        property (monoidRightIdentity :: BoolConj -> Bool)
+      it "monoid left identity should work"
+        $ property (monoidLeftIdentity :: BoolConj -> Bool)
+      it "monoid right identity should work"
+        $ property (monoidRightIdentity :: BoolConj -> Bool)
     describe "BoolDisj" $ do
-      it "monoid left identity should work" $
-        property (monoidLeftIdentity :: BoolDisj -> Bool)
-      it "monoid right identity should work" $
-        property (monoidRightIdentity :: BoolDisj -> Bool)
+      it "monoid left identity should work"
+        $ property (monoidLeftIdentity :: BoolDisj -> Bool)
+      it "monoid right identity should work"
+        $ property (monoidRightIdentity :: BoolDisj -> Bool)
