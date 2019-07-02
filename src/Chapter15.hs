@@ -104,13 +104,13 @@ main = do
       rmzero = runMem mempty 0
       rmleft = runMem (f' <> mempty) 0
       rmright = runMem (mempty <> f') 0
-  print $ success 1 <> failure "blah"
-  print $ failure "woot" <> failure "blah"
-  print $ success 1 <> success 2
-  print $ failure "woot" <> success 2
+  print $ success 1 <> failure "blah" -- Success 1
+  print $ failure "woot" <> failure "blah" -- Failure "wootblah"
+  print $ success 1 <> success 2 -- Success 1
+  print $ failure "woot" <> success 2 -- Success 2
   print $ "Mem ----------------------"
-  print $ rmleft
-  print $ rmright
-  print $ (rmzero :: (String, Int))
-  print $ rmleft == runMem f' 0
-  print $ rmright == runMem f' 0
+  print $ rmleft -- ("hi", 1)
+  print $ rmright -- ("hi", 1)
+  print $ (rmzero :: (String, Int)) -- ("", 0)
+  print $ rmleft == runMem f' 0 -- True
+  print $ rmright == runMem f' 0 -- True
