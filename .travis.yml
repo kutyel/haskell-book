@@ -18,7 +18,7 @@ script:
   - cabal build
   - cabal test --show-details=always
 after_script:
-  - cabal install hpc-coveralls
+  - cabal new-install hpc-coveralls
   - hpc-coveralls --coverage-mode=StrictlyFullLines --exclude-dir=test haskell-book-test
 notifications:
   email: false
