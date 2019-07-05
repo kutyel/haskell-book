@@ -1,17 +1,27 @@
 language: haskell
 ghc: 8.6.5
+sudo: false
+cache:
+  directories:
+    - ~/.cabal/packages
+    - ~/.cabal/store
+matrix:
+  include:
+    - env: CABALVER=2.4 GHCVER=8.6.5
+      addons: {apt: {packages: [cabal-install-2.4,ghc-8.6.5], sources: [hvr-ghc]}}
 before_install:
   - sudo apt-get install llvm-dev
   - cabal install --only-dependencies --enable-tests
-
+install:
+  - cabal --version
+  - ghc --version
+  - travis_retry cabal new-update
 script:
   - cabal configure --enable-tests --enable-library-coverage
   - cabal build
   - cabal test --show-details=always
-
 after_script:
   - cabal install hpc-coveralls
   - hpc-coveralls --coverage-mode=StrictlyFullLines --exclude-dir=test haskell-book-test
-
 notifications:
   email: false
