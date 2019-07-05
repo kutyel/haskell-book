@@ -24,3 +24,23 @@ e =
   let ioi = readIO "1" :: IO Integer
       changed = (fmap read . fmap ("123" ++) . fmap show) ioi
    in fmap (* 3) changed
+
+-- Possibly (Maybe)
+data Possibly a
+  = LolNope
+  | Yeppers a
+  deriving (Eq, Show)
+
+instance Functor Possibly where
+  fmap _ LolNope     = LolNope
+  fmap f (Yeppers x) = Yeppers (f x)
+
+-- Sum (Either)
+data Sum a b
+  = First a
+  | Second b
+  deriving (Eq, Show)
+
+instance Functor (Sum a) where
+  fmap _ (First x)  = First x
+  fmap f (Second x) = Second (f x)

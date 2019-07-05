@@ -58,6 +58,67 @@ instance (Arbitrary a) => Arbitrary (Pair a) where
     x <- arbitrary
     return $ Pair x x
 
+-- Three
+data Three a b c =
+  Three a b c
+  deriving (Eq, Show)
+
+instance Functor (Three a b) where
+  fmap f (Three x y z) = Three x y (f z)
+
+instance (Arbitrary a, Arbitrary b, Arbitrary c) =>
+         Arbitrary (Three a b c) where
+  arbitrary = do
+    x <- arbitrary
+    y <- arbitrary
+    z <- arbitrary
+    return $ Three x y z
+
+-- Three'
+data Three' a b =
+  Three' a b b
+  deriving (Eq, Show)
+
+instance Functor (Three' a) where
+  fmap f (Three' x y z) = Three' x (f y) (f z)
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Three' a b) where
+  arbitrary = do
+    x <- arbitrary
+    y <- arbitrary
+    return $ Three' x y y
+
+-- Four
+data Four a b c d =
+  Four a b c d
+  deriving (Eq, Show)
+
+instance Functor (Four a b c) where
+  fmap f (Four x y z a) = Four x y z (f a)
+
+instance (Arbitrary a, Arbitrary b, Arbitrary c, Arbitrary d) =>
+         Arbitrary (Four a b c d) where
+  arbitrary = do
+    x <- arbitrary
+    y <- arbitrary
+    z <- arbitrary
+    a <- arbitrary
+    return $ Four x y z a
+
+-- Four'
+data Four' a b =
+  Four' a a a b
+  deriving (Eq, Show)
+
+instance Functor (Four' a) where
+  fmap f (Four' x y z a) = Four' x y z (f a)
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Four' a b) where
+  arbitrary = do
+    x <- arbitrary
+    y <- arbitrary
+    return $ Four' x x x y
+
 -- Trivial can't be made into a Functor because -> :k Trivial = * != * -> *
 data Trivial =
   Trivial
@@ -93,3 +154,23 @@ spec = do
         property (functorIdentity :: Pair Int -> Bool)
       it "functor compose law should hold" $
         property (functorCompose (+ 1) (* 2) :: Pair Int -> Bool)
+    describe "Three" $ do
+      it "functor identity law should hold" $
+        property (functorIdentity :: Three String Int Int -> Bool)
+      it "functor compose law should hold" $
+        property (functorCompose (+ 1) (* 2) :: Three String Int Int -> Bool)
+    describe "Three'" $ do
+      it "functor identity law should hold" $
+        property (functorIdentity :: Three' String Int -> Bool)
+      it "functor compose law should hold" $
+        property (functorCompose (+ 1) (* 2) :: Three' String Int -> Bool)
+    describe "Four" $ do
+      it "functor identity law should hold" $
+        property (functorIdentity :: Four Int Int Int Int -> Bool)
+      it "functor compose law should hold" $
+        property (functorCompose (+ 1) (* 2) :: Four Int Int Int Int -> Bool)
+    describe "Four'" $ do
+      it "functor identity law should hold" $
+        property (functorIdentity :: Four' String Int -> Bool)
+      it "functor compose law should hold" $
+        property (functorCompose (+ 1) (* 2) :: Four' String Int -> Bool)
