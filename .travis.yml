@@ -12,10 +12,7 @@ matrix:
 before_install:
   - sudo apt-get install llvm-dev
   - cabal install --only-dependencies --enable-tests
-install:
-  - cabal --version
-  - ghc --version
-  - travis_retry cabal new-update
+  - export PATH=/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:$PATH
 script:
   - cabal configure --enable-tests --enable-library-coverage
   - cabal build
