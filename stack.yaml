@@ -1,7 +1,6 @@
 resolver: lts-13.25
 extra-deps:
-  - hpc-coveralls-1.0.10
-  - aeson-1.4.2.0
-  - containers-0.6.0.1
+  - aeson-1.2.4.0@sha256:2ff56812644c3e272fef6b19aaff1ddab81c9984b1c1f8969521cb856bc22eab,6541
+  - containers-0.5.11.0@sha256:28ad7337057442f75bc689315ab4ec7bdf5e6b2c39668f306672cecd82c02798,16685
 packages:
   - .
