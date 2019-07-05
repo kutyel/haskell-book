@@ -13,10 +13,10 @@ before_install:
   - travis_retry curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
 install:
   - stack --no-terminal --install-ghc test --only-dependencies
+  - stack install stack-hpc-coveralls
 script:
   - stack --no-terminal test --coverage
 after_script:
-  - stack install hpc-coveralls
-  - hpc-coveralls haskell-book-test
+  - shc haskell-book haskell-book-test
 notifications:
   email: false
