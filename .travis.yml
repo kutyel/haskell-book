@@ -1,17 +1,22 @@
-language: haskell
-ghc: 8.6.5
+dist: xenial
+language: generic
+cache:
+  directories:
+  - $HOME/.stack
+addons:
+  apt:
+    packages:
+      - libgmp-dev
 before_install:
-  - sudo apt-get install llvm-dev
-  - cabal install --only-dependencies --enable-tests
-
+  - mkdir -p ~/.local/bin
+  - export PATH=$HOME/.local/bin:$PATH
+  - travis_retry curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+install:
+  - stack --no-terminal --install-ghc test --only-dependencies
 script:
-  - cabal configure --enable-tests --enable-library-coverage
-  - cabal build
-  - cabal test --show-details=always
-
+  - stack --no-terminal test --coverage
 after_script:
-  - cabal install hpc-coveralls
-  - hpc-coveralls --coverage-mode=StrictlyFullLines --exclude-dir=test haskell-book-test
-
+  - stack install hpc-coveralls
+  - hpc-coveralls haskell-book-test
 notifications:
   email: false
