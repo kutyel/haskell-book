@@ -1,8 +1,9 @@
 language: haskell
 ghc: 8.6.5
-install:
-  - cabal install hpc-coveralls
+notifications:
+  email: false
 script:
   - cabal configure --enable-tests --enable-library-coverage && cabal build && cabal test
 after_script:
+  - cabal install hpc-coveralls
   - hpc-coveralls --coverage-mode=StrictlyFullLines haskell-book-test
