@@ -2,11 +2,9 @@ language: haskell
 ghc: 8.6.5
 notifications:
   email: false
-before_install:
-  - cabal install codecov-haskell
 script:
   - cabal configure --enable-tests --enable-library-coverage && cabal build && cabal test
-  - run-cabal-test
 after_script:
-  - cabal install codecov-haskell
-  - codecov-haskell haskell-book-test
+  - cabal sandbox init && cabal install codecov-haskell
+  - .cabal-sandbox/bin/codecov-haskell --display-report haskell-book-test
+
