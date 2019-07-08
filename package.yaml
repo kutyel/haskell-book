@@ -37,4 +37,3 @@ tests:
       - haskell-book
       - hspec
       - QuickCheck
-      - hpc-coveralls
