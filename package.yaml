@@ -12,9 +12,7 @@ description: Please see the README on GitHub at <https://github.com/kutyel/haske
 dependencies:
   - base >= 4.7 && < 5
   - time
-  - text
   - split
-  - ilist
 library:
   source-dirs: src
 executables:
@@ -39,3 +37,4 @@ tests:
       - haskell-book
       - hspec
       - QuickCheck
+      - hpc-coveralls

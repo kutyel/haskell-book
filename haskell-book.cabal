@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 09f92970efe09459a83c01a2850c24706450e664f7f8bdab3c122cb001ce5a11
+-- hash: 811606167499ea1065ad2c9088c09878da6db6113e9096453fa21be2e9115399
 
 name:           haskell-book
 version:        0.1.0.0
@@ -69,9 +69,7 @@ library
       src
   build-depends:
       base >=4.7 && <5
-    , ilist
     , split
-    , text
     , time
   default-language: Haskell2010
 
@@ -85,9 +83,7 @@ executable haskell-book-exe
   build-depends:
       base >=4.7 && <5
     , haskell-book
-    , ilist
     , split
-    , text
     , time
   default-language: Haskell2010
 
@@ -109,9 +105,8 @@ test-suite haskell-book-test
       QuickCheck
     , base >=4.7 && <5
     , haskell-book
+    , hpc-coveralls
     , hspec
-    , ilist
     , split
-    , text
     , time
   default-language: Haskell2010
