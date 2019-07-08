@@ -1,25 +1,8 @@
-dist: xenial
-language: generic
-notifications:
-  email: false
-cache:
-  directories:
-  - $HOME/.stack
-addons:
-  apt:
-    packages:
-      - libgmp-dev
-env:
-  - GHCVER=8.6.5 STACK_YAML=stack.yaml
-before_install:
-  - mkdir -p ~/.local/bin
-  - export PATH=$HOME/.local/bin:$PATH
-  - travis_retry curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+language: haskell
+ghc: 8.6.5
 install:
-  - stack --no-terminal --install-ghc test --only-dependencies
-  - stack install stack-hpc-coveralls
+  - cabal install hpc-coveralls
 script:
-  - stack test :haskell-book-test --no-terminal --coverage
+  - cabal configure --enable-tests --enable-library-coverage && cabal build && cabal test
 after_script:
-  - travis_retry curl -L https://github.com/rubik/stack-hpc-coveralls/releases/download/v0.0.3.0/shc-linux-x64-$GHCVER.tar.bz2 | tar -xj
-  - ./shc haskell-book haskell-book-test
+  - hpc-coveralls --coverage-mode=StrictlyFullLines haskell-book-test
