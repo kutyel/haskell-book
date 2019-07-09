@@ -1,9 +1,24 @@
-language: haskell
-ghc: 8.6.5
+dist: xenial
+language: generic
 notifications:
   email: false
+env:
+  - GHCVER=8.6.5 STACK_YAML=stack.yaml
+cache:
+  directories:
+    - $HOME/.stack
+addons:
+  apt:
+    packages:
+      - libgmp-dev
+before_install:
+  - mkdir -p ~/.local/bin
+  - export PATH=$HOME/.local/bin:$PATH
+  - travis_retry curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+install:
+  - stack --no-terminal --install-ghc test --only-dependencies
 script:
-  - cabal configure --enable-tests --enable-library-coverage && cabal build && cabal test
+  - stack --no-terminal test --coverage
 after_script:
-  - cabal sandbox init && cabal install codecov-haskell
-  - .cabal-sandbox/bin/codecov-haskell --display-report haskell-book-test
+  - travis_retry curl -L https://github.com/fendor/stack-hpc-coveralls/releases/download/v0.0.4.1/shc-linux-x64-$GHCVER.tar.bz2 | tar -xj
+  - ./shc haskell-book haskell-book-test
