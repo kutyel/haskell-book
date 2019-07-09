@@ -2,8 +2,6 @@ dist: xenial
 language: generic
 notifications:
   email: false
-env:
-  - GHCVER=8.6.5 STACK_YAML=stack.yaml
 cache:
   directories:
     - $HOME/.stack
@@ -20,5 +18,5 @@ install:
 script:
   - stack --no-terminal test --coverage
 after_script:
-  - travis_retry curl -L https://github.com/fendor/stack-hpc-coveralls/releases/download/v0.0.4.1/shc-linux-x64-$GHCVER.tar.bz2 | tar -xj
+  - travis_retry curl -L https://github.com/fendor/stack-hpc-coveralls/releases/download/v0.0.4.1/shc-linux-x64-8.0.2.tar.bz2 | tar -xj
   - ./shc haskell-book haskell-book-test
