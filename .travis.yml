@@ -7,4 +7,3 @@ script:
 after_script:
   - cabal sandbox init && cabal install codecov-haskell
   - .cabal-sandbox/bin/codecov-haskell --display-report haskell-book-test
-
