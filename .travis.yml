@@ -18,5 +18,4 @@ install:
 script:
   - stack --no-terminal test --coverage
 after_script:
-  - travis_retry curl -L https://github.com/fendor/stack-hpc-coveralls/releases/download/v0.0.4.1/shc-linux-x64-8.0.2.tar.bz2 | tar -xj
-  - ./shc haskell-book haskell-book-test
+  - shc haskell-book haskell-book-test
