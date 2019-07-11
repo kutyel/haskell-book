@@ -1,10 +1,10 @@
 module Test.Chapter15 where
 
-import           Chapter15       (Optional (..))
+import           Chapter15       (Optional (..), Validation (..), madlibbin)
 import           Control.Monad   (liftM)
 import           Data.Monoid
 import           Test.Hspec
-import           Test.QuickCheck
+import           Test.QuickCheck hiding (Failure, Success)
 
 -- Bull
 data Bull
@@ -177,6 +177,17 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Or a b) where
     y <- arbitrary
     elements [Fst x, Snd y]
 
+-- Arbitrary Optional
+instance Arbitrary a => Arbitrary (Optional a) where
+  arbitrary = frequency [(1, return Nada), (3, liftM Only arbitrary)]
+
+-- Arbitrary Validation
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Validation a b) where
+  arbitrary = do
+    x <- arbitrary
+    y <- arbitrary
+    elements [Failure x, Success y]
+
 -- Properties
 semigroupAssoc :: (Eq s, Semigroup s) => s -> s -> s -> Bool
 semigroupAssoc a b c = (a <> (b <> c)) == ((a <> b) <> c)
@@ -203,9 +214,17 @@ type FourStr = Four String String String String
 
 type StrOrStr = Or String String
 
+type OprtStr = Optional String
+
+type ValidStr = Validation String String
+
 -- Tests
 spec :: Spec
 spec = do
+  describe "Chapter 15 exercises" $ do
+    it "madlibbin should work" $
+      madlibbin "damn" "quickly" "Jim" "beautiful" `shouldBe`
+      "damn! he said quickly as he jumped into his car Jim and drove off with his beautiful wife."
   describe "Semigroups" $ do
     describe "Trivial" $ do
       it "semigroup associativity should work" $
@@ -231,6 +250,12 @@ spec = do
     describe "Or" $ do
       it "semigroup associativity should work" $
         property (semigroupAssoc :: StrOrStr -> StrOrStr -> StrOrStr -> Bool)
+    describe "Optional" $ do
+      it "semigroup associativity should work" $
+        property (semigroupAssoc :: OprtStr -> OprtStr -> OprtStr -> Bool)
+    describe "Validation" $ do
+      it "semigroup associativity should work" $
+        property (semigroupAssoc :: ValidStr -> ValidStr -> ValidStr -> Bool)
   describe "Monoids" $ do
     describe "Bull" $ do
       it "monoid associativity should work" $
@@ -271,3 +296,8 @@ spec = do
         property (monoidLeftIdentity :: BoolDisj -> Bool)
       it "monoid right identity should work" $
         property (monoidRightIdentity :: BoolDisj -> Bool)
+    describe "Optional" $ do
+      it "monoid left identity should work" $
+        property (monoidLeftIdentity :: OprtStr -> Bool)
+      it "monoid right identity should work" $
+        property (monoidRightIdentity :: OprtStr -> Bool)
