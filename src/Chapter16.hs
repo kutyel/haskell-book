@@ -150,3 +150,48 @@ data Parappa f g a =
 
 instance (Functor f, Functor g) => Functor (Parappa f g) where
   fmap f (DaWrappa g x) = DaWrappa (fmap f g) (fmap f x)
+
+-- 7)
+data IgnoreOne f g a b =
+  IgnoringSomething (f a) (g b)
+
+instance (Functor f, Functor g) => Functor (IgnoreOne f g e) where
+  fmap f (IgnoringSomething g x) = IgnoringSomething g (fmap f x)
+
+-- 8)
+data Notorious g o a t =
+  Notorious (g o) (g a) (g t)
+
+instance (Functor g) => Functor (Notorious g o a) where
+  fmap g (Notorious o a t) = Notorious o a (fmap g t)
+
+-- 9)
+data List a
+  = Nil
+  | Cons a (List a)
+
+instance Functor List where
+  fmap _ Nil         = Nil
+  fmap f (Cons x xs) = Cons (f x) (fmap f xs)
+
+-- 10)
+data GoatLord a
+  = NoGoat
+  | OneGoat a
+  | MoreGoats (GoatLord a) (GoatLord a) (GoatLord a)
+
+instance Functor GoatLord where
+  fmap _ NoGoat            = NoGoat
+  fmap f (OneGoat x)       = OneGoat (f x)
+  fmap f (MoreGoats x y z) = MoreGoats (fmap f x) (fmap f y) (fmap f z)
+
+-- 11)
+data TalkToMe a
+  = Halt
+  | Print String a
+  | Read (String -> a)
+
+instance Functor TalkToMe where
+  fmap _ Halt        = Halt
+  fmap f (Print s x) = Print s (f x)
+  fmap f (Read g)    = Read (f . g)
