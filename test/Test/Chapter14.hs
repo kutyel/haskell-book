@@ -5,11 +5,6 @@ import           Data.List       (sort)
 import           Test.Hspec
 import           Test.QuickCheck
 
-data Fool
-  = Fulse
-  | Frue
-  deriving (Eq, Show)
-
 genFoolEqual :: Gen Fool
 genFoolEqual = elements [Fulse, Frue]
 

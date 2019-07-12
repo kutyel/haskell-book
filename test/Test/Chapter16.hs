@@ -54,6 +54,30 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Four' a b) where
     y <- arbitrary
     return $ Four' x x x y
 
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Quant a b) where
+  arbitrary = do
+    x <- arbitrary
+    y <- arbitrary
+    elements [Finance, Desk x, Bloor y]
+
+instance (Arbitrary a) => Arbitrary (K a b) where
+  arbitrary = liftM K arbitrary
+
+instance (Arbitrary b) => Arbitrary (EvilGoateeConst a b) where
+  arbitrary = liftM GoatyConst arbitrary
+
+instance (Arbitrary a) => Arbitrary (List a) where
+  arbitrary = frequency [(1, pure Nil), (3, Cons <$> arbitrary <*> arbitrary)]
+
+instance (Arbitrary a) => Arbitrary (GoatLord a) where
+  arbitrary = do
+    x <- arbitrary
+    frequency
+      [ (1, return NoGoat)
+      , (2, return $ OneGoat x)
+      , (2, return $ MoreGoats NoGoat (OneGoat x) (OneGoat x))
+      ]
+
 -- properties
 functorIdentity :: (Functor f, Eq (f a)) => f a -> Bool
 functorIdentity f = fmap id f == f
@@ -105,3 +129,28 @@ spec = do
         property (functorIdentity :: Four' String Int -> Bool)
       it "functor compose law should hold" $
         property (functorCompose (+ 1) (* 2) :: Four' String Int -> Bool)
+    describe "Quant" $ do
+      it "functor identity law should hold" $
+        property (functorIdentity :: Quant String Int -> Bool)
+      it "functor compose law should hold" $
+        property (functorCompose (+ 1) (* 2) :: Quant String Int -> Bool)
+    describe "K" $ do
+      it "functor identity law should hold" $
+        property (functorIdentity :: K String Int -> Bool)
+      it "functor compose law should hold" $
+        property (functorCompose (+ 1) (* 2) :: K String Int -> Bool)
+    describe "EvilGoateeConst" $ do
+      it "functor identity law should hold" $
+        property (functorIdentity :: EvilGoateeConst Int Int -> Bool)
+      it "functor compose law should hold" $
+        property (functorCompose (+ 1) (* 2) :: EvilGoateeConst Int Int -> Bool)
+    describe "List" $ do
+      it "functor identity law should hold" $
+        property (functorIdentity :: List Int -> Bool)
+      it "functor compose law should hold" $
+        property (functorCompose (+ 1) (* 2) :: List Int -> Bool)
+    describe "GoatLord" $ do
+      it "functor identity law should hold" $
+        property (functorIdentity :: GoatLord Int -> Bool)
+      it "functor compose law should hold" $
+        property (functorCompose (+ 1) (* 2) :: GoatLord Int -> Bool)

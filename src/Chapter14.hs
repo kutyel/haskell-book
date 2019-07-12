@@ -3,6 +3,11 @@ module Chapter14 where
 import           Chapter11 (capitalizeWord)
 import           Data.List (sort)
 
+data Fool
+  = Fulse
+  | Frue
+  deriving (Eq, Show)
+
 half :: Fractional a => a -> a
 half = (/ 2)
 

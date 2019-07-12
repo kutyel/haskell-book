@@ -176,6 +176,7 @@ data Quant a b
   = Finance
   | Desk a
   | Bloor b
+  deriving (Eq, Show)
 
 instance Functor (Quant e) where
   fmap _ Finance   = Finance
@@ -185,6 +186,7 @@ instance Functor (Quant e) where
 -- 2)
 data K a b =
   K a
+  deriving (Eq, Show)
 
 instance Functor (K e) where
   fmap _ (K x) = K x
@@ -203,6 +205,7 @@ instance Functor (Flip K' a) where
 -- 4)
 data EvilGoateeConst a b =
   GoatyConst b
+  deriving (Eq, Show)
 
 instance Functor (EvilGoateeConst e) where
   fmap f (GoatyConst x) = GoatyConst (f x)
@@ -239,6 +242,7 @@ instance (Functor g) => Functor (Notorious g o a) where
 data List a
   = Nil
   | Cons a (List a)
+  deriving (Eq, Show)
 
 instance Functor List where
   fmap _ Nil         = Nil
@@ -249,6 +253,7 @@ data GoatLord a
   = NoGoat
   | OneGoat a
   | MoreGoats (GoatLord a) (GoatLord a) (GoatLord a)
+  deriving (Eq, Show)
 
 instance Functor GoatLord where
   fmap _ NoGoat            = NoGoat
