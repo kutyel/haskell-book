@@ -1,9 +1,16 @@
+{-# LANGUAGE FlexibleInstances #-}
+
 module Test.Chapter16 where
 
 import           Chapter16
 import           Control.Monad   (liftM)
 import           Test.Hspec
 import           Test.QuickCheck
+
+instance Arbitrary a => Arbitrary (Possibly a) where
+  arbitrary = do
+    x <- arbitrary
+    frequency [(1, return LolNope), (2, return $ Yeppers x)]
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Two a b) where
   arbitrary = do
@@ -20,7 +27,7 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Or a b) where
 instance Arbitrary a => Arbitrary (Identity a) where
   arbitrary = liftM Identity arbitrary
 
-instance (Arbitrary a) => Arbitrary (Pair a) where
+instance Arbitrary a => Arbitrary (Pair a) where
   arbitrary = do
     x <- arbitrary
     return $ Pair x x
@@ -60,16 +67,19 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Quant a b) where
     y <- arbitrary
     elements [Finance, Desk x, Bloor y]
 
-instance (Arbitrary a) => Arbitrary (K a b) where
+instance Arbitrary a => Arbitrary (K a b) where
   arbitrary = liftM K arbitrary
 
-instance (Arbitrary b) => Arbitrary (EvilGoateeConst a b) where
+instance Arbitrary b => Arbitrary (Flip K a b) where
+  arbitrary = liftM (Flip . K) arbitrary
+
+instance Arbitrary b => Arbitrary (EvilGoateeConst a b) where
   arbitrary = liftM GoatyConst arbitrary
 
-instance (Arbitrary a) => Arbitrary (List a) where
+instance Arbitrary a => Arbitrary (List a) where
   arbitrary = frequency [(1, pure Nil), (3, Cons <$> arbitrary <*> arbitrary)]
 
-instance (Arbitrary a) => Arbitrary (GoatLord a) where
+instance Arbitrary a => Arbitrary (GoatLord a) where
   arbitrary = do
     x <- arbitrary
     frequency
@@ -139,6 +149,11 @@ spec = do
         property (functorIdentity :: K String Int -> Bool)
       it "functor compose law should hold" $
         property (functorCompose (+ 1) (* 2) :: K String Int -> Bool)
+    describe "Flip" $ do
+      it "functor identity law should hold" $
+        property (functorIdentity :: Flip K String Int -> Bool)
+      it "functor compose law should hold" $
+        property (functorCompose (+ 1) (* 2) :: Flip K String Int -> Bool)
     describe "EvilGoateeConst" $ do
       it "functor identity law should hold" $
         property (functorIdentity :: EvilGoateeConst Int Int -> Bool)
@@ -154,3 +169,8 @@ spec = do
         property (functorIdentity :: GoatLord Int -> Bool)
       it "functor compose law should hold" $
         property (functorCompose (+ 1) (* 2) :: GoatLord Int -> Bool)
+    describe "Possibly" $ do
+      it "functor identity law should hold" $
+        property (functorIdentity :: Possibly Int -> Bool)
+      it "functor compose law should hold" $
+        property (functorCompose (+ 1) (* 2) :: Possibly Int -> Bool)
