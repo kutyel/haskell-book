@@ -29,6 +29,76 @@ e =
       changed = (fmap read . fmap ("123" ++) . fmap show) ioi
    in fmap (* 3) changed
 
+-- Trivial can't be made into a Functor because -> :k Trivial = * != * -> *
+data Trivial =
+  Trivial
+
+-- Two
+data Two a b =
+  Two a b
+  deriving (Eq, Show)
+
+instance Functor (Two a) where
+  fmap f (Two x y) = Two x (f y)
+
+-- Or
+data Or a b
+  = Fst a
+  | Snd b
+  deriving (Eq, Show)
+
+instance Functor (Or a) where
+  fmap _ (Fst x) = Fst x
+  fmap f (Snd x) = Snd (f x)
+
+-- Identity
+data Identity a =
+  Identity a
+  deriving (Eq, Show)
+
+instance Functor Identity where
+  fmap f (Identity x) = Identity (f x)
+
+-- Pair
+data Pair a =
+  Pair a a
+  deriving (Eq, Show)
+
+instance Functor Pair where
+  fmap f (Pair x y) = Pair (f x) (f y)
+
+-- Three
+data Three a b c =
+  Three a b c
+  deriving (Eq, Show)
+
+instance Functor (Three a b) where
+  fmap f (Three x y z) = Three x y (f z)
+
+-- Three'
+data Three' a b =
+  Three' a b b
+  deriving (Eq, Show)
+
+instance Functor (Three' a) where
+  fmap f (Three' x y z) = Three' x (f y) (f z)
+
+-- Four
+data Four a b c d =
+  Four a b c d
+  deriving (Eq, Show)
+
+instance Functor (Four a b c) where
+  fmap f (Four x y z a) = Four x y z (f a)
+
+-- Four'
+data Four' a b =
+  Four' a a a b
+  deriving (Eq, Show)
+
+instance Functor (Four' a) where
+  fmap f (Four' x y z a) = Four' x y z (f a)
+
 -- Possibly (Maybe)
 data Possibly a
   = LolNope
