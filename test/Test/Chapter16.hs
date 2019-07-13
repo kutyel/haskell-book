@@ -76,6 +76,9 @@ instance Arbitrary b => Arbitrary (Flip K a b) where
 instance Arbitrary b => Arbitrary (EvilGoateeConst a b) where
   arbitrary = liftM GoatyConst arbitrary
 
+instance Arbitrary a => Arbitrary (LiftItOut Identity a) where
+  arbitrary = liftM (LiftItOut . Identity) arbitrary
+
 instance Arbitrary a => Arbitrary (List a) where
   arbitrary = frequency [(1, pure Nil), (3, Cons <$> arbitrary <*> arbitrary)]
 
@@ -159,6 +162,11 @@ spec = do
         property (functorIdentity :: EvilGoateeConst Int Int -> Bool)
       it "functor compose law should hold" $
         property (functorCompose (+ 1) (* 2) :: EvilGoateeConst Int Int -> Bool)
+    describe "LiftItOut" $ do
+      it "functor identity law should hold" $
+        property (functorIdentity :: LiftItOut Identity Int -> Bool)
+      it "functor compose law should hold" $
+        property (functorCompose (+ 1) (* 2) :: LiftItOut Identity Int -> Bool)
     describe "List" $ do
       it "functor identity law should hold" $
         property (functorIdentity :: List Int -> Bool)
