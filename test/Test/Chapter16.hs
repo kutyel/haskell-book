@@ -8,24 +8,16 @@ import           Test.Hspec
 import           Test.QuickCheck
 
 instance Arbitrary a => Arbitrary (Possibly a) where
-  arbitrary = do
-    x <- arbitrary
-    frequency [(1, return LolNope), (2, return $ Yeppers x)]
+  arbitrary = frequency [(1, pure LolNope), (2, liftA Yeppers arbitrary)]
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Two a b) where
   arbitrary = liftA2 Two arbitrary arbitrary
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Sum a b) where
-  arbitrary = do
-    x <- arbitrary
-    y <- arbitrary
-    elements [First x, Second y]
+  arbitrary = oneof [liftA First arbitrary, liftA Second arbitrary]
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Or a b) where
-  arbitrary = do
-    x <- arbitrary
-    y <- arbitrary
-    elements [Fst x, Snd y]
+  arbitrary = oneof [liftA Fst arbitrary, liftA Snd arbitrary]
 
 instance Arbitrary a => Arbitrary (Identity a) where
   arbitrary = liftA Identity arbitrary
@@ -38,18 +30,12 @@ instance (Arbitrary a, Arbitrary b, Arbitrary c) =>
   arbitrary = liftA3 Three arbitrary arbitrary arbitrary
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Three' a b) where
-  arbitrary = do
-    x <- arbitrary
-    y <- arbitrary
-    return $ Three' x y y
+  arbitrary = liftA3 Three' arbitrary arbitrary arbitrary
 
 instance (Arbitrary a, Arbitrary b, Arbitrary c) =>
          Arbitrary (Company a c b) where
-  arbitrary = do
-    x <- arbitrary
-    y <- arbitrary
-    z <- arbitrary
-    elements [DeepBlue x z, Something y]
+  arbitrary =
+    oneof [liftA2 DeepBlue arbitrary arbitrary, liftA Something arbitrary]
 
 instance (Arbitrary a, Arbitrary b, Arbitrary c, Arbitrary d) =>
          Arbitrary (Four a b c d) where
@@ -67,10 +53,7 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Four' a b) where
     return $ Four' x x x y
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Quant a b) where
-  arbitrary = do
-    x <- arbitrary
-    y <- arbitrary
-    elements [Finance, Desk x, Bloor y]
+  arbitrary = oneof [pure Finance, liftA Desk arbitrary, liftA Bloor arbitrary]
 
 instance Arbitrary a => Arbitrary (K a b) where
   arbitrary = liftA K arbitrary
@@ -99,12 +82,11 @@ instance Arbitrary a => Arbitrary (List a) where
   arbitrary = frequency [(1, pure Nil), (3, Cons <$> arbitrary <*> arbitrary)]
 
 instance Arbitrary a => Arbitrary (GoatLord a) where
-  arbitrary = do
-    x <- arbitrary
+  arbitrary =
     frequency
-      [ (1, return NoGoat)
-      , (2, return $ OneGoat x)
-      , (2, return $ MoreGoats NoGoat (OneGoat x) (OneGoat x))
+      [ (3, pure NoGoat)
+      , (2, liftA OneGoat arbitrary)
+      , (1, liftA3 MoreGoats arbitrary arbitrary arbitrary)
       ]
 
 -- properties
