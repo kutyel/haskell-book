@@ -3,7 +3,7 @@
 module Test.Chapter16 where
 
 import           Chapter16
-import           Control.Monad   (liftM)
+import           Control.Applicative (liftA, liftA2, liftA3)
 import           Test.Hspec
 import           Test.QuickCheck
 
@@ -13,10 +13,13 @@ instance Arbitrary a => Arbitrary (Possibly a) where
     frequency [(1, return LolNope), (2, return $ Yeppers x)]
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Two a b) where
+  arbitrary = liftA2 Two arbitrary arbitrary
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Sum a b) where
   arbitrary = do
     x <- arbitrary
     y <- arbitrary
-    return $ Two x y
+    elements [First x, Second y]
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Or a b) where
   arbitrary = do
@@ -25,26 +28,28 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Or a b) where
     elements [Fst x, Snd y]
 
 instance Arbitrary a => Arbitrary (Identity a) where
-  arbitrary = liftM Identity arbitrary
+  arbitrary = liftA Identity arbitrary
 
 instance Arbitrary a => Arbitrary (Pair a) where
-  arbitrary = do
-    x <- arbitrary
-    return $ Pair x x
+  arbitrary = liftA2 Pair arbitrary arbitrary
 
 instance (Arbitrary a, Arbitrary b, Arbitrary c) =>
          Arbitrary (Three a b c) where
-  arbitrary = do
-    x <- arbitrary
-    y <- arbitrary
-    z <- arbitrary
-    return $ Three x y z
+  arbitrary = liftA3 Three arbitrary arbitrary arbitrary
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Three' a b) where
   arbitrary = do
     x <- arbitrary
     y <- arbitrary
     return $ Three' x y y
+
+instance (Arbitrary a, Arbitrary b, Arbitrary c) =>
+         Arbitrary (Company a c b) where
+  arbitrary = do
+    x <- arbitrary
+    y <- arbitrary
+    z <- arbitrary
+    elements [DeepBlue x z, Something y]
 
 instance (Arbitrary a, Arbitrary b, Arbitrary c, Arbitrary d) =>
          Arbitrary (Four a b c d) where
@@ -68,16 +73,27 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Quant a b) where
     elements [Finance, Desk x, Bloor y]
 
 instance Arbitrary a => Arbitrary (K a b) where
-  arbitrary = liftM K arbitrary
+  arbitrary = liftA K arbitrary
 
 instance Arbitrary b => Arbitrary (Flip K a b) where
-  arbitrary = liftM (Flip . K) arbitrary
+  arbitrary = liftA Flip arbitrary
 
 instance Arbitrary b => Arbitrary (EvilGoateeConst a b) where
-  arbitrary = liftM GoatyConst arbitrary
+  arbitrary = liftA GoatyConst arbitrary
 
 instance Arbitrary a => Arbitrary (LiftItOut Identity a) where
-  arbitrary = liftM (LiftItOut . Identity) arbitrary
+  arbitrary = liftA LiftItOut arbitrary
+
+instance Arbitrary a => Arbitrary (Parappa Identity Identity a) where
+  arbitrary = liftA2 DaWrappa arbitrary arbitrary
+
+instance (Arbitrary a, Arbitrary b) =>
+         Arbitrary (IgnoreOne Identity Identity a b) where
+  arbitrary = liftA2 IgnoringSomething arbitrary arbitrary
+
+instance (Arbitrary a, Arbitrary b, Arbitrary c) =>
+         Arbitrary (Notorious Identity a b c) where
+  arbitrary = liftA3 Notorious arbitrary arbitrary arbitrary
 
 instance Arbitrary a => Arbitrary (List a) where
   arbitrary = frequency [(1, pure Nil), (3, Cons <$> arbitrary <*> arbitrary)]
@@ -102,6 +118,13 @@ functorCompose f g x = (fmap g (fmap f x)) == (fmap (g . f) x)
 spec :: Spec
 spec = do
   describe "Functors!" $ do
+    describe "heavy lifting!" $ do
+      it "a should be [2]" $ a `shouldBe` [2]
+      it "b should be Just [Hi,lol,Hello,lol]" $
+        b `shouldBe` Just ["Hi,lol", "Hellolol"]
+      it "c 1 should be -2" $ c 1 `shouldBe` -2
+      it "d 0 should be 1[0,1,2,3]" $ d 0 `shouldBe` "1[0,1,2,3]"
+      it "e should be 3693" $ e `shouldReturn` 3693
     describe "Two" $ do
       it "functor identity law should hold" $
         property (functorIdentity :: Two String Int -> Bool)
@@ -167,6 +190,25 @@ spec = do
         property (functorIdentity :: LiftItOut Identity Int -> Bool)
       it "functor compose law should hold" $
         property (functorCompose (+ 1) (* 2) :: LiftItOut Identity Int -> Bool)
+    describe "Parappa" $ do
+      it "functor identity law should hold" $
+        property (functorIdentity :: Parappa Identity Identity Int -> Bool)
+      it "functor compose law should hold" $
+        property
+          (functorCompose (+ 1) (* 2) :: Parappa Identity Identity Int -> Bool)
+    describe "IgnoreOne" $ do
+      it "functor identity law should hold" $
+        property
+          (functorIdentity :: IgnoreOne Identity Identity String Int -> Bool)
+      it "functor compose law should hold" $
+        property
+          (functorCompose (+ 1) (* 2) :: IgnoreOne Identity Identity String Int -> Bool)
+    describe "Notorious" $ do
+      it "functor identity law should hold" $
+        property (functorIdentity :: Notorious Identity Int Int Int -> Bool)
+      it "functor compose law should hold" $
+        property
+          (functorCompose (+ 1) (* 2) :: Notorious Identity Int Int Int -> Bool)
     describe "List" $ do
       it "functor identity law should hold" $
         property (functorIdentity :: List Int -> Bool)
@@ -182,3 +224,13 @@ spec = do
         property (functorIdentity :: Possibly Int -> Bool)
       it "functor compose law should hold" $
         property (functorCompose (+ 1) (* 2) :: Possibly Int -> Bool)
+    describe "Sum" $ do
+      it "functor identity law should hold" $
+        property (functorIdentity :: Sum String Int -> Bool)
+      it "functor compose law should hold" $
+        property (functorCompose (+ 1) (* 2) :: Sum String Int -> Bool)
+    describe "Company" $ do
+      it "functor identity law should hold" $
+        property (functorIdentity :: Company Int Int Int -> Bool)
+      it "functor compose law should hold" $
+        property (functorCompose (+ 1) (* 2) :: Company Int Int Int -> Bool)
