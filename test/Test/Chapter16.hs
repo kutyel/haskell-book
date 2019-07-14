@@ -3,80 +3,71 @@
 module Test.Chapter16 where
 
 import           Chapter16
-import           Control.Applicative (liftA, liftA2, liftA3)
 import           Test.Hspec
 import           Test.QuickCheck
 
 instance Arbitrary a => Arbitrary (Possibly a) where
-  arbitrary = frequency [(1, pure LolNope), (2, liftA Yeppers arbitrary)]
+  arbitrary = frequency [(1, pure LolNope), (2, Yeppers <$> arbitrary)]
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Two a b) where
-  arbitrary = liftA2 Two arbitrary arbitrary
+  arbitrary = Two <$> arbitrary <*> arbitrary
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Sum a b) where
-  arbitrary = oneof [liftA First arbitrary, liftA Second arbitrary]
+  arbitrary = oneof [First <$> arbitrary, Second <$> arbitrary]
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Or a b) where
-  arbitrary = oneof [liftA Fst arbitrary, liftA Snd arbitrary]
+  arbitrary = oneof [Fst <$> arbitrary, Snd <$> arbitrary]
 
 instance Arbitrary a => Arbitrary (Identity a) where
-  arbitrary = liftA Identity arbitrary
+  arbitrary = Identity <$> arbitrary
 
 instance Arbitrary a => Arbitrary (Pair a) where
-  arbitrary = liftA2 Pair arbitrary arbitrary
+  arbitrary = Pair <$> arbitrary <*> arbitrary
 
 instance (Arbitrary a, Arbitrary b, Arbitrary c) =>
          Arbitrary (Three a b c) where
-  arbitrary = liftA3 Three arbitrary arbitrary arbitrary
+  arbitrary = Three <$> arbitrary <*> arbitrary <*> arbitrary
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Three' a b) where
-  arbitrary = liftA3 Three' arbitrary arbitrary arbitrary
+  arbitrary = Three' <$> arbitrary <*> arbitrary <*> arbitrary
 
 instance (Arbitrary a, Arbitrary b, Arbitrary c) =>
          Arbitrary (Company a c b) where
   arbitrary =
-    oneof [liftA2 DeepBlue arbitrary arbitrary, liftA Something arbitrary]
+    oneof [DeepBlue <$> arbitrary <*> arbitrary, Something <$> arbitrary]
 
 instance (Arbitrary a, Arbitrary b, Arbitrary c, Arbitrary d) =>
          Arbitrary (Four a b c d) where
-  arbitrary = do
-    x <- arbitrary
-    y <- arbitrary
-    z <- arbitrary
-    a <- arbitrary
-    return $ Four x y z a
+  arbitrary = Four <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Four' a b) where
-  arbitrary = do
-    x <- arbitrary
-    y <- arbitrary
-    return $ Four' x x x y
+  arbitrary = Four' <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Quant a b) where
-  arbitrary = oneof [pure Finance, liftA Desk arbitrary, liftA Bloor arbitrary]
+  arbitrary = oneof [pure Finance, Desk <$> arbitrary, Bloor <$> arbitrary]
 
 instance Arbitrary a => Arbitrary (K a b) where
-  arbitrary = liftA K arbitrary
+  arbitrary = K <$> arbitrary
 
 instance Arbitrary b => Arbitrary (Flip K a b) where
-  arbitrary = liftA Flip arbitrary
+  arbitrary = Flip <$> arbitrary
 
 instance Arbitrary b => Arbitrary (EvilGoateeConst a b) where
-  arbitrary = liftA GoatyConst arbitrary
+  arbitrary = GoatyConst <$> arbitrary
 
 instance Arbitrary a => Arbitrary (LiftItOut Identity a) where
-  arbitrary = liftA LiftItOut arbitrary
+  arbitrary = LiftItOut <$> arbitrary
 
 instance Arbitrary a => Arbitrary (Parappa Identity Identity a) where
-  arbitrary = liftA2 DaWrappa arbitrary arbitrary
+  arbitrary = DaWrappa <$> arbitrary <*> arbitrary
 
 instance (Arbitrary a, Arbitrary b) =>
          Arbitrary (IgnoreOne Identity Identity a b) where
-  arbitrary = liftA2 IgnoringSomething arbitrary arbitrary
+  arbitrary = IgnoringSomething <$> arbitrary <*> arbitrary
 
 instance (Arbitrary a, Arbitrary b, Arbitrary c) =>
          Arbitrary (Notorious Identity a b c) where
-  arbitrary = liftA3 Notorious arbitrary arbitrary arbitrary
+  arbitrary = Notorious <$> arbitrary <*> arbitrary <*> arbitrary
 
 instance Arbitrary a => Arbitrary (List a) where
   arbitrary = frequency [(1, pure Nil), (3, Cons <$> arbitrary <*> arbitrary)]
@@ -85,8 +76,8 @@ instance Arbitrary a => Arbitrary (GoatLord a) where
   arbitrary =
     frequency
       [ (3, pure NoGoat)
-      , (2, liftA OneGoat arbitrary)
-      , (1, liftA3 MoreGoats arbitrary arbitrary arbitrary)
+      , (2, OneGoat <$> arbitrary)
+      , (1, MoreGoats <$> arbitrary <*> arbitrary <*> arbitrary)
       ]
 
 -- properties

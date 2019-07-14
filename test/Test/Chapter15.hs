@@ -1,7 +1,6 @@
 module Test.Chapter15 where
 
 import           Chapter15       (Optional (..), Validation (..), madlibbin)
-import           Control.Monad   (liftM)
 import           Data.Monoid
 import           Test.Hspec
 import           Test.QuickCheck hiding (Failure, Success)
@@ -39,8 +38,7 @@ instance Monoid (First' a) where
   mempty = First' Nada
 
 instance Arbitrary a => Arbitrary (First' a) where
-  arbitrary =
-    frequency [(1, return $ First' Nada), (3, liftM (First' . Only) arbitrary)]
+  arbitrary = frequency [(1, pure $ First' Nada), (3, First' <$> arbitrary)]
 
 -- Trivial
 data Trivial =
@@ -54,7 +52,7 @@ instance Monoid Trivial where
   mempty = Trivial
 
 instance Arbitrary Trivial where
-  arbitrary = return Trivial
+  arbitrary = pure Trivial
 
 -- Identity
 data Identity a =
@@ -68,7 +66,7 @@ instance Monoid a => Monoid (Identity a) where
   mempty = Identity mempty
 
 instance Arbitrary a => Arbitrary (Identity a) where
-  arbitrary = liftM Identity arbitrary
+  arbitrary = Identity <$> arbitrary
 
 -- Two
 data Two a b =
@@ -82,10 +80,7 @@ instance (Monoid a, Monoid b) => Monoid (Two a b) where
   mempty = Two mempty mempty
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Two a b) where
-  arbitrary = do
-    x <- arbitrary
-    y <- arbitrary
-    return $ Two x y
+  arbitrary = Two <$> arbitrary <*> arbitrary
 
 -- Three
 data Three a b c =
@@ -98,11 +93,7 @@ instance (Semigroup a, Semigroup b, Semigroup c) =>
 
 instance (Arbitrary a, Arbitrary b, Arbitrary c) =>
          Arbitrary (Three a b c) where
-  arbitrary = do
-    x <- arbitrary
-    y <- arbitrary
-    z <- arbitrary
-    return $ Three x y z
+  arbitrary = Three <$> arbitrary <*> arbitrary <*> arbitrary
 
 -- Four
 data Four a b c d =
@@ -115,12 +106,7 @@ instance (Semigroup a, Semigroup b, Semigroup c, Semigroup d) =>
 
 instance (Arbitrary a, Arbitrary b, Arbitrary c, Arbitrary d) =>
          Arbitrary (Four a b c d) where
-  arbitrary = do
-    w <- arbitrary
-    x <- arbitrary
-    y <- arbitrary
-    z <- arbitrary
-    return $ Four w x y z
+  arbitrary = Four <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
 
 -- BoolConj (and)
 newtype BoolConj =
@@ -137,7 +123,7 @@ instance Monoid BoolConj where
   mempty = BoolConj True
 
 instance Arbitrary BoolConj where
-  arbitrary = liftM BoolConj arbitrary
+  arbitrary = BoolConj <$> arbitrary
 
 -- BoolDisj (or)
 newtype BoolDisj =
@@ -155,7 +141,7 @@ instance Monoid BoolDisj where
   mempty = BoolDisj False
 
 instance Arbitrary BoolDisj where
-  arbitrary = liftM BoolDisj arbitrary
+  arbitrary = BoolDisj <$> arbitrary
 
 -- Or
 data Or a b
@@ -172,21 +158,15 @@ instance Semigroup (Or a b) where
       (Snd x, Snd _) -> Snd x
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Or a b) where
-  arbitrary = do
-    x <- arbitrary
-    y <- arbitrary
-    elements [Fst x, Snd y]
+  arbitrary = oneof [Fst <$> arbitrary, Snd <$> arbitrary]
 
 -- Arbitrary Optional
 instance Arbitrary a => Arbitrary (Optional a) where
-  arbitrary = frequency [(1, return Nada), (3, liftM Only arbitrary)]
+  arbitrary = frequency [(1, pure Nada), (3, Only <$> arbitrary)]
 
 -- Arbitrary Validation
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Validation a b) where
-  arbitrary = do
-    x <- arbitrary
-    y <- arbitrary
-    elements [Failure x, Success y]
+  arbitrary = oneof [Failure <$> arbitrary, Success <$> arbitrary]
 
 -- Properties
 semigroupAssoc :: (Eq s, Semigroup s) => s -> s -> s -> Bool
