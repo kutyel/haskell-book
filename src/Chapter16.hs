@@ -146,6 +146,7 @@ data D =
 data Sum' b a
   = First' a
   | Second' b
+  deriving (Eq, Show)
 
 instance Functor (Sum' e) where
   fmap f (First' a)  = First' (f a)

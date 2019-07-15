@@ -15,6 +15,9 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Two a b) where
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Sum a b) where
   arbitrary = oneof [First <$> arbitrary, Second <$> arbitrary]
 
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Sum' a b) where
+  arbitrary = oneof [First' <$> arbitrary, Second' <$> arbitrary]
+
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Or a b) where
   arbitrary = oneof [Fst <$> arbitrary, Snd <$> arbitrary]
 
@@ -80,7 +83,17 @@ instance Arbitrary a => Arbitrary (GoatLord a) where
       , (1, MoreGoats <$> arbitrary <*> arbitrary <*> arbitrary)
       ]
 
+instance (Arbitrary a, Arbitrary b) => Arbitrary (More b a) where
+  arbitrary =
+    oneof
+      [ L <$> arbitrary <*> arbitrary <*> arbitrary
+      , R <$> arbitrary <*> arbitrary <*> arbitrary
+      ]
+
 -- properties
+prop_Eq :: (Eq a) => a -> Bool
+prop_Eq x = x == x
+
 functorIdentity :: (Functor f, Eq (f a)) => f a -> Bool
 functorIdentity f = fmap id f == f
 
@@ -99,26 +112,32 @@ spec = do
       it "d 0 should be 1[0,1,2,3]" $ d 0 `shouldBe` "1[0,1,2,3]"
       it "e should be 3693" $ e `shouldReturn` 3693
     describe "Two" $ do
+      it "has an instance of Eq" $ property (prop_Eq :: Two String Int -> Bool)
       it "functor identity law should hold" $
         property (functorIdentity :: Two String Int -> Bool)
       it "functor compose law should hold" $
         property (functorCompose (+ 1) (* 2) :: Two String Int -> Bool)
     describe "Or" $ do
+      it "has an instance of Eq" $ property (prop_Eq :: Or String Int -> Bool)
       it "functor identity law should hold" $
         property (functorIdentity :: Or String Int -> Bool)
       it "functor compose law should hold" $
         property (functorCompose (+ 1) (* 2) :: Or String Int -> Bool)
     describe "Identity" $ do
+      it "has an instance of Eq" $ property (prop_Eq :: Identity String -> Bool)
       it "functor identity law should hold" $
         property (functorIdentity :: Identity Int -> Bool)
       it "functor compose law should hold" $
         property (functorCompose (+ 1) (* 2) :: Identity Int -> Bool)
     describe "Pair" $ do
+      it "has an instance of Eq" $ property (prop_Eq :: Pair Int -> Bool)
       it "functor identity law should hold" $
         property (functorIdentity :: Pair Int -> Bool)
       it "functor compose law should hold" $
         property (functorCompose (+ 1) (* 2) :: Pair Int -> Bool)
     describe "Three" $ do
+      it "has an instance of Eq" $
+        property (prop_Eq :: Three Bool String Int -> Bool)
       it "functor identity law should hold" $
         property (functorIdentity :: Three String Int Int -> Bool)
       it "functor compose law should hold" $
@@ -138,6 +157,11 @@ spec = do
         property (functorIdentity :: Four' String Int -> Bool)
       it "functor compose law should hold" $
         property (functorCompose (+ 1) (* 2) :: Four' String Int -> Bool)
+    describe "More" $ do
+      it "functor identity law should hold" $
+        property (functorIdentity :: More String Int -> Bool)
+      it "functor compose law should hold" $
+        property (functorCompose (+ 1) (* 2) :: More String Int -> Bool)
     describe "Quant" $ do
       it "functor identity law should hold" $
         property (functorIdentity :: Quant String Int -> Bool)
@@ -202,6 +226,11 @@ spec = do
         property (functorIdentity :: Sum String Int -> Bool)
       it "functor compose law should hold" $
         property (functorCompose (+ 1) (* 2) :: Sum String Int -> Bool)
+    describe "Sum'" $ do
+      it "functor identity law should hold" $
+        property (functorIdentity :: Sum' String Int -> Bool)
+      it "functor compose law should hold" $
+        property (functorCompose (+ 1) (* 2) :: Sum' String Int -> Bool)
     describe "Company" $ do
       it "functor identity law should hold" $
         property (functorIdentity :: Company Int Int Int -> Bool)
