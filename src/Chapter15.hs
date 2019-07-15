@@ -2,6 +2,100 @@ module Chapter15 where
 
 import           Data.Monoid
 
+-- Trivial
+data Trivial =
+  Trivial
+  deriving (Eq, Show)
+
+instance Semigroup Trivial where
+  _ <> _ = Trivial
+
+instance Monoid Trivial where
+  mempty = Trivial
+
+-- Identity
+data Identity a =
+  Identity a
+  deriving (Eq, Show)
+
+instance Semigroup a => Semigroup (Identity a) where
+  (Identity x) <> (Identity y) = Identity (x <> y)
+
+instance Monoid a => Monoid (Identity a) where
+  mempty = Identity mempty
+
+-- Two
+data Two a b =
+  Two a b
+  deriving (Eq, Show)
+
+instance (Semigroup a, Semigroup b) => Semigroup (Two a b) where
+  (Two x y) <> (Two a b) = Two (x <> a) (y <> b)
+
+instance (Monoid a, Monoid b) => Monoid (Two a b) where
+  mempty = Two mempty mempty
+
+-- Three
+data Three a b c =
+  Three a b c
+  deriving (Eq, Show)
+
+instance (Semigroup a, Semigroup b, Semigroup c) =>
+         Semigroup (Three a b c) where
+  (Three x y z) <> (Three a b c) = Three (x <> a) (y <> b) (z <> c)
+
+-- Four
+data Four a b c d =
+  Four a b c d
+  deriving (Eq, Show)
+
+instance (Semigroup a, Semigroup b, Semigroup c, Semigroup d) =>
+         Semigroup (Four a b c d) where
+  (Four w x y z) <> (Four a b c d) = Four (w <> a) (x <> b) (y <> c) (z <> d)
+
+-- Bull
+data Bull
+  = Fools
+  | Twoo
+  deriving (Eq, Show)
+
+instance Semigroup Bull where
+  _ <> _ = Fools
+
+instance Monoid Bull where
+  mempty = Fools
+
+-- Or
+data Or a b
+  = Fst a
+  | Snd b
+  deriving (Eq, Show)
+
+instance Semigroup (Or a b) where
+  x <> y =
+    case (x, y) of
+      (Fst _, Snd x) -> Snd x
+      (Fst _, Fst x) -> Fst x
+      (Snd x, Fst _) -> Snd x
+      (Snd x, Snd _) -> Snd x
+
+-- First'
+newtype First' a =
+  First'
+    { getFirst' :: Optional a
+    }
+  deriving (Eq, Show)
+
+instance Semigroup (First' a) where
+  a <> b =
+    case (getFirst' a, getFirst' b) of
+      (Nada, Nada) -> First' Nada
+      (Only x, _)  -> First' (Only x)
+      (_, Only x)  -> First' (Only x)
+
+instance Monoid (First' a) where
+  mempty = First' Nada
+
 -- Optional Monoid
 data Optional a
   = Nada
@@ -40,6 +134,35 @@ madlibbin e adv noun adj =
     , adj
     , " wife."
     ]
+
+-- BoolConj (and)
+newtype BoolConj =
+  BoolConj Bool
+  deriving (Eq, Show)
+
+instance Semigroup BoolConj where
+  BoolConj x <> BoolConj y =
+    case (x, y) of
+      (True, True) -> BoolConj True
+      (_, _)       -> BoolConj False
+
+instance Monoid BoolConj where
+  mempty = BoolConj True
+
+-- BoolDisj (or)
+newtype BoolDisj =
+  BoolDisj Bool
+  deriving (Eq, Show)
+
+instance Semigroup BoolDisj where
+  (BoolDisj x) <> (BoolDisj y) =
+    case (x, y) of
+      (_, True) -> BoolDisj True
+      (True, _) -> BoolDisj True
+      (_, _)    -> BoolDisj False
+
+instance Monoid BoolDisj where
+  mempty = BoolDisj False
 
 -- Combine
 newtype Combine a b =

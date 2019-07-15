@@ -91,9 +91,6 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (More b a) where
       ]
 
 -- properties
-prop_Eq :: (Eq a) => a -> Bool
-prop_Eq x = x == x
-
 functorIdentity :: (Functor f, Eq (f a)) => f a -> Bool
 functorIdentity f = fmap id f == f
 
@@ -112,32 +109,26 @@ spec = do
       it "d 0 should be 1[0,1,2,3]" $ d 0 `shouldBe` "1[0,1,2,3]"
       it "e should be 3693" $ e `shouldReturn` 3693
     describe "Two" $ do
-      it "has an instance of Eq" $ property (prop_Eq :: Two String Int -> Bool)
       it "functor identity law should hold" $
         property (functorIdentity :: Two String Int -> Bool)
       it "functor compose law should hold" $
         property (functorCompose (+ 1) (* 2) :: Two String Int -> Bool)
     describe "Or" $ do
-      it "has an instance of Eq" $ property (prop_Eq :: Or String Int -> Bool)
       it "functor identity law should hold" $
         property (functorIdentity :: Or String Int -> Bool)
       it "functor compose law should hold" $
         property (functorCompose (+ 1) (* 2) :: Or String Int -> Bool)
     describe "Identity" $ do
-      it "has an instance of Eq" $ property (prop_Eq :: Identity String -> Bool)
       it "functor identity law should hold" $
         property (functorIdentity :: Identity Int -> Bool)
       it "functor compose law should hold" $
         property (functorCompose (+ 1) (* 2) :: Identity Int -> Bool)
     describe "Pair" $ do
-      it "has an instance of Eq" $ property (prop_Eq :: Pair Int -> Bool)
       it "functor identity law should hold" $
         property (functorIdentity :: Pair Int -> Bool)
       it "functor compose law should hold" $
         property (functorCompose (+ 1) (* 2) :: Pair Int -> Bool)
     describe "Three" $ do
-      it "has an instance of Eq" $
-        property (prop_Eq :: Three Bool String Int -> Bool)
       it "functor identity law should hold" $
         property (functorIdentity :: Three String Int Int -> Bool)
       it "functor compose law should hold" $
