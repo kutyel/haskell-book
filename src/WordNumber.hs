@@ -22,6 +22,6 @@ digits n = digits (div n 10) ++ [mod n 10]
 wordNumber :: Int -> String
 wordNumber = concat . intersperse "-" . map digitToWord . digits
 
-main :: IO ()
+main :: IO String
 main = do
-  print (wordNumber 12324546) -- "one-two-three-two-four-five-four-six" 🎉
+  pure $ wordNumber 12324546 -- "one-two-three-two-four-five-four-six" 🎉
