@@ -18,9 +18,6 @@ instance Arbitrary a => Arbitrary (Constant a b) where
 instance Eq a => EqProp (Constant a b) where
   (=-=) = eq
 
-tuple :: (String, String, String)
-tuple = ("a", "a", "a")
-
 -- tests
 spec :: Spec
 spec = do
@@ -37,9 +34,7 @@ spec = do
     it "tupled should be Just (6, 5)" $ tupled `shouldBe` Just (6, 5)
     it "maxed should be Just 3" $ maxed `shouldBe` Just 3
     it "summed should be Just 5" $ summed `shouldBe` Just 5
-    describe "Identity" $ do
-      it "applicative laws should hold" $
-        quickBatch $ applicative $ Identity tuple
-    -- describe "Constant" $ do
-    --   it "applicative laws should hold" $
-    --     quickBatch $ applicative $ Constant tuple
+    it "Identity -> should hold all applicative laws!" $
+      quickBatch $ applicative (undefined :: Identity (Int, Int, Int))
+    it "Constant -> should hold all applicative laws!" $
+      quickBatch $ applicative (undefined :: Constant String (Int, Int, Int))
