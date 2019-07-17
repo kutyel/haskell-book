@@ -170,6 +170,9 @@ newtype Combine a b =
     { unCombine :: (a -> b)
     }
 
+instance Show (Combine a b) where
+  show _ = "Combine"
+
 instance Semigroup b => Semigroup (Combine a b) where
   Combine f <> Combine g = Combine (f <> g)
 
@@ -181,6 +184,9 @@ newtype Comp a =
   Comp
     { unComp :: (a -> a)
     }
+
+instance Show (Comp a) where
+  show _ = "Comp"
 
 instance Semigroup (Comp a) where
   Comp f <> Comp g = Comp (f . g)

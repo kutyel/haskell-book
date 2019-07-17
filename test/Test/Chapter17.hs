@@ -3,13 +3,23 @@ module Test.Chapter17 where
 import           Chapter17
 import           Test.Hspec
 import           Test.QuickCheck
+import           Test.QuickCheck.Checkers
+import           Test.QuickCheck.Classes
 
 instance Arbitrary a => Arbitrary (Identity a) where
   arbitrary = Identity <$> arbitrary
 
--- laws
-appIdentity :: (Applicative f, Eq (f a)) => f a -> Bool
-appIdentity f = (pure id <*> f) == f
+instance Eq a => EqProp (Identity a) where
+  (=-=) = eq
+
+instance Arbitrary a => Arbitrary (Constant a b) where
+  arbitrary = Constant <$> arbitrary
+
+instance Eq a => EqProp (Constant a b) where
+  (=-=) = eq
+
+tuple :: (String, String, String)
+tuple = ("a", "a", "a")
 
 -- tests
 spec :: Spec
@@ -28,5 +38,8 @@ spec = do
     it "maxed should be Just 3" $ maxed `shouldBe` Just 3
     it "summed should be Just 5" $ summed `shouldBe` Just 5
     describe "Identity" $ do
-      it "functor identity law should hold" $
-        property (appIdentity :: Identity Int -> Bool)
+      it "applicative laws should hold" $
+        quickBatch $ applicative $ Identity tuple
+    -- describe "Constant" $ do
+    --   it "applicative laws should hold" $
+    --     quickBatch $ applicative $ Constant tuple

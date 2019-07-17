@@ -34,6 +34,13 @@ instance Arbitrary BoolConj where
 instance Arbitrary BoolDisj where
   arbitrary = BoolDisj <$> arbitrary
 
+instance (CoArbitrary a, Arbitrary a) => Arbitrary (Comp a) where
+  arbitrary = Comp <$> arbitrary
+
+instance (CoArbitrary a, Arbitrary a, CoArbitrary b, Arbitrary b) =>
+         Arbitrary (Combine a b) where
+  arbitrary = Combine <$> arbitrary
+
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Or a b) where
   arbitrary = oneof [Fst <$> arbitrary, Snd <$> arbitrary]
 
@@ -58,6 +65,9 @@ monoidRightIdentity a = (a <> mempty) == a
 firstMappend :: First' a -> First' a -> First' a
 firstMappend = mappend
 
+fAssoc :: (Eq a, Semigroup b) => (b -> t -> a) -> t -> b -> b -> b -> Bool
+fAssoc f v a b c = (f (a <> (b <> c)) $ v) == (f ((a <> b) <> c) $ v)
+
 -- Aliases
 type FirstStr = First' String
 
@@ -74,6 +84,10 @@ type StrOrStr = Or String String
 type OprtStr = Optional String
 
 type ValidStr = Validation String String
+
+type CombStr = Combine String String
+
+type CompStr = Comp String
 
 -- Tests
 spec :: Spec
@@ -104,6 +118,14 @@ spec = do
     describe "BoolDisj" $ do
       it "semigroup associativity should work" $
         property (semigroupAssoc :: BoolDisj -> BoolDisj -> BoolDisj -> Bool)
+    describe "Combine" $ do
+      it "semigroup associativity should work" $
+        property
+          (fAssoc unCombine :: String -> CombStr -> CombStr -> CombStr -> Bool)
+    describe "Comp" $ do
+      it "semigroup associativity should work" $
+        property
+          (fAssoc unComp :: String -> CompStr -> CompStr -> CompStr -> Bool)
     describe "Or" $ do
       it "semigroup associativity should work" $
         property (semigroupAssoc :: StrOrStr -> StrOrStr -> StrOrStr -> Bool)
