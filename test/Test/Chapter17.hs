@@ -18,6 +18,8 @@ instance Arbitrary a => Arbitrary (Constant a b) where
 instance Eq a => EqProp (Constant a b) where
   (=-=) = eq
 
+type Types = (Int, Bool, Double) -- this will be used to generate random values!
+
 -- tests
 spec :: Spec
 spec = do
@@ -35,6 +37,6 @@ spec = do
     it "maxed should be Just 3" $ maxed `shouldBe` Just 3
     it "summed should be Just 5" $ summed `shouldBe` Just 5
     it "Identity -> should hold all applicative laws!" $
-      quickBatch $ applicative (undefined :: Identity (Int, Int, Int))
+      quickBatch $ applicative (undefined :: Identity Types)
     it "Constant -> should hold all applicative laws!" $
-      quickBatch $ applicative (undefined :: Constant String (Int, Int, Int))
+      quickBatch $ applicative (undefined :: Constant String Types)

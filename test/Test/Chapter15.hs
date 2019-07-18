@@ -37,8 +37,7 @@ instance Arbitrary BoolDisj where
 instance (CoArbitrary a, Arbitrary a) => Arbitrary (Comp a) where
   arbitrary = Comp <$> arbitrary
 
-instance (CoArbitrary a, Arbitrary a, CoArbitrary b, Arbitrary b) =>
-         Arbitrary (Combine a b) where
+instance (CoArbitrary a, Arbitrary b) => Arbitrary (Combine a b) where
   arbitrary = Combine <$> arbitrary
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Or a b) where
