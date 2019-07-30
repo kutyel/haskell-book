@@ -19,7 +19,7 @@ instance Eq a => EqProp (Constant a b) where
   (=-=) = eq
 
 instance Arbitrary a => Arbitrary (Option a) where
-  arbitrary = Some <$> arbitrary
+  arbitrary = frequency [(1, pure None), (3, Some <$> arbitrary)]
 
 instance Eq a => EqProp (Option a) where
   (=-=) = eq
