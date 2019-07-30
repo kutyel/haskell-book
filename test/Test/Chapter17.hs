@@ -42,6 +42,9 @@ spec = do
     it "tupled should be Just (6, 5)" $ tupled `shouldBe` Just (6, 5)
     it "maxed should be Just 3" $ maxed `shouldBe` Just 3
     it "summed should be Just 5" $ summed `shouldBe` Just 5
+    it "sum 2 + 3 should be Just 5" $ sum <$> sequence [x, y'] `shouldBe` Just 5
+    it "sum everything and should be Just 20" $
+      sum <$> sequence [added, y, z] `shouldBe` Just 20
     it "fixer upper const should Just Hello" $ ex1 `shouldBe` Just "Hello"
     it "fixer upper (,,,) should Just (,,,)" $
       ex2 `shouldBe` Just (90, 10, "Tierness", [1, 2, 3])
