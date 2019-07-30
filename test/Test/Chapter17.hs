@@ -18,6 +18,12 @@ instance Arbitrary a => Arbitrary (Constant a b) where
 instance Eq a => EqProp (Constant a b) where
   (=-=) = eq
 
+instance Arbitrary a => Arbitrary (Option a) where
+  arbitrary = Some <$> arbitrary
+
+instance Eq a => EqProp (Option a) where
+  (=-=) = eq
+
 type Types = (Int, Bool, Double) -- this will be used to generate random values!
 
 -- tests
@@ -36,7 +42,12 @@ spec = do
     it "tupled should be Just (6, 5)" $ tupled `shouldBe` Just (6, 5)
     it "maxed should be Just 3" $ maxed `shouldBe` Just 3
     it "summed should be Just 5" $ summed `shouldBe` Just 5
+    it "fixer upper const should Just Hello" $ ex1 `shouldBe` Just "Hello"
+    it "fixer upper (,,,) should Just (,,,)" $
+      ex2 `shouldBe` Just (90, 10, "Tierness", [1, 2, 3])
     it "Identity -> should hold all applicative laws!" $
       quickBatch $ applicative (undefined :: Identity Types)
     it "Constant -> should hold all applicative laws!" $
       quickBatch $ applicative (undefined :: Constant String Types)
+    it "Option -> should hold all applicative laws!" $
+      quickBatch $ applicative (undefined :: Option Types)

@@ -88,3 +88,26 @@ instance Functor (Constant a) where
 instance Monoid a => Applicative (Constant a) where
   pure = Constant . mempty
   (Constant x) <*> (Constant y) = Constant (x <> y)
+
+-- Fixer Upper
+-- 1)
+ex1 = const <$> Just "Hello" <*> pure "World"
+
+-- 2)
+ex2 = (,,,) <$> Just 90 <*> Just 10 <*> Just "Tierness" <*> pure [1, 2, 3]
+
+-- Reason tribute
+data Option a
+  = None
+  | Some a
+  deriving (Eq, Show)
+
+instance Functor Option where
+  fmap _ None     = None
+  fmap f (Some x) = Some (f x)
+
+instance Applicative Option where
+  pure = Some
+  None <*> _ = None
+  _ <*> None = None
+  (Some f) <*> (Some x) = Some (f x)
