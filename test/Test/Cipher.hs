@@ -21,7 +21,7 @@ prop_vigenereCipher =
   forAll strNonEmptyGen (\s -> (fromVigenere s . toVigenere s) s == s)
 
 spec :: Spec
-spec = do
+spec =
   describe "Cihpers" $ do
     it "Caesar cipher should work" $ property prop_caesarCipher
     it "Vigenere cipher should work" $ property prop_vigenereCipher

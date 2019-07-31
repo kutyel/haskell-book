@@ -5,12 +5,12 @@ import           Test.Hspec
 import           Test.QuickCheck
 
 spec :: Spec
-spec = do
+spec =
   describe "Chapter8" $ do
-    it "1 + 1 is greater than 1" $ do (1 + 1) > 1 `shouldBe` True
-    it "2 + 2 is equal to 4" $ do 2 + 2 `shouldBe` 4
+    it "1 + 1 is greater than 1" $ (1 + 1) > 1 `shouldBe` True
+    it "2 + 2 is equal to 4" $ 2 + 2 `shouldBe` 4
     -- property testing!
-    it "x + 1 is always greater than x" $ do property $ \x -> x + 1 > (x :: Int)
+    it "x + 1 is always greater than x" $ property $ \x -> x + 1 > (x :: Int)
     it "dividedBy should work" $ do
       dividedBy 15 3 `shouldBe` (5, 0)
       dividedBy 22 5 `shouldBe` (4, 2)

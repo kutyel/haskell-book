@@ -65,7 +65,7 @@ firstMappend :: First' a -> First' a -> First' a
 firstMappend = mappend
 
 fAssoc :: (Eq a, Semigroup b) => (b -> t -> a) -> t -> b -> b -> b -> Bool
-fAssoc f v a b c = (f (a <> (b <> c)) $ v) == (f ((a <> b) <> c) $ v)
+fAssoc f v a b c = f (a <> (b <> c)) v == f ((a <> b) <> c) v
 
 -- Aliases
 type FirstStr = First' String
@@ -91,49 +91,49 @@ type CompStr = Comp String
 -- Tests
 spec :: Spec
 spec = do
-  describe "Chapter 15 exercises" $ do
+  describe "Chapter 15 exercises" $
     it "madlibbin should work" $
-      madlibbin "damn" "quickly" "Jim" "beautiful" `shouldBe`
-      "damn! he said quickly as he jumped into his car Jim and drove off with his beautiful wife."
+    madlibbin "damn" "quickly" "Jim" "beautiful" `shouldBe`
+    "damn! he said quickly as he jumped into his car Jim and drove off with his beautiful wife."
   describe "Semigroups" $ do
-    describe "Trivial" $ do
+    describe "Trivial" $
       it "semigroup associativity should work" $
-        property (semigroupAssoc :: Trivial -> Trivial -> Trivial -> Bool)
-    describe "Identity" $ do
+      property (semigroupAssoc :: Trivial -> Trivial -> Trivial -> Bool)
+    describe "Identity" $
       it "semigroup associativity should work" $
-        property (semigroupAssoc :: IdentStr -> IdentStr -> IdentStr -> Bool)
-    describe "Two" $ do
+      property (semigroupAssoc :: IdentStr -> IdentStr -> IdentStr -> Bool)
+    describe "Two" $
       it "semigroup associativity should work" $
-        property (semigroupAssoc :: TwoStr -> TwoStr -> TwoStr -> Bool)
-    describe "Three" $ do
+      property (semigroupAssoc :: TwoStr -> TwoStr -> TwoStr -> Bool)
+    describe "Three" $
       it "semigroup associativity should work" $
-        property (semigroupAssoc :: ThreeStr -> ThreeStr -> ThreeStr -> Bool)
-    describe "Four" $ do
+      property (semigroupAssoc :: ThreeStr -> ThreeStr -> ThreeStr -> Bool)
+    describe "Four" $
       it "semigroup associativity should work" $
-        property (semigroupAssoc :: FourStr -> FourStr -> FourStr -> Bool)
-    describe "BoolConj" $ do
+      property (semigroupAssoc :: FourStr -> FourStr -> FourStr -> Bool)
+    describe "BoolConj" $
       it "semigroup associativity should work" $
-        property (semigroupAssoc :: BoolConj -> BoolConj -> BoolConj -> Bool)
-    describe "BoolDisj" $ do
+      property (semigroupAssoc :: BoolConj -> BoolConj -> BoolConj -> Bool)
+    describe "BoolDisj" $
       it "semigroup associativity should work" $
-        property (semigroupAssoc :: BoolDisj -> BoolDisj -> BoolDisj -> Bool)
-    describe "Combine" $ do
+      property (semigroupAssoc :: BoolDisj -> BoolDisj -> BoolDisj -> Bool)
+    describe "Combine" $
       it "semigroup associativity should work" $
-        property
-          (fAssoc unCombine :: String -> CombStr -> CombStr -> CombStr -> Bool)
-    describe "Comp" $ do
+      property
+        (fAssoc unCombine :: String -> CombStr -> CombStr -> CombStr -> Bool)
+    describe "Comp" $
       it "semigroup associativity should work" $
-        property
-          (fAssoc unComp :: String -> CompStr -> CompStr -> CompStr -> Bool)
-    describe "Or" $ do
+      property
+        (fAssoc unComp :: String -> CompStr -> CompStr -> CompStr -> Bool)
+    describe "Or" $
       it "semigroup associativity should work" $
-        property (semigroupAssoc :: StrOrStr -> StrOrStr -> StrOrStr -> Bool)
-    describe "Optional" $ do
+      property (semigroupAssoc :: StrOrStr -> StrOrStr -> StrOrStr -> Bool)
+    describe "Optional" $
       it "semigroup associativity should work" $
-        property (semigroupAssoc :: OprtStr -> OprtStr -> OprtStr -> Bool)
-    describe "Validation" $ do
+      property (semigroupAssoc :: OprtStr -> OprtStr -> OprtStr -> Bool)
+    describe "Validation" $
       it "semigroup associativity should work" $
-        property (semigroupAssoc :: ValidStr -> ValidStr -> ValidStr -> Bool)
+      property (semigroupAssoc :: ValidStr -> ValidStr -> ValidStr -> Bool)
   describe "Monoids" $ do
     describe "Bull" $ do
       it "monoid associativity should work" $

@@ -12,10 +12,10 @@ genFool :: Gen Fool
 genFool = frequency [(3, return Fulse), (1, return Frue)]
 
 prop_quotAndRem :: Integral a => NonZero a -> NonZero a -> Bool
-prop_quotAndRem (NonZero x) (NonZero y) = (quot x y) * y + (rem x y) == x
+prop_quotAndRem (NonZero x) (NonZero y) = quot x y * y + rem x y == x
 
 prop_divAndMod :: Integral a => NonZero a -> NonZero a -> Bool
-prop_divAndMod (NonZero x) (NonZero y) = (div x y) * y + (mod x y) == x
+prop_divAndMod (NonZero x) (NonZero y) = div x y * y + mod x y == x
 
 prop_squareId :: (Eq a, Floating a) => a -> Bool
 prop_squareId x = squareIdentity x == x
@@ -27,7 +27,7 @@ commuExp :: Integral a => Positive a -> Positive a -> Bool
 commuExp (Positive x) (Positive y) = commutative (^) x y
 
 spec :: Spec
-spec = do
+spec =
   describe "Property Testing" $ do
     it "half of n should work for fractional numbers" $
       property (prop_half :: Double -> Bool)

@@ -26,9 +26,15 @@ instance Eq a => EqProp (Option a) where
 
 type Types = (Int, Bool, Double) -- this will be used to generate random values!
 
+instance Arbitrary a => Arbitrary (List a) where
+  arbitrary = frequency [(1, pure Nil), (3, Cons <$> arbitrary <*> arbitrary)]
+
+instance Eq a => EqProp (List a) where
+  (=-=) = eq
+
 -- tests
 spec :: Spec
-spec = do
+spec =
   describe "Applicatives!" $ do
     it "f 3 should be Just 'hello'" $ f 3 `shouldBe` Just "hello"
     it "g 8 should be Just 'chris'" $ g 8 `shouldBe` Just "chris"
@@ -54,3 +60,5 @@ spec = do
       quickBatch $ applicative (undefined :: Constant String Types)
     it "Option -> should hold all applicative laws!" $
       quickBatch $ applicative (undefined :: Option Types)
+    it "List -> should hold all applicative laws!" $
+      quickBatch $ applicative (undefined :: List Types)
