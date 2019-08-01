@@ -145,3 +145,24 @@ flatMap f = concat' . fmap f
 
 toMyList :: Foldable t => t a -> List a
 toMyList = foldr Cons Nil
+
+-- ZipList applicative
+newtype ZipList' a =
+  ZipList' (List a)
+  deriving (Eq, Show)
+
+instance Functor ZipList' where
+  fmap f (ZipList' xs) = ZipList' $ fmap f xs
+
+instance Applicative ZipList' where
+  pure = ZipList' . flip Cons Nil
+  x <*> y =
+    case (x, y) of
+      (_, ZipList' Nil) -> ZipList' Nil
+      (ZipList' Nil, _) -> ZipList' Nil
+      (ZipList' (Cons f Nil), ZipList' (Cons x xs)) ->
+        ZipList' $ Cons (f x) (pure f <*> xs)
+      (ZipList' (Cons f fs), ZipList' (Cons x Nil)) ->
+        ZipList' $ Cons (f x) (fs <*> pure x)
+      (ZipList' (Cons f fs), ZipList' (Cons x xs)) ->
+        ZipList' $ Cons (f x) (fs <*> xs)

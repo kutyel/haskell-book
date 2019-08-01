@@ -32,6 +32,12 @@ instance Arbitrary a => Arbitrary (List a) where
 instance Eq a => EqProp (List a) where
   (=-=) = eq
 
+instance Arbitrary a => Arbitrary (ZipList' a) where
+  arbitrary = ZipList' <$> arbitrary
+
+instance Eq a => EqProp (ZipList' a) where
+  (=-=) = eq
+
 -- tests
 spec :: Spec
 spec =
@@ -62,3 +68,5 @@ spec =
       quickBatch $ applicative (undefined :: Option Types)
     it "List -> applicative laws should hold!" $
       quickBatch $ applicative (undefined :: List Types)
+    it "ZipList' -> applicative laws should hold!" $
+      quickBatch $ applicative (undefined :: ZipList' Types)
