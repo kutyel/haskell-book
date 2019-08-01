@@ -1,3 +1,5 @@
+{-# LANGUAGE TupleSections #-}
+
 module Chapter15 where
 
 import           Data.Monoid
@@ -14,7 +16,7 @@ instance Monoid Trivial where
   mempty = Trivial
 
 -- Identity
-data Identity a =
+newtype Identity a =
   Identity a
   deriving (Eq, Show)
 
@@ -167,7 +169,7 @@ instance Monoid BoolDisj where
 -- Combine
 newtype Combine a b =
   Combine
-    { unCombine :: (a -> b)
+    { unCombine :: a -> b
     }
 
 instance Show (Combine a b) where
@@ -182,7 +184,7 @@ instance Monoid b => Monoid (Combine a b) where
 -- Comp
 newtype Comp a =
   Comp
-    { unComp :: (a -> a)
+    { unComp :: a -> a
     }
 
 instance Show (Comp a) where
@@ -222,7 +224,7 @@ instance Semigroup a => Semigroup (Mem s a) where
        in (a <> c, d)
 
 instance Monoid a => Monoid (Mem s a) where
-  mempty = Mem $ \x -> (mempty, x)
+  mempty = Mem (mempty, )
 
 main = do
   let failure :: String -> Validation String Int
@@ -237,9 +239,9 @@ main = do
   print $ failure "woot" <> failure "blah" -- Failure "wootblah"
   print $ success 1 <> success 2 -- Success 1
   print $ failure "woot" <> success 2 -- Success 2
-  print $ "Mem ----------------------"
-  print $ rmleft -- ("hi", 1)
-  print $ rmright -- ("hi", 1)
-  print $ (rmzero :: (String, Int)) -- ("", 0)
+  print "Mem ----------------------"
+  print rmleft -- ("hi", 1)
+  print rmright -- ("hi", 1)
+  print (rmzero :: (String, Int)) -- ("", 0)
   print $ rmleft == runMem f' 0 -- True
   print $ rmright == runMem f' 0 -- True

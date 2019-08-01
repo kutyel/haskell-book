@@ -6,6 +6,8 @@ import           Test.QuickCheck
 import           Test.QuickCheck.Checkers
 import           Test.QuickCheck.Classes
 
+type Types = (Int, Bool, Double) -- this will be used to generate random values!
+
 instance Arbitrary a => Arbitrary (Identity a) where
   arbitrary = Identity <$> arbitrary
 
@@ -24,8 +26,6 @@ instance Arbitrary a => Arbitrary (Option a) where
 instance Eq a => EqProp (Option a) where
   (=-=) = eq
 
-type Types = (Int, Bool, Double) -- this will be used to generate random values!
-
 instance Arbitrary a => Arbitrary (List a) where
   arbitrary = frequency [(1, pure Nil), (3, Cons <$> arbitrary <*> arbitrary)]
 
@@ -35,7 +35,7 @@ instance Eq a => EqProp (List a) where
 -- tests
 spec :: Spec
 spec =
-  describe "Applicatives!" $ do
+  describe "Chapter 17:" $ do
     it "f 3 should be Just 'hello'" $ f 3 `shouldBe` Just "hello"
     it "g 8 should be Just 'chris'" $ g 8 `shouldBe` Just "chris"
     it "(+) <$> h 5 <*> m 1 should be Just 9007" $
@@ -54,11 +54,11 @@ spec =
     it "fixer upper const should Just Hello" $ ex1 `shouldBe` Just "Hello"
     it "fixer upper (,,,) should Just (,,,)" $
       ex2 `shouldBe` Just (90, 10, "Tierness", [1, 2, 3])
-    it "Identity -> should hold all applicative laws!" $
+    it "Identity -> applicative laws should hold!" $
       quickBatch $ applicative (undefined :: Identity Types)
-    it "Constant -> should hold all applicative laws!" $
+    it "Constant -> applicative laws should hold!" $
       quickBatch $ applicative (undefined :: Constant String Types)
-    it "Option -> should hold all applicative laws!" $
+    it "Option -> applicative laws should hold!" $
       quickBatch $ applicative (undefined :: Option Types)
-    it "List -> should hold all applicative laws!" $
+    it "List -> applicative laws should hold!" $
       quickBatch $ applicative (undefined :: List Types)

@@ -11,7 +11,7 @@ import           GHC.Arr
 -- 3) What is the kind of c? * -> * -> *
 -- f :: c a b -> c b a
 -- 1)
-a = fmap (+ 1) $ read "[1]" :: [Int]
+a = ((+ 1) <$> read "[1]") :: [Int]
 
 -- 2)
 b = fmap (fmap (++ "lol")) (Just ["Hi,", "Hello"])
@@ -26,7 +26,7 @@ d = ((return '1' ++) . show) . (\x -> [x,1 .. 3])
 e :: IO Integer
 e =
   let ioi = readIO "1" :: IO Integer
-      changed = (fmap read . fmap ("123" ++) . fmap show) ioi
+      changed = fmap ((read . ("123" ++)) . show) ioi
    in fmap (* 3) changed
 
 -- Trivial can't be made into a Functor because -> :k Trivial = * != * -> *
@@ -52,7 +52,7 @@ instance Functor (Or a) where
   fmap f (Snd x) = Snd (f x)
 
 -- Identity
-data Identity a =
+newtype Identity a =
   Identity a
   deriving (Eq, Show)
 
@@ -186,7 +186,7 @@ instance Functor (Quant e) where
   fmap f (Bloor y) = Bloor (f y)
 
 -- 2)
-data K a b =
+newtype K a b =
   K a
   deriving (Eq, Show)
 
@@ -202,7 +202,7 @@ instance Functor (Flip K a) where
   fmap f (Flip (K x)) = Flip $ K (f x)
 
 -- 4)
-data EvilGoateeConst a b =
+newtype EvilGoateeConst a b =
   GoatyConst b
   deriving (Eq, Show)
 
@@ -210,7 +210,7 @@ instance Functor (EvilGoateeConst e) where
   fmap f (GoatyConst x) = GoatyConst (f x)
 
 -- 5)
-data LiftItOut f a =
+newtype LiftItOut f a =
   LiftItOut (f a)
   deriving (Eq, Show)
 
