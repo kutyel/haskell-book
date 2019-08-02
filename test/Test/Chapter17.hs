@@ -2,7 +2,7 @@ module Test.Chapter17 where
 
 import           Chapter17
 import           Test.Hspec
-import           Test.QuickCheck
+import           Test.QuickCheck          hiding (Failure, Success)
 import           Test.QuickCheck.Checkers
 import           Test.QuickCheck.Classes
 
@@ -38,6 +38,12 @@ instance Arbitrary a => Arbitrary (ZipList' a) where
 instance Eq a => EqProp (ZipList' a) where
   (=-=) = eq
 
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Validation a b) where
+  arbitrary = oneof [Failure <$> arbitrary, Success <$> arbitrary]
+
+instance (Eq a, Eq b) => EqProp (Validation a b) where
+  (=-=) = eq
+
 -- tests
 spec :: Spec
 spec =
@@ -70,3 +76,5 @@ spec =
       quickBatch $ applicative (undefined :: List Types)
     it "ZipList' -> applicative laws should hold!" $
       quickBatch $ applicative (undefined :: ZipList' Types)
+    it "Validation -> applicative laws should hold!" $
+      quickBatch $ applicative (undefined :: Validation String Types)
