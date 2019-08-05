@@ -187,27 +187,43 @@ instance Monoid e => Applicative (Validation e) where
       (Success f, Success x) -> Success (f x)
 
 -- Chapter exercises
--- 1)
+-- USED -> :set -XTypeApplications
+-- 1)  :t (<*>) @[]
 -- Type []
 -- Methods
--- pure :: a => [a]
--- (<*>) :: [a -> b] -> [a] -> [b]
-type L = [] -- 2)
+pureList :: a -> [a]
+pureList = pure
 
+apList :: [a -> b] -> [a] -> [b]
+apList = (<*>)
+
+-- 2) :t (<*>) @IO
 -- Type IO
 -- Methods
--- pure :: a => IO a
--- (<*>) :: IO (a -> b) -> IO a -> IO b
--- 3)
+pureIO :: a -> IO a
+pureIO = pure
+
+apIO :: IO (a -> b) -> IO a -> IO b
+apIO = (<*>)
+
+-- 3)  :t (<*>) @((,) Any)
 -- Type (,) a
 -- Methods
--- pure :: a => (,) e a
--- (<*>) :: (,) e (a -> b) -> (,) e a -> (,) e b
--- 4)
+pureTuple :: Monoid a => b -> (a, b)
+pureTuple = pure
+
+apTuple :: Monoid a => (a, b -> c) -> (a, b) -> (a, c)
+apTuple = (<*>)
+
+-- 4) :t (<*>) @((->) Int)
 -- Type (->) e
 -- Methods
--- pure :: a => (->) e a
--- (<*>) :: (->) e (a -> b) -> (->) e a -> (->) e b
+pureFn :: a -> b -> a
+pureFn = pure
+
+apFn :: (a -> b -> c) -> (a -> b) -> (a -> c)
+apFn = (<*>)
+
 -- Combinations
 stops :: String
 stops = "pbtdkg"
