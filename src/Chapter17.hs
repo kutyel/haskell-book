@@ -185,3 +185,38 @@ instance Monoid e => Applicative (Validation e) where
       (Failure x, Success _) -> Failure x
       (Success _, Failure x) -> Failure x
       (Success f, Success x) -> Success (f x)
+
+-- Chapter exercises
+-- 1)
+-- Type []
+-- Methods
+-- pure :: a => [a]
+-- (<*>) :: [a -> b] -> [a] -> [b]
+type L = [] -- 2)
+
+-- Type IO
+-- Methods
+-- pure :: a => IO a
+-- (<*>) :: IO (a -> b) -> IO a -> IO b
+-- 3)
+-- Type (,) a
+-- Methods
+-- pure :: a => (,) e a
+-- (<*>) :: (,) e (a -> b) -> (,) e a -> (,) e b
+-- 4)
+-- Type (->) e
+-- Methods
+-- pure :: a => (->) e a
+-- (<*>) :: (->) e (a -> b) -> (->) e a -> (->) e b
+-- Combinations
+stops :: String
+stops = "pbtdkg"
+
+vowels :: String
+vowels = "aeiou"
+
+combos :: [a] -> [b] -> [c] -> [(a, b, c)]
+combos = liftA3 (,,)
+
+ex :: [(Char, Char, Char)]
+ex = combos stops vowels stops

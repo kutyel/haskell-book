@@ -103,7 +103,7 @@ seekritFunc x = div (sum (map length (words x))) (length (words x))
 seekritFunc' :: String -> Double
 seekritFunc' x = dd / dv
   where
-    dd = (fromIntegral . sum . (map length) . words) x
+    dd = (fromIntegral . sum . map length . words) x
     dv = (fromIntegral . length . words) x
 
 -- Rewriting functions using folds
