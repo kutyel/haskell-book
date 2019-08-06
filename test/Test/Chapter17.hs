@@ -78,6 +78,8 @@ spec =
     it "fixer upper const should Just Hello" $ ex1 `shouldBe` Just "Hello"
     it "fixer upper (,,,) should Just (,,,)" $
       ex2 `shouldBe` Just (90, 10, "Tierness", [1, 2, 3])
+    it "refactor `combos` to use applicatives!" $
+      ex `shouldBe` [(x, y, z) | x <- stops, y <- vowels, z <- stops]
     it "Identity -> applicative laws should hold!" $
       quickBatch $ applicative (undefined :: Identity Types)
     it "Constant -> applicative laws should hold!" $
