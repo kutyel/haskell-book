@@ -73,7 +73,7 @@ instance Functor Identity where
 
 instance Applicative Identity where
   pure = Identity
-  (Identity f) <*> (Identity x) = Identity (f x)
+  Identity f <*> Identity x = Identity (f x)
 
 -- Constant Instance
 newtype Constant a b =
@@ -110,7 +110,7 @@ instance Applicative Option where
   pure = Some
   None <*> _ = None
   _ <*> None = None
-  (Some f) <*> (Some x) = Some (f x)
+  Some f <*> Some x = Some (f x)
 
 -- List applicative
 data List a
@@ -126,7 +126,7 @@ instance Applicative List where
   pure = flip Cons Nil
   Nil <*> _ = Nil
   _ <*> Nil = Nil
-  (Cons f fs) <*> xs = (f <$> xs) `append` (fs <*> xs)
+  Cons f fs <*> xs = (f <$> xs) `append` (fs <*> xs)
 
 -- hints
 append :: List a -> List a -> List a
@@ -224,6 +224,35 @@ pureFn = pure
 apFn :: (a -> b -> c) -> (a -> b) -> (a -> c)
 apFn = (<*>)
 
+-- Write instances for the following Datatypes
+-- 1) Pair
+data Pair a =
+  Pair a a
+  deriving (Eq, Show)
+
+instance Functor Pair where
+  fmap f (Pair x y) = Pair (f x) (f y)
+
+instance Applicative Pair where
+  pure x = Pair x x
+  Pair f g <*> Pair x y = Pair (f x) (g y)
+
+-- 2) Two
+data Two a b =
+  Two a b
+  deriving (Eq, Show)
+
+instance Functor (Two a) where
+  fmap f (Two x y) = Two x (f y)
+
+instance Monoid a => Applicative (Two a) where
+  pure = Two mempty
+  Two a f <*> Two b x = Two (a <> b) (f x)
+
+-- 3) TODO: Three
+-- 4) TODO: Three'
+-- 5) TODO: Four
+-- 6) TODO: Four'
 -- Combinations
 stops :: String
 stops = "pbtdkg"

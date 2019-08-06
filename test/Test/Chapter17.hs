@@ -44,6 +44,18 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Validation a b) where
 instance (Eq a, Eq b) => EqProp (Validation a b) where
   (=-=) = eq
 
+instance Arbitrary a => Arbitrary (Pair a) where
+  arbitrary = Pair <$> arbitrary <*> arbitrary
+
+instance Eq a => EqProp (Pair a) where
+  (=-=) = eq
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Two a b) where
+  arbitrary = Two <$> arbitrary <*> arbitrary
+
+instance (Eq a, Eq b) => EqProp (Two a b) where
+  (=-=) = eq
+
 -- tests
 spec :: Spec
 spec =
@@ -78,3 +90,7 @@ spec =
       quickBatch $ applicative (undefined :: ZipList' Types)
     it "Validation -> applicative laws should hold!" $
       quickBatch $ applicative (undefined :: Validation String Types)
+    it "Pair -> applicative laws should hold!" $
+      quickBatch $ applicative (undefined :: Pair Types)
+    it "Two -> applicative laws should hold!" $
+      quickBatch $ applicative (undefined :: Two String Types)
