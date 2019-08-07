@@ -56,6 +56,13 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Two a b) where
 instance (Eq a, Eq b) => EqProp (Two a b) where
   (=-=) = eq
 
+instance (Arbitrary a, Arbitrary b, Arbitrary c) =>
+         Arbitrary (Three a b c) where
+  arbitrary = Three <$> arbitrary <*> arbitrary <*> arbitrary
+
+instance (Eq a, Eq b, Eq c) => EqProp (Three a b c) where
+  (=-=) = eq
+
 -- tests
 spec :: Spec
 spec =
@@ -96,3 +103,5 @@ spec =
       quickBatch $ applicative (undefined :: Pair Types)
     it "Two -> applicative laws should hold!" $
       quickBatch $ applicative (undefined :: Two String Types)
+    it "Three -> applicative laws should hold!" $
+      quickBatch $ applicative (undefined :: Three String String Types)
