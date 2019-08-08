@@ -155,17 +155,18 @@ instance Functor ZipList' where
   fmap f (ZipList' xs) = ZipList' $ fmap f xs
 
 instance Applicative ZipList' where
-  pure = ZipList' . flip Cons Nil
-  x <*> y =
-    case (x, y) of
-      (_, ZipList' Nil) -> ZipList' Nil
-      (ZipList' Nil, _) -> ZipList' Nil
-      (ZipList' (Cons f Nil), ZipList' (Cons x xs)) ->
-        ZipList' $ Cons (f x) (pure f <*> xs)
-      (ZipList' (Cons f fs), ZipList' (Cons x Nil)) ->
-        ZipList' $ Cons (f x) (fs <*> pure x)
-      (ZipList' (Cons f fs), ZipList' (Cons x xs)) ->
-        ZipList' $ Cons (f x) (fs <*> xs)
+  pure x = ZipList' (Cons x Nil)
+  _ <*> ZipList' Nil = ZipList' Nil
+  ZipList' Nil <*> _ = ZipList' Nil
+  ZipList' (Cons f Nil) <*> ZipList' (Cons x xs) =
+    ZipList' $ Cons (f x) (pure f <*> xs)
+  ZipList' (Cons f fs) <*> ZipList' (Cons x Nil) =
+    ZipList' $ Cons (f x) (fs <*> pure x)
+  ZipList' x <*> ZipList' y = ZipList' $ zipWith' ($) x y
+
+zipWith' :: (a -> b -> c) -> List a -> List b -> List c
+zipWith' f (Cons x xs) (Cons y ys) = Cons (f x y) $ zipWith' f xs ys
+zipWith' _ _ _                     = Nil
 
 -- Variations on Either
 data Validation e a

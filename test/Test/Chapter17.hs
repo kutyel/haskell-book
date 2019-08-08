@@ -106,10 +106,10 @@ spec =
       ex2 `shouldBe` Just (90, 10, "Tierness", [1, 2, 3])
     it "refactor `combos` to use applicatives!" $
       ex `shouldBe` [(x, y, z) | x <- stops, y <- vowels, z <- stops]
-    -- TODO: it "own version of ZipList' should work" $
-    --   let z = ZipList' $ toMyList [(+ 9), (* 2), (+ 8)]
-    --       z' = ZipList' $ toMyList [1 .. 3]
-    --    in z <*> z' `shouldBe` (ZipList' $ toMyList [10, 4, 11])
+    it "own version of ZipList' should work" $
+      let z = ZipList' $ toMyList [(+ 9), (* 2), (+ 8)]
+          z' = ZipList' $ toMyList [1 .. 3]
+       in z <*> z' `shouldBe` (ZipList' $ toMyList [10, 4, 11])
     it "Identity -> applicative laws should hold!" $
       quickBatch $ applicative (undefined :: Identity Types)
     it "Constant -> applicative laws should hold!" $
