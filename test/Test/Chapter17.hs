@@ -82,6 +82,9 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Four' a b) where
 instance (Eq a, Eq b) => EqProp (Four' a b) where
   (=-=) = eq
 
+prop_apList :: Eq b => (a -> b) -> [a] -> Bool
+prop_apList f x = fmap f x == pureList f `apList` x
+
 -- tests
 spec :: Spec
 spec =
@@ -110,6 +113,8 @@ spec =
       let z = ZipList' $ toMyList [(+ 9), (* 2), (+ 8)]
           z' = ZipList' $ toMyList [1 .. 3]
        in z <*> z' `shouldBe` (ZipList' $ toMyList [10, 4, 11])
+    it "specialized ap methods for list should work" $
+      property (prop_apList id :: [Int] -> Bool)
     it "Identity -> applicative laws should hold!" $
       quickBatch $ applicative (undefined :: Identity Types)
     it "Constant -> applicative laws should hold!" $
