@@ -63,6 +63,25 @@ instance (Arbitrary a, Arbitrary b, Arbitrary c) =>
 instance (Eq a, Eq b, Eq c) => EqProp (Three a b c) where
   (=-=) = eq
 
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Three' a b) where
+  arbitrary = Three' <$> arbitrary <*> arbitrary <*> arbitrary
+
+instance (Eq a, Eq b) => EqProp (Three' a b) where
+  (=-=) = eq
+
+instance (Arbitrary a, Arbitrary b, Arbitrary c, Arbitrary d) =>
+         Arbitrary (Four a b c d) where
+  arbitrary = Four <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
+
+instance (Eq a, Eq b, Eq c, Eq d) => EqProp (Four a b c d) where
+  (=-=) = eq
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Four' a b) where
+  arbitrary = Four' <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
+
+instance (Eq a, Eq b) => EqProp (Four' a b) where
+  (=-=) = eq
+
 -- tests
 spec :: Spec
 spec =
@@ -87,6 +106,10 @@ spec =
       ex2 `shouldBe` Just (90, 10, "Tierness", [1, 2, 3])
     it "refactor `combos` to use applicatives!" $
       ex `shouldBe` [(x, y, z) | x <- stops, y <- vowels, z <- stops]
+    -- TODO: it "own version of ZipList' should work" $
+    --   let z = ZipList' $ toMyList [(+ 9), (* 2), (+ 8)]
+    --       z' = ZipList' $ toMyList [1 .. 3]
+    --    in z <*> z' `shouldBe` (ZipList' $ toMyList [10, 4, 11])
     it "Identity -> applicative laws should hold!" $
       quickBatch $ applicative (undefined :: Identity Types)
     it "Constant -> applicative laws should hold!" $
@@ -105,3 +128,9 @@ spec =
       quickBatch $ applicative (undefined :: Two String Types)
     it "Three -> applicative laws should hold!" $
       quickBatch $ applicative (undefined :: Three String String Types)
+    it "Three' -> applicative laws should hold!" $
+      quickBatch $ applicative (undefined :: Three' String Types)
+    it "Four -> applicative laws should hold!" $
+      quickBatch $ applicative (undefined :: Four String String String Types)
+    it "Four' -> applicative laws should hold!" $
+      quickBatch $ applicative (undefined :: Four' String Types)

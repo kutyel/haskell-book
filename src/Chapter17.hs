@@ -261,9 +261,42 @@ instance (Monoid a, Monoid b) => Applicative (Three a b) where
   pure = Three mempty mempty
   Three a b f <*> Three c d x = Three (a <> c) (b <> d) (f x)
 
--- 4) TODO: Three'
--- 5) TODO: Four
--- 6) TODO: Four'
+-- 4) Three'
+data Three' a b =
+  Three' a b b
+  deriving (Eq, Show)
+
+instance Functor (Three' a) where
+  fmap f (Three' x y z) = Three' x (f y) (f z)
+
+instance Monoid a => Applicative (Three' a) where
+  pure x = Three' mempty x x
+  Three' a f g <*> Three' b x y = Three' (a <> b) (f x) (g y)
+
+-- 5) Four
+data Four a b c d =
+  Four a b c d
+  deriving (Eq, Show)
+
+instance Functor (Four a b c) where
+  fmap f (Four x y z a) = Four x y z (f a)
+
+instance (Monoid a, Monoid b, Monoid c) => Applicative (Four a b c) where
+  pure = Four mempty mempty mempty
+  Four a b c f <*> Four d e i x = Four (a <> d) (b <> e) (c <> i) (f x)
+
+-- 6) Four'
+data Four' a b =
+  Four' a a a b
+  deriving (Eq, Show)
+
+instance Functor (Four' a) where
+  fmap f (Four' x y z a) = Four' x y z (f a)
+
+instance Monoid a => Applicative (Four' a) where
+  pure = Four' mempty mempty mempty
+  Four' a b c f <*> Four' d e i x = Four' (a <> d) (b <> e) (c <> i) (f x)
+
 -- Combinations
 stops :: String
 stops = "pbtdkg"
