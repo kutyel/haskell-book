@@ -26,5 +26,6 @@ spec =
       twiceWhenEven [1 .. 3] `shouldBe` [1, 4, 4, 9]
     it "custom bind should work like flipped >>=" $
       property (prop_bind (\x -> [x, 1]) :: [Int] -> Bool)
-    it "Sum -> monad laws should hold!" $
+    it "Sum -> monad laws should hold!" $ do
+      quickBatch $ applicative (undefined :: Sum Int Types)
       quickBatch $ monad (undefined :: Sum Int Types)
