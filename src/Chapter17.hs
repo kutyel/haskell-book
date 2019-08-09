@@ -207,7 +207,7 @@ pureIO = pure
 apIO :: IO (a -> b) -> IO a -> IO b
 apIO = (<*>)
 
--- 3)  :t (<*>) @((,) Any)
+-- 3)  :t (<*>) @((,) String)
 -- Type (,) a
 -- Methods
 pureTuple :: Monoid a => b -> (a, b)
