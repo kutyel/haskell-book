@@ -1,6 +1,7 @@
 module Test.Chapter17 where
 
 import           Chapter17
+import           Control.Applicative      (liftA2)
 import           Test.Hspec
 import           Test.QuickCheck          hiding (Failure, Success)
 import           Test.QuickCheck.Checkers
@@ -83,10 +84,10 @@ instance (Eq a, Eq b) => EqProp (Four' a b) where
   (=-=) = eq
 
 prop_apList :: Eq b => (a -> b) -> [a] -> Bool
-prop_apList f x = fmap f x == pureList f `apList` x
+prop_apList f = liftA2 (==) (fmap f) (apList $ pureList f)
 
 prop_apTuple :: (Monoid a, Eq a, Eq c) => (a, b -> c) -> (a, b) -> Bool
-prop_apTuple (_, f) x = fmap f x == pureTuple f `apTuple` x
+prop_apTuple (_, f) = liftA2 (==) (fmap f) (apTuple $ pureTuple f)
 
 -- tests
 spec :: Spec
@@ -118,7 +119,7 @@ spec =
        in z <*> z' `shouldBe` (ZipList' $ toMyList [10, 4, 11])
     it "own version of flatMap for custom List should work" $
       let f x = Cons x (Cons 9 Nil)
-          xs = toMyList [1, 2, 3]
+          xs = toMyList [1 .. 3]
        in flatMap f xs `shouldBe` toMyList [1, 9, 2, 9, 3, 9]
     it "specialized ap methods for list should work" $
       property (prop_apList (+ 1) :: [Int] -> Bool)
