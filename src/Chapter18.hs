@@ -33,3 +33,20 @@ instance Monad (Sum a) where
   return = pure
   First x >>= _ = First x
   Second x >>= f = f x
+
+-- Chapter exercises
+-- 1)
+data Nope a =
+  NopeDotJpg
+  deriving (Eq, Show)
+
+instance Functor Nope where
+  fmap _ _ = NopeDotJpg
+
+instance Applicative Nope where
+  pure = const NopeDotJpg
+  _ <*> _ = NopeDotJpg
+
+instance Monad Nope where
+  return = pure
+  _ >>= _ = NopeDotJpg

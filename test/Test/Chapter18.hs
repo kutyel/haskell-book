@@ -18,6 +18,12 @@ instance (Eq a, Eq b) => EqProp (Sum a b) where
 prop_bind :: (Monad m, Eq (m b)) => (a -> m b) -> m a -> Bool
 prop_bind f = liftA2 (==) (bind f) (f =<<)
 
+instance Arbitrary (Nope a) where
+  arbitrary = pure NopeDotJpg
+
+instance EqProp (Nope a) where
+  (=-=) = eq
+
 -- tests
 spec :: Spec
 spec =
@@ -29,3 +35,6 @@ spec =
     it "Sum -> monad laws should hold!" $ do
       quickBatch $ applicative (undefined :: Sum Int Types)
       quickBatch $ monad (undefined :: Sum Int Types)
+    it "Nope -> monad laws should hold!" $ do
+      quickBatch $ applicative (undefined :: Nope Types)
+      quickBatch $ monad (undefined :: Nope Types)
