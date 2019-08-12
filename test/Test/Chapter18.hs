@@ -36,6 +36,12 @@ instance Arbitrary a => Arbitrary (Identity a) where
 instance Eq a => EqProp (Identity a) where
   (=-=) = eq
 
+instance Arbitrary a => Arbitrary (List a) where
+  arbitrary = frequency [(1, pure Nil), (3, Cons <$> arbitrary <*> arbitrary)]
+
+instance Eq a => EqProp (List a) where
+  (=-=) = eq
+
 -- tests
 spec :: Spec
 spec =
@@ -56,3 +62,6 @@ spec =
     it "Identity -> monad laws should hold!" $ do
       quickBatch $ applicative (undefined :: Identity Types)
       quickBatch $ monad (undefined :: Identity Types)
+    it "List -> monad laws should hold!" $ do
+      quickBatch $ applicative (undefined :: List Types)
+      quickBatch $ monad (undefined :: List Types)

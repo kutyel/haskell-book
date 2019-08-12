@@ -87,3 +87,28 @@ instance Applicative Identity where
 instance Monad Identity where
   return = pure
   Identity x >>= f = f x
+
+-- 4)
+data List a
+  = Nil
+  | Cons a (List a)
+  deriving (Eq, Show)
+
+append :: List a -> List a -> List a
+append Nil xs         = xs
+append (Cons x xs) ys = Cons x $ xs `append` ys
+
+instance Functor List where
+  fmap _ Nil         = Nil
+  fmap f (Cons x xs) = Cons (f x) (fmap f xs)
+
+instance Applicative List where
+  pure = flip Cons Nil
+  Nil <*> _ = Nil
+  _ <*> Nil = Nil
+  Cons f fs <*> xs = (f <$> xs) `append` (fs <*> xs)
+
+instance Monad List where
+  return = pure
+  Nil >>= _ = Nil
+  Cons x xs >>= f = f x `append` (xs >>= f)
