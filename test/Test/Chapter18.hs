@@ -24,6 +24,12 @@ instance Arbitrary (Nope a) where
 instance EqProp (Nope a) where
   (=-=) = eq
 
+instance (Arbitrary a, Arbitrary b) => Arbitrary (BahEither b a) where
+  arbitrary = oneof [PLeft <$> arbitrary, PRight <$> arbitrary]
+
+instance (Eq a, Eq b) => EqProp (BahEither b a) where
+  (=-=) = eq
+
 -- tests
 spec :: Spec
 spec =
@@ -38,3 +44,6 @@ spec =
     it "Nope -> monad laws should hold!" $ do
       quickBatch $ applicative (undefined :: Nope Types)
       quickBatch $ monad (undefined :: Nope Types)
+    it "BahEither -> monad laws should hold!" $ do
+      quickBatch $ applicative (undefined :: BahEither Int Types)
+      quickBatch $ monad (undefined :: BahEither Int Types)

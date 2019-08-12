@@ -50,3 +50,24 @@ instance Applicative Nope where
 instance Monad Nope where
   return = pure
   _ >>= _ = NopeDotJpg
+
+-- 2)
+data BahEither b a
+  = PLeft a
+  | PRight b
+  deriving (Eq, Show)
+
+instance Functor (BahEither b) where
+  fmap _ (PRight x) = PRight x
+  fmap f (PLeft x)  = PLeft $ f x
+
+instance Applicative (BahEither b) where
+  pure = PLeft
+  PRight x <*> _ = PRight x
+  _ <*> PRight x = PRight x
+  PLeft f <*> PLeft x = PLeft $ f x
+
+instance Monad (BahEither b) where
+  return = pure
+  PRight x >>= _ = PRight x
+  PLeft x >>= f = f x
