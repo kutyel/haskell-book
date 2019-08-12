@@ -30,6 +30,12 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (BahEither b a) where
 instance (Eq a, Eq b) => EqProp (BahEither b a) where
   (=-=) = eq
 
+instance Arbitrary a => Arbitrary (Identity a) where
+  arbitrary = Identity <$> arbitrary
+
+instance Eq a => EqProp (Identity a) where
+  (=-=) = eq
+
 -- tests
 spec :: Spec
 spec =
@@ -47,3 +53,6 @@ spec =
     it "BahEither -> monad laws should hold!" $ do
       quickBatch $ applicative (undefined :: BahEither Int Types)
       quickBatch $ monad (undefined :: BahEither Int Types)
+    it "Identity -> monad laws should hold!" $ do
+      quickBatch $ applicative (undefined :: Identity Types)
+      quickBatch $ monad (undefined :: Identity Types)
