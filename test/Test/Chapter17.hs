@@ -2,6 +2,7 @@ module Test.Chapter17 where
 
 import           Chapter17
 import           Control.Applicative      (liftA2)
+import           Data.Maybe               (catMaybes)
 import           Test.Hspec
 import           Test.QuickCheck          hiding (Failure, Success)
 import           Test.QuickCheck.Checkers
@@ -89,6 +90,9 @@ prop_apList f = liftA2 (==) (fmap f) (apList $ pureList f)
 prop_apTuple :: (Monoid a, Eq a, Eq c) => (a, b -> c) -> (a, b) -> Bool
 prop_apTuple (_, f) = liftA2 (==) (fmap f) (apTuple $ pureTuple f)
 
+sumM :: Num a => [Maybe a] -> a
+sumM = sum . catMaybes
+
 -- tests
 spec :: Spec
 spec =
@@ -105,9 +109,8 @@ spec =
     it "tupled should be Just (6, 5)" $ tupled `shouldBe` Just (6, 5)
     it "maxed should be Just 3" $ maxed `shouldBe` Just 3
     it "summed should be Just 5" $ summed `shouldBe` Just 5
-    it "sum 2 + 3 should be Just 5" $ sum <$> sequence [x, y'] `shouldBe` Just 5
-    it "sum everything and should be Just 20" $
-      sum <$> sequence [added, y, z] `shouldBe` Just 20
+    it "sum 2 + 3 should be Just 5" $ sumM [x, y'] `shouldBe` 5
+    it "sum everything and should be Just 20" $ sumM [added, y, z] `shouldBe` 20
     it "fixer upper const should Just Hello" $ ex1 `shouldBe` Just "Hello"
     it "fixer upper (,,,) should Just (,,,)" $
       ex2 `shouldBe` Just (90, 10, "Tierness", [1, 2, 3])
