@@ -1,7 +1,8 @@
 module Chapter18 where
 
-import           Control.Monad (join)
-import           Data.Bool     (bool)
+import           Control.Applicative (liftA2)
+import           Control.Monad       (join)
+import           Data.Bool           (bool)
 
 bind :: Monad m => (a -> m b) -> m a -> m b
 bind f = join . fmap f
@@ -112,3 +113,28 @@ instance Monad List where
   return = pure
   Nil >>= _ = Nil
   Cons x xs >>= f = f x `append` (xs >>= f)
+
+-- Implement the following methods
+-- 1) j == join
+j :: Monad m => m (m a) -> m a
+j = (=<<) id
+
+-- 2) l2 == fmap (f <$> x)
+l1 :: Monad m => (a -> b) -> m a -> m b
+l1 = fmap
+
+-- 3) l2 == ap (f <$> x <*> y)
+l2 :: Monad m => (a -> b -> c) -> m a -> m b -> m c
+l2 = liftA2
+
+-- 4) a == <*> (fs <*> xs)
+a :: Monad m => m a -> m (a -> b) -> m b
+a = flip (<*>)
+
+-- 5) meh == for == flip traverse == (sequence . fmap f)
+meh :: Monad m => [a] -> (a -> m b) -> m [b]
+meh (x:xs) f = f x >>= \x' -> (x' :) <$> meh xs f
+
+-- 6) flipType == traverse
+flipType :: Monad m => [m a] -> m [a]
+flipType = flip meh id

@@ -42,7 +42,7 @@ instance Arbitrary a => Arbitrary (List a) where
 instance Eq a => EqProp (List a) where
   (=-=) = eq
 
--- tests
+-- TODO: add property test for own functions
 spec :: Spec
 spec =
   describe "Chapter 18:" $ do
