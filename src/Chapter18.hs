@@ -4,6 +4,8 @@ import           Control.Applicative (liftA2)
 import           Control.Monad       (join)
 import           Data.Bool           (bool)
 
+{-# ANN bind "HLint: ignore" #-}
+
 bind :: Monad m => (a -> m b) -> m a -> m b
 bind f = join . fmap f
 
@@ -123,18 +125,19 @@ j = (=<<) id
 l1 :: Monad m => (a -> b) -> m a -> m b
 l1 = fmap
 
--- 3) l2 == ap (f <$> x <*> y)
+-- 3) l2 == ap (f <$> x <*> y) == liftM2
 l2 :: Monad m => (a -> b -> c) -> m a -> m b -> m c
 l2 = liftA2
 
--- 4) a == <*> (fs <*> xs)
+-- 4) a == <*> (fs <*> xs) == <**>
 a :: Monad m => m a -> m (a -> b) -> m b
 a = flip (<*>)
 
 -- 5) meh == for == flip traverse == (sequence . fmap f)
 meh :: Monad m => [a] -> (a -> m b) -> m [b]
+meh [] f     = pure []
 meh (x:xs) f = f x >>= \x' -> (x' :) <$> meh xs f
 
--- 6) flipType == traverse
+-- 6) flipType == sequence
 flipType :: Monad m => [m a] -> m [a]
 flipType = flip meh id

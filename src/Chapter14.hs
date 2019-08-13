@@ -3,6 +3,8 @@ module Chapter14 where
 import           Chapter11 (capitalizeWord)
 import           Data.List (sort)
 
+{-# ANN module "HLint: ignore" #-}
+
 data Fool
   = Fulse
   | Frue
