@@ -135,7 +135,7 @@ a = flip (<*>)
 
 -- 5) meh == for == flip traverse == (sequence . fmap f)
 meh :: Monad m => [a] -> (a -> m b) -> m [b]
-meh [] f     = pure []
+meh [] _     = pure []
 meh (x:xs) f = f x >>= \x' -> (x' :) <$> meh xs f
 
 -- 6) flipType == sequence
