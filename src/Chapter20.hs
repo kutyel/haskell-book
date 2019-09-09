@@ -1,6 +1,5 @@
 module Chapter20 where
 
-import           Data.Maybe  (maybe)
 import           Data.Monoid
 
 -- :t foldr :: Foldable t => (a -> b -> b) -> b -> t a -> b
@@ -22,18 +21,32 @@ elem x = getAny . foldMap (Any . (== x))
 minimum :: (Foldable t, Ord a) => t a -> Maybe a
 minimum = foldr f Nothing
   where
-    f x Nothing = Just x
-    f x (Just y) =
-      if x < y
-        then Just x
-        else Just y
+    f x Nothing  = Just x
+    f x (Just y) = Just (min x y)
 
 -- 5)
 maximum :: (Foldable t, Ord a) => t a -> Maybe a
 maximum = foldr f Nothing
   where
-    f x Nothing = Just x
-    f x (Just y) =
-      if x > y
-        then Just x
-        else Just y
+    f x Nothing  = Just x
+    f x (Just y) = Just (max x y)
+
+-- 6)
+null :: (Foldable t) => t a -> Bool
+null = foldr (\_ _ -> False) True
+
+-- 7)
+length :: (Foldable t) => t a -> Int
+length = foldr (const (+ 1)) 0
+
+-- 8)
+toList :: (Foldable t) => t a -> [a]
+toList = foldr (:) []
+
+-- 9)
+fold :: (Foldable t, Monoid m) => t m -> m
+fold = foldMap id
+
+-- 10)
+foldMap' :: (Foldable t, Monoid m) => (a -> m) -> t a -> m
+foldMap' f = foldr (mappend . f) mempty
