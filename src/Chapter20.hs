@@ -1,5 +1,6 @@
 module Chapter20 where
 
+import           Control.Conditional (select)
 import           Data.Monoid
 
 -- :t foldr :: Foldable t => (a -> b -> b) -> b -> t a -> b
@@ -50,3 +51,29 @@ fold = foldMap id
 -- 10)
 foldMap' :: (Foldable t, Monoid m) => (a -> m) -> t a -> m
 foldMap' f = foldr (mappend . f) mempty
+
+-- Chapter Exercises
+-- 1)
+newtype Constant a b =
+  Constant b
+
+-- 2)
+data Two a b =
+  Two a b
+
+-- 3)
+data Three a b c =
+  Three a b c
+
+-- 4)
+data Three' a b =
+  Three' a b b
+
+-- 5)
+data Four' a b =
+  Four' a b b b
+
+-- extra (tip: select = functional if-then-else)
+filterF ::
+     (Applicative f, Foldable t, Monoid (f a)) => (a -> Bool) -> t a -> f a
+filterF f = foldMap (select f pure mempty)

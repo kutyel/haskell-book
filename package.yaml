@@ -11,6 +11,7 @@ extra-source-files:
 description: Please see the README on GitHub at <https://github.com/kutyel/haskell-book#readme>
 dependencies:
   - base >= 4.7 && < 5
+  - cond
   - time
   - split
 library:
