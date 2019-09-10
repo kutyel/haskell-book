@@ -57,21 +57,36 @@ foldMap' f = foldr (mappend . f) mempty
 newtype Constant a b =
   Constant b
 
+instance Foldable (Constant a) where
+  foldMap f (Constant x) = f x
+
 -- 2)
 data Two a b =
   Two a b
+
+instance Foldable (Two a) where
+  foldMap f (Two _ x) = f x
 
 -- 3)
 data Three a b c =
   Three a b c
 
+instance Foldable (Three a b) where
+  foldMap f (Three _ _ x) = f x
+
 -- 4)
 data Three' a b =
   Three' a b b
 
+instance Foldable (Three' a) where
+  foldMap f (Three' _ x y) = f x <> f y
+
 -- 5)
 data Four' a b =
   Four' a b b b
+
+instance Foldable (Four' a) where
+  foldMap f (Four' _ x y z) = f x <> f y <> f z
 
 -- extra (tip: select = functional if-then-else)
 filterF ::
