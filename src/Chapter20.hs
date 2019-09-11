@@ -56,6 +56,7 @@ foldMap' f = foldr (mappend . f) mempty
 -- 1)
 newtype Constant a b =
   Constant b
+  deriving (Eq, Show)
 
 instance Foldable (Constant a) where
   foldMap f (Constant x) = f x
@@ -63,6 +64,7 @@ instance Foldable (Constant a) where
 -- 2)
 data Two a b =
   Two a b
+  deriving (Eq, Show)
 
 instance Foldable (Two a) where
   foldMap f (Two _ x) = f x
@@ -70,6 +72,7 @@ instance Foldable (Two a) where
 -- 3)
 data Three a b c =
   Three a b c
+  deriving (Eq, Show)
 
 instance Foldable (Three a b) where
   foldMap f (Three _ _ x) = f x
@@ -77,6 +80,7 @@ instance Foldable (Three a b) where
 -- 4)
 data Three' a b =
   Three' a b b
+  deriving (Eq, Show)
 
 instance Foldable (Three' a) where
   foldMap f (Three' _ x y) = f x <> f y
@@ -84,6 +88,7 @@ instance Foldable (Three' a) where
 -- 5)
 data Four' a b =
   Four' a b b b
+  deriving (Eq, Show)
 
 instance Foldable (Four' a) where
   foldMap f (Four' _ x y z) = f x <> f y <> f z
