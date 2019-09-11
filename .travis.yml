@@ -14,9 +14,9 @@ before_install:
   - export PATH=$HOME/.local/bin:$PATH
   - travis_retry curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
 install:
-  - stack --no-terminal --install-ghc test --only-dependencies
+  - stack --no-terminal --install-ghc test --only-dependencies --silent
   - stack install stack-hpc-coveralls
 script:
-  - stack --no-terminal test --coverage
+  - stack --no-terminal test --coverage --silent
 after_script:
   - shc haskell-book haskell-book-test
