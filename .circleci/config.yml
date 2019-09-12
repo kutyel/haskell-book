@@ -6,7 +6,6 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
           name: Restore Cached Dependencies
           keys:
             - haskell-book-v1-{{ checksum "stack.yaml" }}-{{ checksum "package.yaml" }}
@@ -20,8 +19,6 @@ jobs:
       - run:
           name: Run tests
           command: stack --no-terminal test --coverage --silent
-      - store_artifacts:
-          path: coverage
       - run:
           name: Report coverage
           command: shc haskell-book haskell-book-test
