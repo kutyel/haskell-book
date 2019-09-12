@@ -9,8 +9,8 @@ jobs:
           # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
           name: Restore Cached Dependencies
           keys:
-            - cci-demo-haskell-v1-{{ checksum "stack.yaml" }}-{{ checksum "package.yaml" }}
-            - cci-demo-haskell-v1-{{ checksum "stack.yaml" }}
+            - haskell-book-v1-{{ checksum "stack.yaml" }}-{{ checksum "package.yaml" }}
+            - haskell-book-v1-{{ checksum "stack.yaml" }}
       - run:
           name: Resolve/Update Dependencies
           command: stack --no-terminal setup
@@ -20,19 +20,20 @@ jobs:
       - run:
           name: Run tests
           command: stack --no-terminal test --coverage --silent
+      - store_artifacts:
+          path: coverage
       - run:
           name: Report coverage
           command: shc haskell-book haskell-book-test
       - run:
           name: Install executable
           command: stack --no-terminal install
+      - store_artifacts:
+          path: ~/.local/bin/haskell-book
+          destination: haskell-book
       - save_cache:
           name: Cache Dependencies
-          key: cci-demo-haskell-v1-{{ checksum "stack.yaml" }}-{{ checksum "package.yaml" }}
+          key: haskell-book-v1-{{ checksum "stack.yaml" }}-{{ checksum "package.yaml" }}
           paths:
             - "/root/.stack"
             - ".stack-work"
-      - store_artifacts:
-          # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-          path: ~/.local/bin/haskell-book
-          destination: haskell-book
