@@ -17,6 +17,6 @@ install:
   - stack --no-terminal --install-ghc test --only-dependencies --silent
   - stack install stack-hpc-coveralls
 script:
-  - stack --no-terminal test --coverage --silent
+  - stack --no-terminal test --coverage --silent >/dev/null
 after_script:
   - shc haskell-book haskell-book-test
