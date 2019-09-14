@@ -15,13 +15,15 @@ jobs:
           command: stack --no-terminal setup
       - run:
           name: Install Coveralls.io for Haskell
-          command: stack --no-terminal install stack-hpc-coveralls
+          command: stack --no-terminal --install-ghc test --only-dependencies --silent
       - run:
           name: Run tests
           command: stack --no-terminal test --coverage --silent
       - run:
           name: Report coverage
-          command: shc haskell-book haskell-book-test
+          command: |
+            stack install stack-hpc-coveralls
+            shc haskell-book haskell-book-test
       - run:
           name: Install executable
           command: stack --no-terminal install
