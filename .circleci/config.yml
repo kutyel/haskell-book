@@ -14,22 +14,16 @@ jobs:
           name: Resolve/Update Dependencies
           command: stack --no-terminal setup
       - run:
-          name: Install Coveralls.io for Haskell
-          command: stack --no-terminal --install-ghc test --only-dependencies --silent
+          name: Install Haskell Stack Coverage
+          command: stack --no-terminal install stack-hpc-coveralls
       - run:
           name: Run tests
           command: stack --no-terminal test --coverage --silent
       - run:
-          name: Report coverage
-          command: |
-            stack install stack-hpc-coveralls
-            shc haskell-book haskell-book-test
-      - run:
-          name: Install executable
-          command: stack --no-terminal install
-      - store_artifacts:
-          path: ~/.local/bin/haskell-book
-          destination: haskell-book
+          name: Report coverage to coveralls.io
+          command: shc haskell-book haskell-book-test
+          environment:
+            COVERALLS_REPO_TOKEN: w4sJhxGnHxUnWqAffv1QYKtLtctdOmIu1
       - save_cache:
           name: Cache Dependencies
           key: haskell-book-v1-{{ checksum "stack.yaml" }}-{{ checksum "package.yaml" }}
