@@ -1,5 +1,7 @@
 resolver: lts-13.25
 extra-deps:
+  - github: guillaume-nargeot/codecov-haskell
+    commit: 8448801f8d01624e4cd60420beb3fdc85c099576
   - github: rubik/stack-hpc-coveralls
     commit: 8a85fa2f5fb907fb8d9d7fc36978b3951cae6e75
 packages:
