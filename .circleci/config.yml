@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  codecov: codecov/codecov@1.0.2
 jobs:
   build:
     docker:
@@ -13,15 +15,18 @@ jobs:
       - run:
           name: Resolve/Update Dependencies
           command: stack --no-terminal setup
-      - run:
-          name: Install Haskell Stack Coverage
-          command: stack --no-terminal install codecov-haskell
+      # - run:
+      #     name: Install Haskell Stack Coverage
+      #     command: stack --no-terminal install codecov-haskell
       - run:
           name: Run tests
-          command: stack --no-terminal test --coverage --silent
-      - run:
-          name: Report coverage to codecov
-          command: codecov-haskell --display-report haskell-book-test
+          command: stack --no-terminal test --coverage
+      - codecov/upload:
+          file: .stack-work/install/x86_64-osx/lts-13.25/8.6.5/hpc/haskell-book/haskell-book-test/hpc_index.html
+          # file: .stack-work/install/x86_64-osx/lts-13.25/8.6.5/hpc/index.html
+      # - run:
+      #     name: Report coverage to codecov
+      #     command: codecov-haskell --display-report haskell-book-test
       - save_cache:
           name: Cache Dependencies
           key: haskell-book-v1-{{ checksum "stack.yaml" }}-{{ checksum "package.yaml" }}
