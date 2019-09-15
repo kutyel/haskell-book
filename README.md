@@ -1,7 +1,7 @@
 # λ My Solutions to the Haskell Book exercises! 💪🏼
 
-[![Build](https://img.shields.io/circleci/build/github/kutyel/haskell-book?style=flat-square)](https://circleci.com/gh/kutyel/haskell-book)
-[![Coverage Status](https://img.shields.io/coveralls/kutyel/haskell-book/master.svg?style=flat-square)](https://coveralls.io/github/kutyel/haskell-book?branch=master)
+[![CircleCI](https://circleci.com/gh/kutyel/haskell-book.svg?style=svg)](https://circleci.com/gh/kutyel/haskell-book)
+[![codecov](https://codecov.io/gh/kutyel/haskell-book/branch/master/graph/badge.svg)](https://codecov.io/gh/kutyel/haskell-book)
 
 ## Other related projects
 
