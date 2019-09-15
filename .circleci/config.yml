@@ -16,12 +16,13 @@ jobs:
           name: Resolve/Update Dependencies
           command: stack --no-terminal setup
       - run:
-          name: Run Tests and Report Coverage!
-          command: |
-            stack --no-terminal --install-ghc test --only-dependencies --silent
-            stack install codecov-haskell
-            stack --no-terminal test --coverage
-            codecov-haskell --display-report haskell-book-test
+          name: Run tests
+          command: stack --no-terminal --install-ghc --only-dependencies test --coverage
+      - run:
+          name: Report Coverage!
+          command: hpc report --xml-output /root/project/.stack-work/install/x86_64-linux/f5b7af260f8222e07e6c42b8b8deba8927651e70b99955dcf610cadc5328f339/8.6.5/hpc/haskell-book/haskell-book-test/haskell-book-test.tix
+      - codecov/upload:
+          file: /root/project/.stack-work/install/x86_64-linux/f5b7af260f8222e07e6c42b8b8deba8927651e70b99955dcf610cadc5328f339/8.6.5/hpc/haskell-book/haskell-book-test/hpc_index.html
       - save_cache:
           name: Cache Dependencies
           key: haskell-book-v1-{{ checksum "stack.yaml" }}-{{ checksum "package.yaml" }}
