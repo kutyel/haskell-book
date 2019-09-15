@@ -15,9 +15,6 @@ jobs:
       - run:
           name: Resolve/Update Dependencies
           command: stack --no-terminal setup
-      # - run:
-      #     name: Run tests
-      #     command: stack --no-terminal test --coverage
       - save_cache:
           name: Cache Dependencies
           key: haskell-book-v1-{{ checksum "stack.yaml" }}-{{ checksum "package.yaml" }}
@@ -27,14 +24,14 @@ jobs:
   test:
     docker:
       - image: fpco/stack-build:lts
-    pre:
-      - cabal install codecov-haskell
-      - cabal configure --enable-tests --enable-library-coverage
-      - cabal build
-    override:
-      - cabal test
-    post:
-      - codecov-haskell --display-report haskell-book-test
+    steps:
+      - run:
+        name: Report Coverage!
+        command: |
+          stack --no-terminal --install-ghc test --only-dependencies --silent
+          stack install stack-hpc-coveralls
+          stack --no-terminal test --coverage
+          codecov-haskell --display-report haskell-book-test
 workflows:
   version: 2.1
   build_and_test:
