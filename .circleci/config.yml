@@ -25,6 +25,8 @@ jobs:
             - "/root/.stack"
             - ".stack-work"
   test:
+    docker:
+      - image: fpco/stack-build:lts
     pre:
       - cabal install codecov-haskell
       - cabal configure --enable-tests --enable-library-coverage
