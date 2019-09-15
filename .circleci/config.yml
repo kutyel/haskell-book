@@ -33,3 +33,9 @@ jobs:
       - cabal test
     post:
       - codecov-haskell --display-report haskell-book-test
+workflows:
+  version: 2.1
+  build_and_test:
+    jobs:
+      - build
+      - test
