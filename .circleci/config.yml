@@ -21,7 +21,13 @@ jobs:
           command: stack --no-terminal test --coverage --silent
       - run:
           name: Report coverage to coveralls.io
-          command: shc haskell-book haskell-book-test
+          command: |
+            echo ${repo_token}
+            echo ${COVERALLS_REPO_TOKEN}
+            shc haskell-book haskell-book-test
+          environment:
+            repo_token: $COVERALLS_REPO_TOKEN
+            COVERALLS_REPO_TOKEN: $COVERALLS_REPO_TOKEN
       - save_cache:
           name: Cache Dependencies
           key: haskell-book-v1-{{ checksum "stack.yaml" }}-{{ checksum "package.yaml" }}
