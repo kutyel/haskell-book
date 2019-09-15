@@ -19,8 +19,7 @@ jobs:
           name: Run tests
           command: stack --no-terminal test --coverage
       - codecov/upload:
-          file: .stack-work/install/x86_64-osx/lts-13.25/8.6.5/hpc/haskell-book/haskell-book-test/hpc_index.html
-          # file: .stack-work/install/x86_64-osx/lts-13.25/8.6.5/hpc/index.html
+          file: /root/project/.stack-work/install/x86_64-linux/f5b7af260f8222e07e6c42b8b8deba8927651e70b99955dcf610cadc5328f339/8.6.5/hpc/index.html
       - save_cache:
           name: Cache Dependencies
           key: haskell-book-v1-{{ checksum "stack.yaml" }}-{{ checksum "package.yaml" }}
