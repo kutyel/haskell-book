@@ -16,12 +16,12 @@ jobs:
           name: Resolve/Update Dependencies
           command: stack --no-terminal setup
       - run:
-        name: Run Tests and Report Coverage!
-        command: |
-          stack --no-terminal --install-ghc test --only-dependencies --silent
-          stack install stack-hpc-coveralls
-          stack --no-terminal test --coverage
-          codecov-haskell --display-report haskell-book-test
+          name: Run Tests and Report Coverage!
+          command: |
+            stack --no-terminal --install-ghc test --only-dependencies --silent
+            stack install stack-hpc-coveralls
+            stack --no-terminal test --coverage
+            codecov-haskell --display-report haskell-book-test
       - save_cache:
           name: Cache Dependencies
           key: haskell-book-v1-{{ checksum "stack.yaml" }}-{{ checksum "package.yaml" }}
