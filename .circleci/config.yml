@@ -19,7 +19,7 @@ jobs:
           name: Run Tests and Report Coverage!
           command: |
             stack --no-terminal --install-ghc test --only-dependencies --silent
-            stack install stack-hpc-coveralls
+            stack install codecov-haskell
             stack --no-terminal test --coverage
             codecov-haskell --display-report haskell-book-test
       - save_cache:
