@@ -19,7 +19,7 @@ jobs:
           name: Run tests
           command: |
             stack --no-terminal --install-ghc test --coverage
-            stack exec -- hpc report --xml-output $(find $(stack path --local-hpc-root) -name \*.tix)
+            # stack exec -- hpc report --xml-output $(find $(stack path --local-hpc-root) -name \*.tix)
       - codecov/upload:
           file: $(find $(stack path --local-hpc-root) -name \*.xml)
       - save_cache:
