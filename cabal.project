@@ -3,4 +3,4 @@ packages: .
 source-repository-package
     type: git
     location: https://github.com/guillaume-nargeot/codecov-haskell.git
-    tag: 8448801f8d01624e4cd60420beb3fdc85c099576
+    tag: 27a2601f44681ac5f42e36a2c86e08b376074f19
