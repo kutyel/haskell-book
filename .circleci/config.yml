@@ -7,9 +7,7 @@ workflows:
       - haskell/build:
           run-check: false
           before-build:
-            - run: |
-              cabal configure --enable-tests --enable-library-coverage
-              cabal new-install cabal-cache
+            - run: cabal configure --enable-tests --enable-library-coverage && cabal new-install cabal-cache
           after-build:
             - run: cabal build && cabal test
           after-test:
