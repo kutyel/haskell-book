@@ -15,13 +15,15 @@ jobs:
       - run:
           name: Resolve/Update Dependencies
           command: stack --no-terminal setup
-      - run:
-          name: Run tests
-          command: stack --no-terminal --install-ghc test --coverage
+      # - run:
+      #     name: Run tests
+      #     command: stack --no-terminal test --coverage
       - run:
           name: Send coverage
           command: |
-            stack install codecov-haskell
+            cabal install codecov-haskell
+            cabal configure --enable-tests --enable-library-coverage && cabal build
+            run-cabal-test # [options] [cabal-test-options]
             codecov-haskell --display-report haskell-book-test
       - codecov/upload:
           file: $(find $(stack path --local-hpc-root) -name \*.xml)
