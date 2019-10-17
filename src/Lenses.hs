@@ -6,6 +6,7 @@
 
 module Lenses where
 
+import           Data.Function         ((&))
 import           Data.Functor.Const
 import           Data.Functor.Identity
 
@@ -79,3 +80,22 @@ nameL = lens getter setter
     getter = haskellerName
     setter :: Haskeller -> String -> Haskeller
     setter h newName = h {haskellerName = newName}
+
+knowledgeL :: Lens' Haskeller Knowledge
+knowledgeL = lens g s
+  where
+    g :: Haskeller -> Knowledge
+    g = haskellerKnowledge
+    s :: Haskeller -> Knowledge -> Haskeller
+    s h n = h {haskellerKnowledge = n}
+
+lensL :: Lens' Knowledge Bool
+lensL = lens g s
+  where
+    g :: Knowledge -> Bool
+    g = kLens
+    s :: Knowledge -> Bool -> Knowledge
+    s k n = k {kLens = n}
+
+betterMe :: Haskeller
+betterMe = me & nameL .~ "Flavio, Haskeller" & knowledgeL . lensL .~ True
