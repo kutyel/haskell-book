@@ -17,9 +17,12 @@ jobs:
           command: stack --no-terminal setup
       - run:
           name: Run tests
+          command: stack --no-terminal --install-ghc test --coverage
+      - run:
+          name: Send coverage
           command: |
-            stack --no-terminal --install-ghc test --coverage
-            # stack exec -- hpc report --xml-output $(find $(stack path --local-hpc-root) -name \*.tix)
+            stack install codecov-haskell
+            codecov-haskell --display-report haskell-book-test
       - codecov/upload:
           file: $(find $(stack path --local-hpc-root) -name \*.xml)
       - save_cache:
