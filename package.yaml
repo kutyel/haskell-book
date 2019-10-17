@@ -7,7 +7,6 @@ maintainer: "flaviocorpa@gmail.com"
 copyright: "MIT"
 extra-source-files:
   - README.md
-  - CHANGELOG.md
 description: Please see the README on GitHub at <https://github.com/kutyel/haskell-book#readme>
 dependencies:
   - base >= 4.7 && < 5
