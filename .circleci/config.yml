@@ -2,12 +2,13 @@ version: 2.1
 orbs:
   haskell: haskell-works/haskell-build-2@1.6.8
 workflows:
-  build-my-application:
+  build:
     jobs:
       - haskell/build:
+          cache-version: latest
           run-check: false
           before-build:
-            - run: cabal configure --enable-tests --enable-library-coverage && cabal new-install cabal-cache
+            - run: cabal configure --enable-tests --enable-library-coverage
           after-build:
             - run: cabal build && cabal test
           after-test:
