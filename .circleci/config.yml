@@ -5,6 +5,7 @@ workflows:
   build-my-application:
     jobs:
       - haskell/build:
+          run-check: false
           before-build:
             - run: cabal configure --enable-tests --enable-library-coverage
           after-build:
