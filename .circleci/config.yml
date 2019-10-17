@@ -9,7 +9,5 @@ workflows:
             - run: cabal configure --enable-tests --enable-library-coverage
           after-build:
             - run: cabal build && cabal test
-          before-test:
-            - run: cabal install codecov-haskell
           after-test:
-            - run: codecov-haskell --display-report haskell-book-test
+            - run: cabal install codecov-haskell && codecov-haskell --display-report haskell-book-test
