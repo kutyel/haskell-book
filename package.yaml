@@ -13,6 +13,7 @@ dependencies:
   - cond
   - time
   - split
+  - lens
 library:
   source-dirs: src
 executables:

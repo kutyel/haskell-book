@@ -2,10 +2,12 @@
 {-# LANGUAGE ImpredicativeTypes  #-}
 {-# LANGUAGE RankNTypes          #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TemplateHaskell     #-}
 {-# LANGUAGE TypeApplications    #-}
 
 module Lenses where
 
+import           Control.Lens.TH       (makeLenses)
 import           Data.Function         ((&))
 import           Data.Functor.Const
 import           Data.Functor.Identity
@@ -42,60 +44,43 @@ over l f = set l <$> f . view l <*> id
 -- Usage
 data Haskeller =
   Haskeller
-    { haskellerName       :: String
-    , haskellerExperience :: Int
-    , haskellerKnowledge  :: Knowledge
+    { _hName       :: String
+    , _hExperience :: Int
+    , _hKnowledge  :: Knowledge
     }
   deriving (Show)
 
 data Knowledge =
   Knowledge
-    { kSyntax         :: Bool
-    , kMonads         :: Bool
-    , kLens           :: Bool
-    , kTypeLevelMagic :: Bool
-    , kNix            :: Bool
+    { _kSyntax         :: Bool
+    , _kMonads         :: Bool
+    , _kLens           :: Bool
+    , _kTypeLevelMagic :: Bool
+    , _kNix            :: Bool
     }
   deriving (Show)
+
+$(makeLenses ''Haskeller)
+
+$(makeLenses ''Knowledge)
 
 me :: Haskeller
 me =
   Haskeller
-    { haskellerName = "Flavio"
-    , haskellerExperience = 1
-    , haskellerKnowledge =
+    { _hName = "Flavio"
+    , _hExperience = 1
+    , _hKnowledge =
         Knowledge
-          { kSyntax = True
-          , kMonads = True
-          , kLens = False
-          , kTypeLevelMagic = False
-          , kNix = False
+          { _kSyntax = True
+          , _kMonads = True
+          , _kLens = False
+          , _kTypeLevelMagic = False
+          , _kNix = False
           }
     }
 
-nameL :: Lens' Haskeller String
-nameL = lens getter setter
-  where
-    getter :: Haskeller -> String
-    getter = haskellerName
-    setter :: Haskeller -> String -> Haskeller
-    setter h newName = h {haskellerName = newName}
-
-knowledgeL :: Lens' Haskeller Knowledge
-knowledgeL = lens g s
-  where
-    g :: Haskeller -> Knowledge
-    g = haskellerKnowledge
-    s :: Haskeller -> Knowledge -> Haskeller
-    s h n = h {haskellerKnowledge = n}
-
-lensL :: Lens' Knowledge Bool
-lensL = lens g s
-  where
-    g :: Knowledge -> Bool
-    g = kLens
-    s :: Knowledge -> Bool -> Knowledge
-    s k n = k {kLens = n}
-
 betterMe :: Haskeller
-betterMe = me & nameL .~ "Flavio, Haskeller" & knowledgeL . lensL .~ True
+betterMe = me
+  & hName .~ "Flavio, Haskeller"
+  & hKnowledge . kLens .~ True
+  & hKnowledge . kTypeLevelMagic .~ True

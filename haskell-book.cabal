@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 74d3cf1f8b544c5fef717fb9aa2bd6a706d4dc8ed5391ccf23a47805a0761bbc
+-- hash: b4f3dac5f66c04ef95c8e2e2eaf4531be6e8cc8d555a9e83e252ce2e73ec7a70
 
 name:           haskell-book
 version:        0.1.0.0
@@ -17,7 +17,8 @@ copyright:      MIT
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
-extra-source-files: README.md
+extra-source-files:
+    README.md
 
 source-repository head
   type: git
@@ -72,6 +73,7 @@ library
   build-depends:
       base >=4.7 && <5
     , cond
+    , lens
     , split
     , time
   default-language: Haskell2010
@@ -87,6 +89,7 @@ executable haskell-book-exe
       base >=4.7 && <5
     , cond
     , haskell-book
+    , lens
     , split
     , time
   default-language: Haskell2010
@@ -115,6 +118,7 @@ test-suite haskell-book-test
     , cond
     , haskell-book
     , hspec
+    , lens
     , split
     , time
   default-language: Haskell2010
