@@ -23,6 +23,7 @@ jobs:
       run: |
         sudo apt-get install libcurl4-openssl-dev
         cabal install codecov-haskell
+        export PATH=~/cabal/bin/:$PATH
         codecov-haskell --display-report haskell-book-test
     - uses: codecov/codecov-action@v1.0.3
       with:
