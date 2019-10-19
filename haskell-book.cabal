@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b4f3dac5f66c04ef95c8e2e2eaf4531be6e8cc8d555a9e83e252ce2e73ec7a70
+-- hash: 1fa4548485afa062a08edb121cffab8eacfc9f6a514431c4ac6d9d75d7314f34
 
 name:           haskell-book
 version:        0.1.0.0
@@ -73,7 +73,7 @@ library
   build-depends:
       base >=4.7 && <5
     , cond
-    , lens
+    , generic-lens
     , split
     , time
   default-language: Haskell2010
@@ -88,8 +88,8 @@ executable haskell-book-exe
   build-depends:
       base >=4.7 && <5
     , cond
+    , generic-lens
     , haskell-book
-    , lens
     , split
     , time
   default-language: Haskell2010
@@ -116,9 +116,9 @@ test-suite haskell-book-test
     , base >=4.7 && <5
     , checkers
     , cond
+    , generic-lens
     , haskell-book
     , hspec
-    , lens
     , split
     , time
   default-language: Haskell2010

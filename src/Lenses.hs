@@ -1,16 +1,22 @@
-{-# LANGUAGE ExplicitForAll      #-}
-{-# LANGUAGE ImpredicativeTypes  #-}
-{-# LANGUAGE RankNTypes          #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE TemplateHaskell     #-}
-{-# LANGUAGE TypeApplications    #-}
+{-# LANGUAGE AllowAmbiguousTypes       #-}
+{-# LANGUAGE DataKinds                 #-}
+{-# LANGUAGE DeriveGeneric             #-}
+{-# LANGUAGE DuplicateRecordFields     #-}
+{-# LANGUAGE ExplicitForAll            #-}
+{-# LANGUAGE FlexibleContexts          #-}
+{-# LANGUAGE ImpredicativeTypes        #-}
+{-# LANGUAGE NoMonomorphismRestriction #-}
+{-# LANGUAGE RankNTypes                #-}
+{-# LANGUAGE ScopedTypeVariables       #-}
+{-# LANGUAGE TypeApplications          #-}
 
 module Lenses where
 
-import           Control.Lens.TH       (makeLenses)
-import           Data.Function         ((&))
+import           Data.Function                ((&))
 import           Data.Functor.Const
 import           Data.Functor.Identity
+import           Data.Generics.Product.Fields (field)
+import           GHC.Generics
 
 type Lens' s a
    = forall f. Functor f =>
@@ -42,42 +48,40 @@ over l f = set l <$> f . view l <*> id
 -- Usage
 data Haskeller =
   Haskeller
-    { _hName       :: String
-    , _hExperience :: Int
-    , _hKnowledge  :: Knowledge
+    { hName       :: String
+    , hExperience :: Int
+    , hKnowledge  :: Knowledge
     }
-  deriving (Show)
+  deriving (Generic, Show)
 
 data Knowledge =
   Knowledge
-    { _kSyntax         :: Bool
-    , _kMonads         :: Bool
-    , _kLens           :: Bool
-    , _kTypeLevelMagic :: Bool
-    , _kNix            :: Bool
+    { kSyntax         :: Bool
+    , kMonads         :: Bool
+    , kLens           :: Bool
+    , kTypeLevelMagic :: Bool
+    , kNix            :: Bool
     }
-  deriving (Show)
+  deriving (Generic, Show)
 
-$(makeLenses ''Haskeller)
-$(makeLenses ''Knowledge)
 
 me :: Haskeller
 me =
   Haskeller
-    { _hName = "Flavio"
-    , _hExperience = 1
-    , _hKnowledge =
+    { hName = "Flavio"
+    , hExperience = 1
+    , hKnowledge =
         Knowledge
-          { _kSyntax = True
-          , _kMonads = True
-          , _kLens = False
-          , _kTypeLevelMagic = False
-          , _kNix = False
+          { kSyntax = True
+          , kMonads = True
+          , kLens = False
+          , kTypeLevelMagic = False
+          , kNix = False
           }
     }
 
 betterMe :: Haskeller
 betterMe = me
-  & hName .~ "Flavio, Haskeller"
-  & hKnowledge . kLens .~ True
-  & hKnowledge . kTypeLevelMagic .~ True
+  & field @"hName" .~ "Flavio, Haskeller"
+  & field @"hKnowledge" . field @"kLens" .~ True
+  & field @"hKnowledge" . field @"kTypeLevelMagic" .~ True
