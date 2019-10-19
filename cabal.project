@@ -1,6 +1,0 @@
-packages: .
-
-source-repository-package
-    type: git
-    location: https://github.com/nirum-lang/codecov-haskell.git
-    tag: 8448801f8d01624e4cd60420beb3fdc85c099576

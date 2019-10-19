@@ -22,9 +22,9 @@ jobs:
     - name: Send coverage
       run: |
         sudo apt-get install libcurl4-openssl-dev
-        echo export PATH=~/cabal/bin/:$PATH >> ~/.profile && more ~/.profile
-        cabal install codecov-haskell
-        codecov-haskell --display-report haskell-book-test
+        # echo export PATH=~/cabal/bin/:$PATH >> ~/.profile && more ~/.profile
+        cabal install hpc-coveralls
+        hpc-coveralls --display-report haskell-book-test
     - uses: codecov/codecov-action@v1.0.3
       with:
         token: ${{secrets.CODECOV_TOKEN}}
