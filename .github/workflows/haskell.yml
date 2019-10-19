@@ -19,11 +19,10 @@ jobs:
         cabal build
     - name: Run tests
       run: cabal test
-    - name: Send coverage
-      run: |
-        sudo apt-get install curl
-        cabal install codecov-haskell
-        codecov-haskell --display-report haskell-book-test
+    # - name: Send coverage
+    #   run: |
+    #     cabal install codecov-haskell
+    #     codecov-haskell --display-report haskell-book-test
     - uses: codecov/codecov-action@v1.0.3
       with:
         token: ${{secrets.CODECOV_TOKEN}}
