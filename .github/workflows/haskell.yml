@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build:
-   
+
     runs-on: ubuntu-latest
 
     steps:
@@ -16,7 +16,7 @@ jobs:
     - name: Install dependencies
       run: |
         cabal update
-        cabal install --only-dependencies --enable-tests  --enable-library-coverage
+        cabal install --only-dependencies --enable-tests # --enable-library-coverage
     - name: Build
       run: |
         cabal configure --enable-tests
