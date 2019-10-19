@@ -19,11 +19,11 @@ jobs:
         cabal build
     - name: Run tests
       run: cabal test
-    - uses: codecov/codecov-action@v1.0.3
-      with:
-        token: ${{secrets.CODECOV_TOKEN}}
-        file: ${find dist-newstyle -name hpc_index.html -print -quit}
-    # - name: Send coverage
-    #   run: |
-    #     cabal install codecov-haskell
-    #     codecov-haskell --display-report haskell-book-test
+    # - uses: codecov/codecov-action@v1.0.3
+    #   with:
+    #     token: ${{secrets.CODECOV_TOKEN}}
+    #     file: ${find dist-newstyle -name hpc_index.html -print -quit}
+    - name: Send coverage
+      run: |
+        cabal install hpc-coveralls
+        hpc-coveralls --display-report haskell-book-test
