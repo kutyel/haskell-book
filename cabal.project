@@ -1,5 +1,4 @@
-packages: */*.cabal
-with-compiler: /opt/ghc/8.0.1/bin/ghc
+packages: .
 
 source-repository-package
     type: git
