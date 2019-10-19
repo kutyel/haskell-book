@@ -1,6 +1,6 @@
 # λ My Solutions to the Haskell Book exercises! 💪🏼
 
-[![CircleCI](https://circleci.com/gh/kutyel/haskell-book.svg?style=svg)](https://circleci.com/gh/kutyel/haskell-book)
+[![Actions Status](https://github.com/kutyel/haskell-book/workflows/Haskell+CI/badge.svg)](https://github.com/kutyel/haskell-book/actions)
 [![codecov](https://codecov.io/gh/kutyel/haskell-book/branch/master/graph/badge.svg)](https://codecov.io/gh/kutyel/haskell-book)
 
 ## Other related projects
