@@ -21,7 +21,6 @@ jobs:
       run: cabal test
     - name: Send coverage
       run: |
-        apt install libcurl-dev -y # apparently github needs this!
         cabal install codecov-haskell
         codecov-haskell --display-report haskell-book-test
     - uses: codecov/codecov-action@v1.0.3
