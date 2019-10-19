@@ -10,4 +10,8 @@ workflows:
           cache-version: latest
           run-check: false
           before-build:
-            - run: cabal configure --enable-tests --enable-library-coverage && cabal build && cabal test && cabal install codecov-haskell && codecov-haskell --display-report haskell-book-test
+            - run: cabal configure --enable-tests --enable-library-coverage
+          after-build:
+            - run: cabal build && cabal test
+          # after-test:
+          #   - run: cabal install codecov-haskell && codecov-haskell --display-report haskell-book-test
