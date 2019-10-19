@@ -1,14 +1,8 @@
-{-# LANGUAGE AllowAmbiguousTypes       #-}
-{-# LANGUAGE DataKinds                 #-}
-{-# LANGUAGE DeriveGeneric             #-}
-{-# LANGUAGE DuplicateRecordFields     #-}
-{-# LANGUAGE ExplicitForAll            #-}
-{-# LANGUAGE FlexibleContexts          #-}
-{-# LANGUAGE ImpredicativeTypes        #-}
-{-# LANGUAGE NoMonomorphismRestriction #-}
-{-# LANGUAGE RankNTypes                #-}
-{-# LANGUAGE ScopedTypeVariables       #-}
-{-# LANGUAGE TypeApplications          #-}
+{-# LANGUAGE DataKinds           #-}
+{-# LANGUAGE DeriveGeneric       #-}
+{-# LANGUAGE ImpredicativeTypes  #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TypeApplications    #-}
 
 module Lenses where
 
@@ -63,7 +57,6 @@ data Knowledge =
     , kNix            :: Bool
     }
   deriving (Generic, Show)
-
 
 me :: Haskeller
 me =
