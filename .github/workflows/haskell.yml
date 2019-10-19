@@ -22,13 +22,6 @@ jobs:
     - name: Send coverage
       run: |
         sudo apt-get install libcurl4-openssl-dev
-        sudo emacs /etc/environment
-        PATH="~/cabal/bin/:$PATH"
-        source /etc/environment
-        # echo export PATH=~/cabal/bin/:$PATH >> ~/.profile && more ~/.profile
+        echo export PATH=~/cabal/bin/:$PATH >> ~/.bash_profile && more ~/.bash_profile
         cabal install codecov-haskell
         codecov-haskell --display-report haskell-book-test
-    - uses: codecov/codecov-action@v1.0.3
-      with:
-        token: ${{secrets.CODECOV_TOKEN}}
-    #     file: ${find dist-newstyle -name hpc_index.html -print -quit}
