@@ -24,7 +24,6 @@ view :: Lens' s a -> s -> a
 view l = getConst . l Const
 
 infixr 4 ^.
-
 (^.) :: forall s a. s -> Lens' s a -> a
 (^.) = flip @(Lens' s a) view
 
@@ -33,7 +32,6 @@ set :: Lens' s a -> a -> s -> s
 set l a = runIdentity . l (const (Identity a))
 
 infixr 4 .~
-
 (.~) :: Lens' s a -> a -> s -> s
 (.~) = set
 
@@ -61,7 +59,6 @@ data Knowledge =
   deriving (Show)
 
 $(makeLenses ''Haskeller)
-
 $(makeLenses ''Knowledge)
 
 me :: Haskeller
