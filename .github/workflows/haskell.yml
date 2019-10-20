@@ -21,6 +21,6 @@ jobs:
       run: cabal test
     - name: Send coverage
       run: |
-        # sudo apt-get install libcurl4-openssl-dev
-        cabal install codecov-haskell # --installdir=/opt/cabal/3.0/bin/
+        sudo apt-get install libcurl4-openssl-dev # github needs this...
+        cabal install codecov-haskell
         codecov-haskell --display-report haskell-book-test
