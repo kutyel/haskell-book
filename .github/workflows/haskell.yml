@@ -14,7 +14,8 @@ jobs:
         sudo apt-get install libcurl4-openssl-dev # github needs this...
         cabal update
         cabal new-install --only-dependencies
-        cabal new-install codecov-haskell --installdir=/home/runner/.cabal/bin
+        cabal new-install --help
+        cabal new-install codecov-haskell # --installdir=/home/runner/.cabal/bin
     - name: Build
       run: cabal new-build --only-dependencies --enable-tests --enable-coverage
     - name: Run tests
