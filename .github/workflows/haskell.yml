@@ -16,9 +16,9 @@ jobs:
     - name: Build
       run: |
         sudo apt-get install libcurl4-openssl-dev # github needs this...
-        cabal install codecov-haskell # --installdir=/opt/cabal/3.0/bin/
+        cabal new-install codecov-haskell # --installdir=/opt/cabal/3.0/bin/
         cabal configure --enable-tests --enable-library-coverage
-        cabal build
+        cabal new-build all
     - name: Run tests
       run: cabal test
     - name: Send coverage
