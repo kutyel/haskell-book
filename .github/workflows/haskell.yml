@@ -8,7 +8,7 @@ jobs:
     - uses: actions/setup-haskell@v1
       with:
         ghc-version: '8.6.5'
-        cabal-version: '3.0'
+        cabal-version: '2.4'
     - name: Install dependencies
       run: |
         cabal update
@@ -21,5 +21,5 @@ jobs:
         cabal build
     - name: Run tests
       run: cabal test
-    # - name: Send coverage
-    #   run: codecov-haskell --display-report haskell-book-test
+    - name: Send coverage
+      run: codecov-haskell --display-report haskell-book-test
