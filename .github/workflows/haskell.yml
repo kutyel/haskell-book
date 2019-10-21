@@ -8,15 +8,15 @@ jobs:
     - uses: actions/setup-haskell@v1
       with:
         ghc-version: '8.6.5'
-        cabal-version: '2.4'
+        cabal-version: '3.0'
     - name: Install dependencies
       run: |
         sudo apt-get install libcurl4-openssl-dev # github needs this...
         cabal update
-        cabal new-install codecov-haskell --builddir=/home/runner/.cabal/bin --only-dependencies
+        cabal install codecov-haskell --installdir=/opt/cabal/3.0/bin/ --only-dependencies
     - name: Build
-      run: cabal new-build --only-dependencies --enable-tests --enable-coverage
+      run: cabal build --only-dependencies --enable-tests --enable-coverage
     - name: Run tests
-      run: cabal new-test
+      run: cabal test
     - name: Send coverage
       run: codecov-haskell --display-report haskell-book-test
