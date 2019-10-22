@@ -18,7 +18,8 @@ jobs:
       run: cabal build
     - name: Run tests
       run: cabal test
-    # - name: Send coverage
-    #   run: |
-    #     cabal install codecov-haskell --installdir=/opt/cabal/3.0/bin/
-    #     codecov-haskell --display-report haskell-book-test
+    - name: Send coverage
+      run: |
+        cabal install codecov-haskell --installdir=/opt/cabal/3.0/bin/
+        find . -type f -name "*.tix" # where is my tix file??
+        # codecov-haskell --display-report haskell-book-test
