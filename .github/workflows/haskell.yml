@@ -21,5 +21,4 @@ jobs:
     - name: Send coverage
       run: |
         cabal install codecov-haskell --installdir=/opt/cabal/3.0/bin/
-        find . -type f -name "*.tix" # where is my tix file??
-        # codecov-haskell --display-report haskell-book-test
+        codecov-haskell --display-report haskell-book-test
