@@ -3,4 +3,4 @@ packages: .
 source-repository-package
     type: git
     location: https://github.com/kutyel/codecov-haskell.git
-    tag: b8b1e4a5d7a0bfe8b0934c86297c84623e2a1d1b
+    tag: 8ea02b52c3d072421be8131764de509220e83a76
