@@ -5,20 +5,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - uses: actions/setup-haskell@v1
-      with:
-        ghc-version: '8.6.5'
-        cabal-version: '3.0'
+    - name: Install Stack
+      run: |
+        mkdir -p ~/.local/bin
+        export PATH=$HOME/.local/bin:$PATH
+        curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
     - name: Install dependencies
       run: |
-        sudo apt-get install libcurl4-openssl-dev # github needs this...
-        cabal update
-        cabal configure --enable-tests --enable-coverage --only-dependencies
-    - name: Build
-      run: cabal build
+        stack --no-terminal --install-ghc test --only-dependencies
+        stack install stack-hpc-coveralls
+        # sudo apt-get install libcurl4-openssl-dev # github needs this...
     - name: Run tests
-      run: cabal test
-    # - name: Send coverage
-    #   run: |
-    #     cabal install codecov-haskell --installdir=/opt/cabal/3.0/bin/
-    #     codecov-haskell --display-report haskell-book-test
+      run: stack --no-terminal test --coverage
+    - name: Send coverage
+      run: shc haskell-book haskell-book-test
