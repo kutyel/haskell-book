@@ -1,6 +1,6 @@
 resolver: lts-13.25
 extra-deps:
-  - github: rubik/stack-hpc-coveralls
-    commit: 8a85fa2f5fb907fb8d9d7fc36978b3951cae6e75
+  - github: kutyel/stack-hpc-coveralls
+    commit: 19460701080f2e6e8a4cf53db56bec46f26ca8c0
 packages:
   - .
