@@ -9,13 +9,17 @@ jobs:
       run: |
         mkdir -p ~/.local/bin
         export PATH=$HOME/.local/bin:$PATH
+        echo ::add-path::/home/runner/.local/bin
         curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
     - name: Install dependencies
       run: |
         stack --no-terminal --install-ghc test --only-dependencies
         stack install stack-hpc-coveralls
-        # sudo apt-get install libcurl4-openssl-dev # github needs this...
     - name: Run tests
       run: stack --no-terminal test --coverage
     - name: Send coverage
       run: shc haskell-book haskell-book-test
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.COVERALLS_TOKEN }}
