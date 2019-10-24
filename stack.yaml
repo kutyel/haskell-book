@@ -1,6 +1,6 @@
 resolver: lts-13.25
 extra-deps:
   - github: kutyel/stack-hpc-coveralls
-    commit: a94feedbc1f696c685b0fe7d228cad411b3deedf
+    commit: 35a9434925bd7f423830974c94e87a83268daa61
 packages:
   - .
