@@ -4,6 +4,7 @@ import qualified Test.Chapter16  as Chapter16
 import qualified Test.Chapter17  as Chapter17
 import qualified Test.Chapter18  as Chapter18
 import qualified Test.Chapter20  as Chapter20
+import qualified Test.Chapter21  as Chapter21
 import qualified Test.Chapter8   as Chapter8
 import qualified Test.Cipher     as Cipher
 import           Test.Hspec
@@ -21,3 +22,4 @@ main =
     Chapter17.spec
     Chapter18.spec
     Chapter20.spec
+    Chapter21.spec

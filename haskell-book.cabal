@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1fa4548485afa062a08edb121cffab8eacfc9f6a514431c4ac6d9d75d7314f34
+-- hash: fbbc91a161604bd84043aee8f96a0696d7504af213fc8994e90e3aab148506cf
 
 name:           haskell-book
 version:        0.1.0.0
@@ -41,6 +41,7 @@ library
       Chapter17
       Chapter18
       Chapter20
+      Chapter21
       Chapter6
       Chapter7
       Chapter8
@@ -104,6 +105,7 @@ test-suite haskell-book-test
       Test.Chapter17
       Test.Chapter18
       Test.Chapter20
+      Test.Chapter21
       Test.Chapter8
       Test.Cipher
       Test.WordNumber
