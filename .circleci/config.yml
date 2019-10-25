@@ -16,21 +16,21 @@ jobs:
       - run:
           name: Run tests
           command: stack --no-terminal test --coverage
-      - run:
-          name: Send coverage
-          command: |
-            stack install stack-hpc-coveralls
-            shc haskell-book haskell-book-test
       # - run:
-      #     name: Install executable
-      #     command: stack --no-terminal install
+      #     name: Send coverage
+      #     command: |
+      #       stack install stack-hpc-coveralls
+      #       shc haskell-book haskell-book-test
+      - run:
+          name: Install executable
+          command: stack --no-terminal install
       - save_cache:
           name: Cache Dependencies
           key: haskell-book-v1-{{ checksum "stack.yaml" }}-{{ checksum "package.yaml" }}
           paths:
             - "/root/.stack"
             - ".stack-work"
-      # - store_artifacts:
-      #     path: ~/.local/bin/haskell-book-exe
-      #     destination: haskell-book-exe
+      - store_artifacts:
+          path: ~/.local/bin/haskell-book-exe
+          destination: haskell-book-exe
 
