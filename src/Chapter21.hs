@@ -47,3 +47,21 @@ instance Foldable Optional where
 instance Traversable Optional where
   traverse _ Nada    = pure Nada
   traverse f (Yep x) = Yep <$> f x
+
+-- List
+data List a
+  = Nil
+  | Cons a (List a)
+  deriving (Eq, Show)
+
+instance Functor List where
+  fmap _ Nil         = Nil
+  fmap f (Cons x xs) = Cons (f x) (f <$> xs)
+
+instance Foldable List where
+  foldMap _ Nil         = mempty
+  foldMap f (Cons x xs) = f x <> foldMap f xs
+
+instance Traversable List where
+  traverse _ Nil         = pure Nil
+  traverse f (Cons x xs) = Cons <$> f x <*> traverse f xs

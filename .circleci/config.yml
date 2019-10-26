@@ -16,11 +16,11 @@ jobs:
       - run:
           name: Run tests
           command: stack --no-terminal test --coverage
-      # - run:
-      #     name: Send coverage
-      #     command: |
-      #       stack install stack-hpc-coveralls
-      #       shc haskell-book haskell-book-test
+      - run:
+          name: Send coverage
+          command: |
+            stack install stack-hpc-coveralls
+            shc haskell-book haskell-book-test
       - run:
           name: Install executable
           command: stack --no-terminal install

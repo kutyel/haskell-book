@@ -27,6 +27,12 @@ instance Arbitrary a => Arbitrary (Optional a) where
 instance Eq a => EqProp (Optional a) where
   (=-=) = eq
 
+instance Arbitrary a => Arbitrary (List a) where
+  arbitrary = frequency [(1, pure Nil), (3, Cons <$> arbitrary <*> arbitrary)]
+
+instance Eq a => EqProp (List a) where
+  (=-=) = eq
+
 spec :: Spec
 spec =
   describe "Chapter 20:" $ do
@@ -36,3 +42,5 @@ spec =
       quickBatch $ traversable (undefined :: Constant String Types)
     it "Optional -> should be traversable" $
       quickBatch $ traversable (undefined :: Optional Types)
+    it "List -> should be traversable" $
+      quickBatch $ traversable (undefined :: List Types)
