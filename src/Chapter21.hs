@@ -65,3 +65,17 @@ instance Foldable List where
 instance Traversable List where
   traverse _ Nil         = pure Nil
   traverse f (Cons x xs) = Cons <$> f x <*> traverse f xs
+
+-- Three
+data Three a b c =
+  Three a b c
+  deriving (Eq, Show)
+
+instance Functor (Three a b) where
+  fmap f (Three x y z) = Three x y (f z)
+
+instance Foldable (Three a b) where
+  foldMap f (Three _ _ x) = f x
+
+instance Traversable (Three a b) where
+  traverse f (Three x y z) = Three x y <$> f z

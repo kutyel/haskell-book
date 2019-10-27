@@ -33,6 +33,13 @@ instance Arbitrary a => Arbitrary (List a) where
 instance Eq a => EqProp (List a) where
   (=-=) = eq
 
+instance (Arbitrary a, Arbitrary b, Arbitrary c) =>
+         Arbitrary (Three a b c) where
+  arbitrary = Three <$> arbitrary <*> arbitrary <*> arbitrary
+
+instance (Eq a, Eq b, Eq c) => EqProp (Three a b c) where
+  (=-=) = eq
+
 spec :: Spec
 spec =
   describe "Chapter 20:" $ do
@@ -44,3 +51,5 @@ spec =
       quickBatch $ traversable (undefined :: Optional Types)
     it "List -> should be traversable" $
       quickBatch $ traversable (undefined :: List Types)
+    it "Three -> should be traversable" $
+      quickBatch $ traversable (undefined :: Three Int Bool Types)
