@@ -79,3 +79,45 @@ instance Foldable (Three a b) where
 
 instance Traversable (Three a b) where
   traverse f (Three x y z) = Three x y <$> f z
+
+-- Pair
+data Pair a b =
+  Pair a b
+  deriving (Eq, Show)
+
+instance Functor (Pair a) where
+  fmap f (Pair x y) = Pair x $ f y
+
+instance Foldable (Pair a) where
+  foldMap f (Pair _ x) = f x
+
+instance Traversable (Pair a) where
+  traverse f (Pair x y) = Pair x <$> f y
+
+-- Big
+data Big a b =
+  Big a b b
+  deriving (Eq, Show)
+
+instance Functor (Big a) where
+  fmap f (Big x y z) = Big x (f y) (f z)
+
+instance Foldable (Big a) where
+  foldMap f (Big _ x y) = f x <> f y
+
+instance Traversable (Big a) where
+  traverse f (Big x y z) = Big x <$> f y <*> f z
+
+-- Bigger
+data Bigger a b =
+  Bigger a b b b
+  deriving (Eq, Show)
+
+instance Functor (Bigger a) where
+  fmap f (Bigger w x y z) = Bigger w (f x) (f y) (f z)
+
+instance Foldable (Bigger a) where
+  foldMap f (Bigger _ x y z) = f x <> f y <> f z
+
+instance Traversable (Bigger a) where
+  traverse f (Bigger w x y z) = Bigger w <$> f x <*> f y <*> f z

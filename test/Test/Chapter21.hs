@@ -40,6 +40,24 @@ instance (Arbitrary a, Arbitrary b, Arbitrary c) =>
 instance (Eq a, Eq b, Eq c) => EqProp (Three a b c) where
   (=-=) = eq
 
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Pair a b) where
+  arbitrary = Pair <$> arbitrary <*> arbitrary
+
+instance (Eq a, Eq b) => EqProp (Pair a b) where
+  (=-=) = eq
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Big a b) where
+  arbitrary = Big <$> arbitrary <*> arbitrary <*> arbitrary
+
+instance (Eq a, Eq b) => EqProp (Big a b) where
+  (=-=) = eq
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Bigger a b) where
+  arbitrary = Bigger <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
+
+instance (Eq a, Eq b) => EqProp (Bigger a b) where
+  (=-=) = eq
+
 spec :: Spec
 spec =
   describe "Chapter 20:" $ do
@@ -53,3 +71,9 @@ spec =
       quickBatch $ traversable (undefined :: List Types)
     it "Three -> should be traversable" $
       quickBatch $ traversable (undefined :: Three Int Bool Types)
+    it "Pair -> should be traversable" $
+      quickBatch $ traversable (undefined :: Pair Int Types)
+    it "Big -> should be traversable" $
+      quickBatch $ traversable (undefined :: Big Int Types)
+    it "Bigger -> should be traversable" $
+      quickBatch $ traversable (undefined :: Bigger Int Types)
