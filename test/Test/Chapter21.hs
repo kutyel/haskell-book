@@ -67,6 +67,17 @@ instance (Applicative n, Testable (n Property), Eq a, Eq (n a), EqProp a) =>
          EqProp (S n a) where
   (=-=) = eq
 
+instance Arbitrary a => Arbitrary (Tree a) where
+  arbitrary =
+    frequency
+      [ (3, pure Empty)
+      , (2, Leaf <$> arbitrary)
+      , (1, Node <$> arbitrary <*> arbitrary <*> arbitrary)
+      ]
+
+instance Eq a => EqProp (Tree a) where
+  (=-=) = eq
+
 spec :: Spec
 spec =
   describe "Chapter 20:" $ do
@@ -88,3 +99,5 @@ spec =
       quickBatch $ traversable (undefined :: Bigger Int Types)
     it "S -> should be traversable" $
       quickBatch $ traversable (undefined :: S [] Types)
+    it "Tree -> should be traversable" $
+      quickBatch $ traversable (undefined :: Tree Types)
