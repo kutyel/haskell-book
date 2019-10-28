@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module Test.Chapter21 where
 
 import           Chapter21
@@ -58,6 +60,13 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Bigger a b) where
 instance (Eq a, Eq b) => EqProp (Bigger a b) where
   (=-=) = eq
 
+instance (Functor n, Arbitrary (n a), Arbitrary a) => Arbitrary (S n a) where
+  arbitrary = S <$> arbitrary <*> arbitrary
+
+instance (Applicative n, Testable (n Property), Eq a, Eq (n a), EqProp a) =>
+         EqProp (S n a) where
+  (=-=) = eq
+
 spec :: Spec
 spec =
   describe "Chapter 20:" $ do
@@ -77,3 +86,5 @@ spec =
       quickBatch $ traversable (undefined :: Big Int Types)
     it "Bigger -> should be traversable" $
       quickBatch $ traversable (undefined :: Bigger Int Types)
+    it "S -> should be traversable" $
+      quickBatch $ traversable (undefined :: S [] Types)
