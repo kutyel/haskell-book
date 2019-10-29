@@ -90,4 +90,4 @@ data Dog =
     }
 
 getDogRM :: Reader Person Dog
-getDogRM = Dog <$> Reader dogName <*> Reader address
+getDogRM = Reader (Dog <$> dogName <*> address)
