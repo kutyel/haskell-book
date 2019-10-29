@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: fbbc91a161604bd84043aee8f96a0696d7504af213fc8994e90e3aab148506cf
+-- hash: ddedf93ca2780867d44a932c9116d585b3ab472c1784309249b48096fe07701b
 
 name:           haskell-book
 version:        0.1.0.0
@@ -42,6 +42,7 @@ library
       Chapter18
       Chapter20
       Chapter21
+      Chapter22
       Chapter6
       Chapter7
       Chapter8
