@@ -1,5 +1,8 @@
+{-# LANGUAGE InstanceSigs #-}
+
 module Chapter23 where
 
+import           Control.Arrow (first)
 import           System.Random
 
 data Die
@@ -52,3 +55,13 @@ rollsCountLogged n = go 0 (0, [])
       | otherwise =
         let (die, nextGen) = randomR (1, 6) gen
          in go (sum + die) (c + 1, intToDie die : cs) nextGen
+
+-- write State yourself
+newtype State s a =
+  State
+    { runState :: s -> (a, s)
+    }
+
+instance Functor (State s) where
+  fmap :: (a -> b) -> State s a -> State s b
+  fmap f (State g) = State (first f . g)

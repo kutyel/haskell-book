@@ -23,3 +23,4 @@ main =
     Chapter18.spec
     Chapter20.spec
     Chapter21.spec
+    -- TODO: test Reader and State monads!
