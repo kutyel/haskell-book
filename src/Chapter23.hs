@@ -1,4 +1,5 @@
-{-# LANGUAGE InstanceSigs #-}
+{-# LANGUAGE InstanceSigs  #-}
+{-# LANGUAGE TupleSections #-}
 
 module Chapter23 where
 
@@ -65,3 +66,13 @@ newtype State s a =
 instance Functor (State s) where
   fmap :: (a -> b) -> State s a -> State s b
   fmap f (State g) = State (first f . g)
+
+instance Applicative (State s) where
+  pure :: a -> State s a
+  pure a = State (a, )
+  (<*>) :: State s (a -> b) -> State s a -> State s b
+  State f <*> State g =
+    State $ \s ->
+      let (fab, s') = f s
+          (x, s'') = g s'
+       in (fab x, s'')
