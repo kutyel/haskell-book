@@ -76,3 +76,12 @@ instance Applicative (State s) where
       let (fab, s') = f s
           (x, s'') = g s'
        in (fab x, s'')
+
+instance Monad (State s) where
+  return = pure
+  (>>=) :: State s a -> (a -> State s b) -> State s b
+  State f >>= g =
+    State $ \s ->
+      let (a, s') = f s
+          ms = runState (g a)
+       in ms s'

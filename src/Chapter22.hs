@@ -62,7 +62,7 @@ instance Applicative (Reader r) where
 instance Monad (Reader r) where
   return = pure
   (>>=) :: Reader r a -> (a -> Reader r b) -> Reader r b
-  Reader ra >>= aRb = join $ Reader $ \r -> aRb (ra r)
+  Reader ra >>= f = join $ Reader (f . ra)
 
 -- rewrite getDogRM with Reader!
 newtype HumanName =
