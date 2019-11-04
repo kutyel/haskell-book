@@ -57,6 +57,10 @@ rollsCountLogged n = go 0 (0, [])
         let (die, nextGen) = randomR (1, 6) gen
          in go (sum + die) (c + 1, intToDie die : cs) nextGen
 
+-- TODO: strange fizz buzz
+fizzBuzzFromTo :: Integer -> Integer -> [String]
+fizzBuzzFromTo = undefined
+
 -- write State yourself
 newtype State s a =
   State
@@ -85,3 +89,19 @@ instance Monad (State s) where
       let (a, s') = f s
           ms = runState (g a)
        in ms s'
+
+-- chapter exercises
+get :: State s s
+get = State $ \s -> (s, s)
+
+put :: s -> State s ()
+put x = State $ const ((), x)
+
+exec :: State s a -> s -> s
+exec (State sa) = snd . sa
+
+eval :: State s a -> s -> a
+eval (State sa) = fst . sa
+
+modify :: (s -> s) -> State s ()
+modify f = State $ \s -> ((), f s)
