@@ -1,4 +1,5 @@
 {-# LANGUAGE InstanceSigs  #-}
+{-# LANGUAGE LambdaCase    #-}
 {-# LANGUAGE TupleSections #-}
 
 module Chapter23 where
@@ -16,8 +17,8 @@ data Die
   deriving (Eq, Show)
 
 intToDie :: Int -> Die
-intToDie n =
-  case n of
+intToDie =
+  \case
     1 -> DieOne
     2 -> DieTwo
     3 -> DieThree
