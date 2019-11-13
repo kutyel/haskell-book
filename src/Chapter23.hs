@@ -57,10 +57,6 @@ rollsCountLogged n = go 0 (0, [])
         let (die, nextGen) = randomR (1, 6) gen
          in go (sum + die) (c + 1, intToDie die : cs) nextGen
 
--- TODO: strange fizz buzz
-fizzBuzzFromTo :: Integer -> Integer -> [String]
-fizzBuzzFromTo = undefined
-
 -- write State yourself
 newtype State s a =
   State
@@ -105,3 +101,29 @@ eval (State sa) = fst . sa
 
 modify :: (s -> s) -> State s ()
 modify f = State $ fmap f . ((), )
+
+-- weirdest FizzBuzz possible as punishment
+fizzBuzz :: Integer -> String
+fizzBuzz n
+  | n `mod` 15 == 0 = "FizzBuzz"
+  | n `mod` 5 == 0 = "Buzz"
+  | n `mod` 3 == 0 = "Fizz"
+  | otherwise = show n
+
+fizzbuzzList :: [Integer] -> [String]
+fizzbuzzList list = exec (mapM_ addResult list) []
+
+addResult :: Integer -> State [String] ()
+addResult n = do
+  xs <- get
+  let result = fizzBuzz n
+  put (result : xs)
+
+fizzbuzzFromTo :: Integer -> Integer -> [String]
+fizzbuzzFromTo from to
+  | from == to = fizzbuzzList [from]
+  | from < to = fizzbuzzList [to,to - 1 .. from]
+  | otherwise = fizzbuzzFromTo to from
+
+main :: IO ()
+main = mapM_ putStrLn $ fizzbuzzFromTo 1 100
