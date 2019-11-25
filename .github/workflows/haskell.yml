@@ -8,7 +8,7 @@ jobs:
     - uses: actions/cache@v1
       with:
         path: ~/.stack
-        key: ${{ runner.os }}-stack-${{ hashFiles('**/stack.yml.lock') }}
+        key: ${{ runner.os }}-stack-${{ ls && hashFiles('**/package.yml') }}
         restore-keys: |
           ${{ runner.os }}-stack-
     - uses: mstksg/setup-stack@v1
