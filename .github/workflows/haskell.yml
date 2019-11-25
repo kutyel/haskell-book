@@ -1,0 +1,20 @@
+name: Haskell CI
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/cache@v1
+      with:
+        path: ~/.stack
+        key: ${{ runner.os }}-stack-${{ hashFiles('**/stack.yml') }}
+        restore-keys: |
+          ${{ runner.os }}-stack-
+    - uses: mstksg/setup-stack@v1
+    - name: Install dependencies
+      run: stack --no-terminal setup
+    - name: Build
+      run: stack build
+    - name: Run tests
+      run: stack --no-terminal install
