@@ -6,19 +6,19 @@ data BinaryTree a
   deriving (Eq, Ord, Show)
 
 preorder :: BinaryTree a -> [a]
-preorder Leaf                = []
+preorder Leaf = []
 preorder (Node left x right) = x : preorder left ++ preorder right
 
 inorder :: BinaryTree a -> [a]
-inorder Leaf                = []
+inorder Leaf = []
 inorder (Node left x right) = inorder left ++ x : inorder right
 
 postorder :: BinaryTree a -> [a]
-postorder Leaf                = []
+postorder Leaf = []
 postorder (Node left x right) = postorder left ++ postorder right ++ [x]
 
 foldTree :: (a -> b -> b) -> b -> BinaryTree a -> b
-foldTree _ x Leaf                = x
+foldTree _ x Leaf = x
 foldTree f z (Node left x right) = f x (foldTree f (foldTree f z left) right)
 
 testTree :: BinaryTree Integer

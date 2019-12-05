@@ -3,11 +3,11 @@ module ReplaceExperiment where
 replaceWithP :: b -> Char
 replaceWithP = const 'p'
 
-lms :: [Maybe [Char]]
+lms :: [Maybe String]
 lms = [Just "Ave", Nothing, Just "woohoo"]
 
 -- more specific argument
-replaceWithP' :: [Maybe [Char]] -> Char
+replaceWithP' :: [Maybe String] -> Char
 replaceWithP' = replaceWithP
 
 -- lifted
@@ -15,7 +15,7 @@ liftedReplace :: Functor f => f a -> f Char
 liftedReplace = fmap replaceWithP
 
 -- specific
-liftedReplace' :: [Maybe [Char]] -> [Char]
+liftedReplace' :: [Maybe String] -> String
 liftedReplace' = liftedReplace
 
 -- twice
@@ -23,16 +23,16 @@ twiceLifted :: (Functor f1, Functor f) => f (f1 a) -> f (f1 Char)
 twiceLifted = (fmap . fmap) replaceWithP
 
 -- more specific
-twiceLifted' :: [Maybe [Char]] -> [Maybe Char]
+twiceLifted' :: [Maybe String] -> [Maybe Char]
 twiceLifted' = twiceLifted
 
 -- thrice
 thriceLifted ::
-     (Functor f2, Functor f1, Functor f) => f (f1 (f2 a)) -> f (f1 (f2 Char))
+  (Functor f2, Functor f1, Functor f) => f (f1 (f2 a)) -> f (f1 (f2 Char))
 thriceLifted = (fmap . fmap . fmap) replaceWithP
 
 -- more concrete
-thriceLifted' :: [Maybe [Char]] -> [Maybe [Char]]
+thriceLifted' :: [Maybe String] -> [Maybe String]
 thriceLifted' = thriceLifted
 
 main :: IO ()

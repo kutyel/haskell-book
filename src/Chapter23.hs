@@ -1,11 +1,11 @@
-{-# LANGUAGE InstanceSigs  #-}
-{-# LANGUAGE LambdaCase    #-}
+{-# LANGUAGE InstanceSigs #-}
+{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE TupleSections #-}
 
 module Chapter23 where
 
-import           Control.Arrow (first)
-import           System.Random
+import Control.Arrow (first)
+import System.Random
 
 data Die
   = DieOne
@@ -59,18 +59,20 @@ rollsCountLogged n = go 0 (0, [])
          in go (sum + die) (c + 1, intToDie die : cs) nextGen
 
 -- write State yourself
-newtype State s a =
-  State
-    { runState :: s -> (a, s)
-    }
+newtype State s a
+  = State
+      { runState :: s -> (a, s)
+      }
 
 instance Functor (State s) where
   fmap :: (a -> b) -> State s a -> State s b
   fmap f (State g) = State (first f . g)
 
 instance Applicative (State s) where
+
   pure :: a -> State s a
-  pure a = State (a, )
+  pure a = State (a,)
+
   (<*>) :: State s (a -> b) -> State s a -> State s b
   State f <*> State g =
     State $ \s ->
@@ -79,7 +81,9 @@ instance Applicative (State s) where
        in (fab x, s'')
 
 instance Monad (State s) where
+
   return = pure
+
   (>>=) :: State s a -> (a -> State s b) -> State s b
   State f >>= g =
     State $ \s ->
@@ -92,7 +96,7 @@ get :: State s s
 get = State $ \s -> (s, s)
 
 put :: s -> State s ()
-put = State . const . ((), )
+put = State . const . ((),)
 
 exec :: State s a -> s -> s
 exec (State sa) = snd . sa
@@ -101,7 +105,7 @@ eval :: State s a -> s -> a
 eval (State sa) = fst . sa
 
 modify :: (s -> s) -> State s ()
-modify f = State $ fmap f . ((), )
+modify f = State $ fmap f . ((),)
 
 -- weirdest FizzBuzz possible as punishment
 fizzBuzz :: Integer -> String
@@ -123,7 +127,7 @@ addResult n = do
 fizzbuzzFromTo :: Integer -> Integer -> [String]
 fizzbuzzFromTo from to
   | from == to = fizzbuzzList [from]
-  | from < to = fizzbuzzList [to,to - 1 .. from]
+  | from < to = fizzbuzzList [to, to - 1 .. from]
   | otherwise = fizzbuzzFromTo to from
 
 main :: IO ()

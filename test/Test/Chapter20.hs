@@ -1,14 +1,14 @@
 module Test.Chapter20 where
 
-import           Chapter20
-import           Control.Applicative      (liftA2)
-import qualified Data.Foldable            as F
-import           Data.Maybe               (fromMaybe)
-import           Data.Monoid              (Sum (..))
-import           Test.Hspec
-import           Test.QuickCheck
-import           Test.QuickCheck.Checkers
-import           Test.QuickCheck.Classes
+import Chapter20
+import Control.Applicative (liftA2)
+import qualified Data.Foldable as F
+import Data.Maybe (fromMaybe)
+import Data.Monoid (Sum (..))
+import Test.Hspec
+import Test.QuickCheck
+import Test.QuickCheck.Checkers
+import Test.QuickCheck.Classes
 
 type Types = (Int, Bool, String, Int, Bool)
 
@@ -27,8 +27,13 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Two a b) where
 instance (Eq a, Eq b) => EqProp (Two a b) where
   (=-=) = eq
 
-instance (Arbitrary a, Arbitrary b, Arbitrary c) =>
-         Arbitrary (Three a b c) where
+instance
+  ( Arbitrary a,
+    Arbitrary b,
+    Arbitrary c
+  ) =>
+  Arbitrary (Three a b c)
+  where
   arbitrary = Three <$> arbitrary <*> arbitrary <*> arbitrary
 
 instance (Eq a, Eq b, Eq c) => EqProp (Three a b c) where
@@ -71,13 +76,18 @@ spec =
       property (prop_eq_fn F.fold fold :: [String] -> Bool)
     it "custom foldMap should work like the one in Prelude" $
       property (prop_eq_fn (foldMap Sum) (foldMap' Sum) :: [Int] -> Bool)
-    it "Constant -> all foldable functions should be derivable" $
-      quickBatch $ foldable (undefined :: Constant String Types)
-    it "Two -> all foldable functions should be derivable" $
-      quickBatch $ foldable (undefined :: Two String Types)
-    it "Three -> all foldable functions should be derivable" $
-      quickBatch $ foldable (undefined :: Three String String Types)
-    it "Three' -> all foldable functions should be derivable" $
-      quickBatch $ foldable (undefined :: Three' String Types)
-    it "Four' -> all foldable functions should be derivable" $
-      quickBatch $ foldable (undefined :: Four' String Types)
+    it "Constant -> all foldable functions should be derivable"
+      $ quickBatch
+      $ foldable (undefined :: Constant String Types)
+    it "Two -> all foldable functions should be derivable"
+      $ quickBatch
+      $ foldable (undefined :: Two String Types)
+    it "Three -> all foldable functions should be derivable"
+      $ quickBatch
+      $ foldable (undefined :: Three String String Types)
+    it "Three' -> all foldable functions should be derivable"
+      $ quickBatch
+      $ foldable (undefined :: Three' String Types)
+    it "Four' -> all foldable functions should be derivable"
+      $ quickBatch
+      $ foldable (undefined :: Four' String Types)

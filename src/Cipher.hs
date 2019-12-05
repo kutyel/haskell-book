@@ -1,14 +1,10 @@
 module Cipher where
 
-import           Data.Char (chr, isUpper, ord)
-import           System.IO
+import Data.Char (chr, isUpper, ord)
+import System.IO
 
 offset :: Char -> Int
-offset x =
-  ord $
-  if isUpper x
-    then 'A'
-    else 'a'
+offset x = ord $ if isUpper x then 'A' else 'a'
 
 shift :: Char -> Int
 shift x = ord x - offset x
@@ -40,20 +36,22 @@ fromCaesarIO = do
   line <- getLine
   putStrLn $ fromCaesar line
 
+getInput :: IO String
+getInput = do
+  hSetBuffering stdout NoBuffering
+  putStrLn "Enter a secret:"
+  getLine
+
 toVigenereIO :: IO ()
 toVigenereIO = do
-  hSetBuffering stdout NoBuffering
-  putStrLn $ "Enter a secret:"
-  secret <- getLine
-  putStrLn $ "Enter a message to encrypt:"
+  secret <- getInput
+  putStrLn "Enter a message to encrypt:"
   message <- getLine
   putStrLn $ toVigenere secret message
 
 fromVigenereIO :: IO ()
 fromVigenereIO = do
-  hSetBuffering stdout NoBuffering
-  putStrLn $ "Enter a secret:"
-  secret <- getLine
-  putStrLn $ "Enter a message to decrypt:"
+  secret <- getInput
+  putStrLn "Enter a message to decrypt:"
   message <- getLine
   putStrLn $ fromVigenere secret message

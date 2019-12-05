@@ -2,12 +2,11 @@
 
 module Test.Chapter21 where
 
-import           Chapter21
-
-import           Test.Hspec
-import           Test.QuickCheck
-import           Test.QuickCheck.Checkers
-import           Test.QuickCheck.Classes
+import Chapter21
+import Test.Hspec
+import Test.QuickCheck
+import Test.QuickCheck.Checkers
+import Test.QuickCheck.Classes
 
 type Types = (Int, Bool, String)
 
@@ -35,8 +34,13 @@ instance Arbitrary a => Arbitrary (List a) where
 instance Eq a => EqProp (List a) where
   (=-=) = eq
 
-instance (Arbitrary a, Arbitrary b, Arbitrary c) =>
-         Arbitrary (Three a b c) where
+instance
+  ( Arbitrary a,
+    Arbitrary b,
+    Arbitrary c
+  ) =>
+  Arbitrary (Three a b c)
+  where
   arbitrary = Three <$> arbitrary <*> arbitrary <*> arbitrary
 
 instance (Eq a, Eq b, Eq c) => EqProp (Three a b c) where
@@ -63,16 +67,18 @@ instance (Eq a, Eq b) => EqProp (Bigger a b) where
 instance (Functor n, Arbitrary (n a), Arbitrary a) => Arbitrary (S n a) where
   arbitrary = S <$> arbitrary <*> arbitrary
 
-instance (Applicative n, Testable (n Property), Eq a, Eq (n a), EqProp a) =>
-         EqProp (S n a) where
+instance
+  (Applicative n, Testable (n Property), Eq a, Eq (n a), EqProp a) =>
+  EqProp (S n a)
+  where
   (=-=) = eq
 
 instance Arbitrary a => Arbitrary (Tree a) where
   arbitrary =
     frequency
-      [ (3, pure Empty)
-      , (2, Leaf <$> arbitrary)
-      , (1, Node <$> arbitrary <*> arbitrary <*> arbitrary)
+      [ (3, pure Empty),
+        (2, Leaf <$> arbitrary),
+        (1, Node <$> arbitrary <*> arbitrary <*> arbitrary)
       ]
 
 instance Eq a => EqProp (Tree a) where
@@ -81,23 +87,33 @@ instance Eq a => EqProp (Tree a) where
 spec :: Spec
 spec =
   describe "Chapter 20:" $ do
-    it "Identity -> should be traversable" $
-      quickBatch $ traversable (undefined :: Identity Types)
-    it "Constant -> should be traversable" $
-      quickBatch $ traversable (undefined :: Constant String Types)
-    it "Optional -> should be traversable" $
-      quickBatch $ traversable (undefined :: Optional Types)
-    it "List -> should be traversable" $
-      quickBatch $ traversable (undefined :: List Types)
-    it "Three -> should be traversable" $
-      quickBatch $ traversable (undefined :: Three Int Bool Types)
-    it "Pair -> should be traversable" $
-      quickBatch $ traversable (undefined :: Pair Int Types)
-    it "Big -> should be traversable" $
-      quickBatch $ traversable (undefined :: Big Int Types)
-    it "Bigger -> should be traversable" $
-      quickBatch $ traversable (undefined :: Bigger Int Types)
-    it "S -> should be traversable" $
-      quickBatch $ traversable (undefined :: S [] Types)
-    it "Tree -> should be traversable" $
-      quickBatch $ traversable (undefined :: Tree Types)
+    it "Identity -> should be traversable"
+      $ quickBatch
+      $ traversable (undefined :: Identity Types)
+    it "Constant -> should be traversable"
+      $ quickBatch
+      $ traversable (undefined :: Constant String Types)
+    it "Optional -> should be traversable"
+      $ quickBatch
+      $ traversable (undefined :: Optional Types)
+    it "List -> should be traversable"
+      $ quickBatch
+      $ traversable (undefined :: List Types)
+    it "Three -> should be traversable"
+      $ quickBatch
+      $ traversable (undefined :: Three Int Bool Types)
+    it "Pair -> should be traversable"
+      $ quickBatch
+      $ traversable (undefined :: Pair Int Types)
+    it "Big -> should be traversable"
+      $ quickBatch
+      $ traversable (undefined :: Big Int Types)
+    it "Bigger -> should be traversable"
+      $ quickBatch
+      $ traversable (undefined :: Bigger Int Types)
+    it "S -> should be traversable"
+      $ quickBatch
+      $ traversable (undefined :: S [] Types)
+    it "Tree -> should be traversable"
+      $ quickBatch
+      $ traversable (undefined :: Tree Types)

@@ -11,7 +11,7 @@ mTh = \x -> \y -> \z -> x * y * z
 addOneIfOdd :: Integral a => a -> a
 addOneIfOdd n =
   case odd n of
-    True  -> f n
+    True -> f n
     False -> n
   where
     f = \n -> n + 1
@@ -21,10 +21,11 @@ addFive :: Integer -> Integer -> Integer
 addFive =
   \x ->
     \y ->
-      (if x > y
-         then y
-         else x) +
-      5
+      ( if x > y
+          then y
+          else x
+      )
+        + 5
 
 -- c)
 mflip :: (a -> b -> c) -> b -> a -> c
@@ -53,14 +54,14 @@ f (a, _, c) (d, _, f) = ((a, d), (c, f))
 functionC :: Ord a => a -> a -> a
 functionC x y =
   case x > y of
-    True  -> x
+    True -> x
     False -> y
 
 -- 2)
 ifEvenAdd2 :: Integral a => a -> a
 ifEvenAdd2 n =
   case even n of
-    True  -> f n
+    True -> f n
     False -> n
   where
     f = (+ 2)
@@ -145,7 +146,7 @@ tensDigit x = d
   where
     xLast = fst $ div x
     d = snd $ div xLast
-    div = (flip divMod) 10
+    div = flip divMod 10
 
 -- a) refactor using `divMod`!
 -- b) obviously, it has the same type!
@@ -160,7 +161,7 @@ hunsD x = d2
 foldBool :: a -> a -> Bool -> a
 foldBool x y z =
   case z of
-    True  -> y
+    True -> y
     False -> x
 
 -- with guards!

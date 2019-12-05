@@ -1,11 +1,10 @@
 module Chapter18 where
 
-import           Control.Applicative (liftA2)
-import           Control.Monad       (join)
-import           Data.Bool           (bool)
+import Control.Applicative (liftA2)
+import Control.Monad (join)
+import Data.Bool (bool)
 
 {-# ANN bind "HLint: ignore" #-}
-
 bind :: Monad m => (a -> m b) -> m a -> m b
 bind f = join . fmap f
 
@@ -23,35 +22,43 @@ data Sum a b
   deriving (Eq, Show)
 
 instance Functor (Sum a) where
-  fmap _ (First x)  = First x
+  fmap _ (First x) = First x
   fmap f (Second x) = Second $ f x
 
 instance Applicative (Sum a) where
+
   pure = Second
+
   First x <*> _ = First x
   _ <*> First x = First x
   Second f <*> Second x = Second $ f x
 
 instance Monad (Sum a) where
+
   return = pure
+
   First x >>= _ = First x
   Second x >>= f = f x
 
 -- Chapter exercises
 -- 1)
-data Nope a =
-  NopeDotJpg
+data Nope a
+  = NopeDotJpg
   deriving (Eq, Show)
 
 instance Functor Nope where
   fmap _ _ = NopeDotJpg
 
 instance Applicative Nope where
+
   pure = const NopeDotJpg
+
   _ <*> _ = NopeDotJpg
 
 instance Monad Nope where
+
   return = pure
+
   _ >>= _ = NopeDotJpg
 
 -- 2)
@@ -62,33 +69,41 @@ data BahEither b a
 
 instance Functor (BahEither b) where
   fmap _ (PRight x) = PRight x
-  fmap f (PLeft x)  = PLeft $ f x
+  fmap f (PLeft x) = PLeft $ f x
 
 instance Applicative (BahEither b) where
+
   pure = PLeft
+
   PRight x <*> _ = PRight x
   _ <*> PRight x = PRight x
   PLeft f <*> PLeft x = PLeft $ f x
 
 instance Monad (BahEither b) where
+
   return = pure
+
   PRight x >>= _ = PRight x
   PLeft x >>= f = f x
 
 -- 3)
-newtype Identity a =
-  Identity a
+newtype Identity a
+  = Identity a
   deriving (Eq, Ord, Show)
 
 instance Functor Identity where
   fmap f (Identity x) = Identity $ f x
 
 instance Applicative Identity where
+
   pure = Identity
+
   Identity f <*> Identity x = Identity $ f x
 
 instance Monad Identity where
+
   return = pure
+
   Identity x >>= f = f x
 
 -- 4)
@@ -98,21 +113,25 @@ data List a
   deriving (Eq, Show)
 
 append :: List a -> List a -> List a
-append Nil xs         = xs
+append Nil xs = xs
 append (Cons x xs) ys = Cons x $ xs `append` ys
 
 instance Functor List where
-  fmap _ Nil         = Nil
+  fmap _ Nil = Nil
   fmap f (Cons x xs) = Cons (f x) (fmap f xs)
 
 instance Applicative List where
+
   pure = flip Cons Nil
+
   Nil <*> _ = Nil
   _ <*> Nil = Nil
   Cons f fs <*> xs = (f <$> xs) `append` (fs <*> xs)
 
 instance Monad List where
+
   return = pure
+
   Nil >>= _ = Nil
   Cons x xs >>= f = f x `append` (xs >>= f)
 
@@ -135,8 +154,8 @@ a = flip (<*>)
 
 -- 5) meh == for == flip traverse == (sequence . fmap f)
 meh :: Monad m => [a] -> (a -> m b) -> m [b]
-meh [] _     = pure []
-meh (x:xs) f = f x >>= \x' -> (x' :) <$> meh xs f
+meh [] _ = pure []
+meh (x : xs) f = f x >>= \x' -> (x' :) <$> meh xs f
 
 -- 6) flipType == sequence
 flipType :: Monad m => [m a] -> m [a]

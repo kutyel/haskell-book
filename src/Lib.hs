@@ -1,6 +1,7 @@
 module Lib
-  ( sayHello
-  ) where
+  ( sayHello,
+  )
+where
 
 -- Hello World!
 sayHello :: String -> IO ()

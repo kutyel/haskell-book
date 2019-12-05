@@ -1,12 +1,12 @@
 module Test.Chapter17 where
 
-import           Chapter17
-import           Control.Applicative      (liftA2)
-import           Data.Maybe               (catMaybes)
-import           Test.Hspec
-import           Test.QuickCheck          hiding (Failure, Success)
-import           Test.QuickCheck.Checkers
-import           Test.QuickCheck.Classes
+import Chapter17
+import Control.Applicative (liftA2)
+import Data.Maybe (catMaybes)
+import Test.Hspec
+import Test.QuickCheck hiding (Failure, Success)
+import Test.QuickCheck.Checkers
+import Test.QuickCheck.Classes
 
 type Types = (Int, Bool, Double) -- this will be used to generate random values!
 
@@ -58,8 +58,10 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Two a b) where
 instance (Eq a, Eq b) => EqProp (Two a b) where
   (=-=) = eq
 
-instance (Arbitrary a, Arbitrary b, Arbitrary c) =>
-         Arbitrary (Three a b c) where
+instance
+  (Arbitrary a, Arbitrary b, Arbitrary c) =>
+  Arbitrary (Three a b c)
+  where
   arbitrary = Three <$> arbitrary <*> arbitrary <*> arbitrary
 
 instance (Eq a, Eq b, Eq c) => EqProp (Three a b c) where
@@ -71,8 +73,14 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Three' a b) where
 instance (Eq a, Eq b) => EqProp (Three' a b) where
   (=-=) = eq
 
-instance (Arbitrary a, Arbitrary b, Arbitrary c, Arbitrary d) =>
-         Arbitrary (Four a b c d) where
+instance
+  ( Arbitrary a,
+    Arbitrary b,
+    Arbitrary c,
+    Arbitrary d
+  ) =>
+  Arbitrary (Four a b c d)
+  where
   arbitrary = Four <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
 
 instance (Eq a, Eq b, Eq c, Eq d) => EqProp (Four a b c d) where
@@ -128,27 +136,39 @@ spec =
       property (prop_apList (+ 1) :: [Int] -> Bool)
     it "specialized ap methods for tuples should work" $
       property (prop_apTuple ("", (+ 1)) :: (String, Int) -> Bool)
-    it "Identity -> applicative laws should hold!" $
-      quickBatch $ applicative (undefined :: Identity Types)
-    it "Constant -> applicative laws should hold!" $
-      quickBatch $ applicative (undefined :: Constant String Types)
-    it "Option -> applicative laws should hold!" $
-      quickBatch $ applicative (undefined :: Option Types)
-    it "List -> applicative laws should hold!" $
-      quickBatch $ applicative (undefined :: List Types)
-    it "ZipList' -> applicative laws should hold!" $
-      quickBatch $ applicative (undefined :: ZipList' Types)
-    it "Validation -> applicative laws should hold!" $
-      quickBatch $ applicative (undefined :: Validation String Types)
-    it "Pair -> applicative laws should hold!" $
-      quickBatch $ applicative (undefined :: Pair Types)
-    it "Two -> applicative laws should hold!" $
-      quickBatch $ applicative (undefined :: Two String Types)
-    it "Three -> applicative laws should hold!" $
-      quickBatch $ applicative (undefined :: Three String String Types)
-    it "Three' -> applicative laws should hold!" $
-      quickBatch $ applicative (undefined :: Three' String Types)
-    it "Four -> applicative laws should hold!" $
-      quickBatch $ applicative (undefined :: Four String String String Types)
-    it "Four' -> applicative laws should hold!" $
-      quickBatch $ applicative (undefined :: Four' String Types)
+    it "Identity -> applicative laws should hold!"
+      $ quickBatch
+      $ applicative (undefined :: Identity Types)
+    it "Constant -> applicative laws should hold!"
+      $ quickBatch
+      $ applicative (undefined :: Constant String Types)
+    it "Option -> applicative laws should hold!"
+      $ quickBatch
+      $ applicative (undefined :: Option Types)
+    it "List -> applicative laws should hold!"
+      $ quickBatch
+      $ applicative (undefined :: List Types)
+    it "ZipList' -> applicative laws should hold!"
+      $ quickBatch
+      $ applicative (undefined :: ZipList' Types)
+    it "Validation -> applicative laws should hold!"
+      $ quickBatch
+      $ applicative (undefined :: Validation String Types)
+    it "Pair -> applicative laws should hold!"
+      $ quickBatch
+      $ applicative (undefined :: Pair Types)
+    it "Two -> applicative laws should hold!"
+      $ quickBatch
+      $ applicative (undefined :: Two String Types)
+    it "Three -> applicative laws should hold!"
+      $ quickBatch
+      $ applicative (undefined :: Three String String Types)
+    it "Three' -> applicative laws should hold!"
+      $ quickBatch
+      $ applicative (undefined :: Three' String Types)
+    it "Four -> applicative laws should hold!"
+      $ quickBatch
+      $ applicative (undefined :: Four String String String Types)
+    it "Four' -> applicative laws should hold!"
+      $ quickBatch
+      $ applicative (undefined :: Four' String Types)

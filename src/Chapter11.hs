@@ -1,15 +1,14 @@
-{-# LANGUAGE FlexibleInstances          #-}
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
 module Chapter11 where
 
-import           Data.Char       (toUpper)
-import           Data.Int
-import           Data.List       (intersperse)
-import           Data.List.Split (splitOn)
+import Data.Char (toUpper)
+import Data.Int
+import Data.List (intercalate)
+import Data.List.Split (splitOn)
 
-data DogueDeBordeaux dogue =
-  DogueDeBordeaux dogue
+newtype DogueDeBordeaux dogue = DogueDeBordeaux dogue
 
 data Doggies a
   = Husky a
@@ -26,9 +25,7 @@ data Doggies a
 -- 7) DogueDeBordeaux is both a type constructor and a data constructor
 -- 8) dogue -> DogueDeBordeaux dogue
 -- 9) DogueDeBordeaux String
-data Price =
-  Price Integer
-  deriving (Eq, Show)
+newtype Price = Price Integer
 
 -- Vehicles
 data Manufacturer
@@ -39,14 +36,13 @@ data Manufacturer
 
 data Airline
   = PapuAir
-  | CatatpultsR'Us
+  | CatatpultsRUs
   | TakeYourChancesUnited
   deriving (Eq, Show)
 
 data Vehicle
   = Car Manufacturer Price
   | Plane Airline String
-  deriving (Eq, Show)
 
 myCar = Car Mini (Price 14000)
 
@@ -60,11 +56,11 @@ doge = Plane PapuAir "Small"
 -- 2)
 isCar :: Vehicle -> Bool
 isCar (Car _ _) = True
-isCar _         = False
+isCar _ = False
 
 isPlane :: Vehicle -> Bool
 isPlane (Plane _ _) = True
-isPlane _           = False
+isPlane _ = False
 
 areCars :: [Vehicle] -> [Bool]
 areCars = map isCar
@@ -72,14 +68,14 @@ areCars = map isCar
 -- 3)
 getManu :: Vehicle -> Maybe Manufacturer
 getManu (Car a _) = Just a
-getManu _         = Nothing
+getManu _ = Nothing
 
 -- 4) bottom! (fixed with Maybe)
 -- 5) add `size` to the Plane constructor!
 -- Cardinality
 -- 1) 1
-data PugType =
-  PugData
+data PugType
+  = PugData
 
 -- 2) cardinality of Airline -> 3
 -- 3) Int8 -> 256, Int16 -> 65.536
@@ -87,15 +83,13 @@ data PugType =
 -- Integer is limited only by your machine's memory!
 -- 5) 256 is 2^8 so Int8 is an 8 bit-signed integer!
 -- For Example
-data Example =
-  MakeExample
+data Example
+  = MakeExample
   deriving (Show)
 
 -- 1) MakeExample :: Example. :t Example -> constructor not in scope!
 -- 2) It works, has an instance of the Show typeclass.
-data Example2 =
-  MakeExample2 Int
-  deriving (Show)
+newtype Example2 = MakeExample2 Int
 
 -- 3) :t MakeExample2 :: Int -> Example 2. It changed the kind!
 -- Logic Goats
@@ -105,8 +99,8 @@ class TooMany a where
 instance TooMany Int where
   tooMany n = n > 42
 
-newtype Goats =
-  Goats Int
+newtype Goats
+  = Goats Int
   deriving (Eq, Show, TooMany)
 
 -- 1)
@@ -163,11 +157,11 @@ data ProgLang
   | PureScript
   deriving (Eq, Show)
 
-data Programmer =
-  Programmer
-    { os   :: OperatingSystem
-    , lang :: ProgLang
-    }
+data Programmer
+  = Programmer
+      { os :: OperatingSystem,
+        lang :: ProgLang
+      }
   deriving (Eq, Show)
 
 allOperatingSystems :: [OperatingSystem]
@@ -188,43 +182,43 @@ data Quantum
   deriving (Eq, Show)
 
 convert1 :: Quantum -> Bool
-convert1 Yes  = True
-convert1 No   = True
+convert1 Yes = True
+convert1 No = True
 convert1 Both = True
 
 convert2 :: Quantum -> Bool
-convert2 Yes  = True
-convert2 No   = True
+convert2 Yes = True
+convert2 No = True
 convert2 Both = False
 
 convert3 :: Quantum -> Bool
-convert3 Yes  = True
-convert3 No   = False
+convert3 Yes = True
+convert3 No = False
 convert3 Both = False
 
 convert4 :: Quantum -> Bool
-convert4 Yes  = True
-convert4 No   = False
+convert4 Yes = True
+convert4 No = False
 convert4 Both = True
 
 convert5 :: Quantum -> Bool
-convert5 Yes  = False
-convert5 No   = True
+convert5 Yes = False
+convert5 No = True
 convert5 Both = False
 
 convert6 :: Quantum -> Bool
-convert6 Yes  = False
-convert6 No   = False
+convert6 Yes = False
+convert6 No = False
 convert6 Both = True
 
 convert7 :: Quantum -> Bool
-convert7 Yes  = False
-convert7 No   = True
+convert7 Yes = False
+convert7 No = True
 convert7 Both = True
 
 convert8 :: Quantum -> Bool
-convert8 Yes  = False
-convert8 No   = False
+convert8 Yes = False
+convert8 No = False
 convert8 Both = False
 
 data Quad
@@ -272,7 +266,7 @@ insert b (Node left a right)
   | b > a = Node left a (insert b right)
 
 mapTree :: (a -> b) -> BinaryTree a -> BinaryTree b
-mapTree _ Leaf                = Leaf
+mapTree _ Leaf = Leaf
 mapTree f (Node left a right) = Node (mapTree f left) (f a) (mapTree f right)
 
 testTree' :: BinaryTree Integer
@@ -310,22 +304,22 @@ g xs = xs !! (length xs - 1)
 -- As-patterns
 -- 1
 isSubseqOf :: Eq a => [a] -> [a] -> Bool
-isSubseqOf [] _            = True
-isSubseqOf (x:xs) y@(_:ys) = elem x y && isSubseqOf xs ys
+isSubseqOf [] _ = True
+isSubseqOf (x : xs) y@(_ : ys) = elem x y && isSubseqOf xs ys
 
 -- 2
 capitalizeWords :: String -> [(String, String)]
 capitalizeWords = map toTuple . words
   where
-    toTuple s@(x:xs) = (s, toUpper x : xs)
+    toTuple s@(x : xs) = (s, toUpper x : xs)
 
 -- Language exercises
 -- 1
 capitalizeWord :: String -> String
-capitalizeWord (x:xs) = toUpper x : xs
-capitalizeWord x      = x
+capitalizeWord (x : xs) = toUpper x : xs
+capitalizeWord x = x
 
 -- 2
 capitalizeParagraph :: String -> String
 capitalizeParagraph =
-  concat . (intersperse ". ") . map capitalizeWord . (splitOn ". ")
+  intercalate ". " . map capitalizeWord . splitOn ". "

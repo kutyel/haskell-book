@@ -1,7 +1,7 @@
 module Chapter12 where
 
-import           Data.Char (toLower)
-import           Data.List (partition)
+import Data.Char (toLower)
+import Data.List (partition)
 
 -- Determine the kinds
 -- 1) id :: a -> a ? * -> *
@@ -14,12 +14,9 @@ notThe s
   | otherwise = Just s
 
 replaceThe :: String -> String
-replaceThe = unwords . (map replace) . words
+replaceThe = unwords . map replace . words
   where
-    replace x =
-      case notThe x of
-        Nothing -> "a"
-        Just x  -> x
+    replace x = fromMaybe "a" (notThe x)
 
 -- 2
 isVowel :: Char -> Bool
@@ -31,21 +28,19 @@ startsWithVowel = isVowel . head
 countTheBeforeVowel :: String -> Integer
 countTheBeforeVowel str = go (words str) 0
   where
-    go (_:[]) count = count
-    go (x:y:xs) count =
+    go [_] count = count
+    go (x : y : xs) count =
       go
         (y : xs)
-        (if x == "the" && startsWithVowel y
-           then count + 1
-           else count)
+        (if x == "the" && startsWithVowel y then count + 1 else count)
 
 -- 3
 countVowels :: String -> Integer
 countVowels = fromIntegral . length . filter isVowel
 
 -- validate the word
-newtype Word' =
-  Word' String
+newtype Word'
+  = Word' String
   deriving (Eq, Show)
 
 mkWord :: String -> Maybe Word'
@@ -62,7 +57,7 @@ data Nat
   deriving (Eq, Show)
 
 natToInteger :: Nat -> Integer
-natToInteger Zero     = 0
+natToInteger Zero = 0
 natToInteger (Succ n) = 1 + natToInteger n
 
 integerToNat :: Integer -> Maybe Nat
@@ -77,14 +72,14 @@ integerToNat x
 -- 1
 isJust :: Maybe a -> Bool
 isJust (Just _) = True
-isJust Nothing  = False
+isJust Nothing = False
 
 isNothing :: Maybe a -> Bool
 isNothing = not . isJust
 
 -- 2
 mayybee :: b -> (a -> b) -> Maybe a -> b
-mayybee x _ Nothing  = x
+mayybee x _ Nothing = x
 mayybee _ f (Just x) = f x
 
 -- 3
@@ -93,11 +88,11 @@ fromMaybe = flip mayybee id
 
 -- 4
 listToMaybe :: [a] -> Maybe a
-listToMaybe []    = Nothing
-listToMaybe (x:_) = Just x
+listToMaybe [] = Nothing
+listToMaybe (x : _) = Just x
 
 maybeToList :: Maybe a -> [a]
-maybeToList Nothing  = []
+maybeToList Nothing = []
 maybeToList (Just x) = [x]
 
 -- 5
@@ -116,14 +111,14 @@ lefts' :: [Either a b] -> [a]
 lefts' = foldr f []
   where
     f (Left x) xs = x : xs
-    f _ xs        = xs
+    f _ xs = xs
 
 -- 2
 rights' :: [Either a b] -> [b]
 rights' = foldr f []
   where
     f (Right x) xs = x : xs
-    f _ xs         = xs
+    f _ xs = xs
 
 -- 3
 partitionEithers' :: [Either a b] -> ([a], [b])
@@ -131,12 +126,12 @@ partitionEithers' xs = (lefts' xs, rights' xs)
 
 -- 4
 eitherMaybe' :: (b -> c) -> Either a b -> Maybe c
-eitherMaybe' _ (Left _)  = Nothing
+eitherMaybe' _ (Left _) = Nothing
 eitherMaybe' f (Right x) = Just (f x)
 
 -- 5
 either' :: (a -> c) -> (b -> c) -> Either a b -> c
-either' f _ (Left x)  = f x
+either' f _ (Left x) = f x
 either' _ g (Right x) = g x
 
 -- 6
@@ -152,7 +147,7 @@ myIterate f x = x : myIterate f (f x)
 myUnfoldr :: (b -> Maybe (a, b)) -> b -> [a]
 myUnfoldr f x =
   case f x of
-    Nothing     -> []
+    Nothing -> []
     Just (a, b) -> a : myUnfoldr f b
 
 -- 3
@@ -169,15 +164,16 @@ data BinaryTree a
 unfold :: (a -> Maybe (a, b, a)) -> a -> BinaryTree b
 unfold f x =
   case f x of
-    Nothing        -> Leaf
+    Nothing -> Leaf
     Just (a, b, c) -> Node (unfold f a) b (unfold f c)
 
 -- 2
 treeBuild :: Integer -> BinaryTree Integer
 treeBuild n =
   unfold
-    (\x ->
-       if x == n
-         then Nothing
-         else Just (x + 1, x, x + 1))
+    ( \x ->
+        if x == n
+          then Nothing
+          else Just (x + 1, x, x + 1)
+    )
     0

@@ -1,9 +1,9 @@
 module Test.Chapter14 where
 
-import           Chapter14
-import           Data.List       (sort)
-import           Test.Hspec
-import           Test.QuickCheck
+import Chapter14
+import Data.List (sort)
+import Test.Hspec
+import Test.QuickCheck
 
 genFoolEqual :: Gen Fool
 genFoolEqual = elements [Fulse, Frue]
@@ -47,13 +47,13 @@ spec =
       property (prop_quotAndRem :: NonZero Int -> NonZero Int -> Bool)
     it "div and mod should be related" $
       property (prop_divAndMod :: NonZero Int -> NonZero Int -> Bool)
-    it "exponentiation should *not* be associative" $
-      expectFailure $
-      property
+    it "exponentiation should *not* be associative"
+      $ expectFailure
+      $ property
         (assocExp :: Positive Int -> Positive Int -> Positive Int -> Bool)
-    it "exponentiation should *not* be commutative" $
-      expectFailure $
-      property (commuExp :: Positive Int -> Positive Int -> Bool)
+    it "exponentiation should *not* be commutative"
+      $ expectFailure
+      $ property (commuExp :: Positive Int -> Positive Int -> Bool)
     it "reversing a list twice is the identity of the list" $
       property (prop_reverseTwice :: [Int] -> Bool)
     it "apply operator ($) should work correctly" $
@@ -62,14 +62,17 @@ spec =
       property (prop_composition :: String -> Bool)
     it "read is the inverse of show" $
       property (prop_roundTrip :: String -> Bool)
-    it "folding by cons shoud *not* concat" $
-      expectFailure $ property (prop_foldrPlusPlus :: [Int] -> [Int] -> Bool)
+    it "folding by cons shoud *not* concat"
+      $ expectFailure
+      $ property (prop_foldrPlusPlus :: [Int] -> [Int] -> Bool)
     it "folding by concat with empty list should equal concat" $
       property (prop_foldrConcat :: [[Int]] -> Bool)
-    it "take and length of n should not hold" $
-      expectFailure $ property (prop_takeLength :: Int -> [Int] -> Bool)
-    it "floating point arithmetic should fail -.-" $
-      expectFailure $ property (prop_squareId :: Double -> Bool)
+    it "take and length of n should not hold"
+      $ expectFailure
+      $ property (prop_takeLength :: Int -> [Int] -> Bool)
+    it "floating point arithmetic should fail -.-"
+      $ expectFailure
+      $ property (prop_squareId :: Double -> Bool)
     it "idempotence should work for capitalizing" $
       property (prop_idemCapitalize :: String -> Bool)
     it "idempotence should work for sorting" $

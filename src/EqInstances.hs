@@ -1,15 +1,14 @@
 module EqInstances where
 
 -- 1
-data TisAnInteger =
-  TisAn Integer
+newtype TisAnInteger = TisAn Integer
 
 instance Eq TisAnInteger where
   (==) (TisAn x) (TisAn x') = x == x'
 
 -- 2
-data TwoIntegers =
-  Two Integer Integer
+data TwoIntegers
+  = Two Integer Integer
 
 instance Eq TwoIntegers where
   (==) (Two x y) (Two x' y') = x == x' && y == y'
@@ -20,19 +19,19 @@ data StringOrInt
   | TisAString String
 
 instance Eq StringOrInt where
-  (==) (TisAnInt x) (TisAnInt x')     = x == x'
+  (==) (TisAnInt x) (TisAnInt x') = x == x'
   (==) (TisAString y) (TisAString y') = y == y'
 
 -- 4
-data Pair a =
-  Pair a a
+data Pair a
+  = Pair a a
 
 instance Eq a => Eq (Pair a) where
   (==) (Pair x y) (Pair x' y') = x == x' && y == y'
 
 -- 5
-data Tuple a b =
-  Tuple a b
+data Tuple a b
+  = Tuple a b
 
 instance (Eq a, Eq b) => Eq (Tuple a b) where
   (==) (Tuple x y) (Tuple x' y') = x == x' && y == y'
@@ -52,5 +51,5 @@ data EitherOr a b
   | Goodbye b
 
 instance (Eq a, Eq b) => Eq (EitherOr a b) where
-  (==) (Hello x) (Hello x')     = x == x'
+  (==) (Hello x) (Hello x') = x == x'
   (==) (Goodbye x) (Goodbye x') = x == x'

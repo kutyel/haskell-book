@@ -1,18 +1,21 @@
 module Chapter13 where
 
-import           Control.Applicative     (liftA2)
-import qualified Control.Concurrent      as CC
+import Control.Applicative (liftA2)
+import qualified Control.Concurrent as CC
 import qualified Control.Concurrent.MVar as MV
-import           Control.Exception       (mask, try)
-import           Control.Monad           (forever, when)
-import           Data.Bits
-import           Data.Char               (toLower)
-import           Data.List.Split         (chunksOf)
-import qualified Data.Time.Clock.POSIX   as PSX
-import           System.Exit             (exitSuccess)
-import           System.IO               (BufferMode (NoBuffering),
-                                          hSetBuffering, stdout)
-import           System.IO.Unsafe        (unsafePerformIO)
+import Control.Exception (mask, try)
+import Control.Monad (forever, when)
+import Data.Bits
+import Data.Char (toLower)
+import Data.List.Split (chunksOf)
+import qualified Data.Time.Clock.POSIX as PSX
+import System.Exit (exitSuccess)
+import System.IO
+  ( BufferMode (NoBuffering),
+    hSetBuffering,
+    stdout,
+  )
+import System.IO.Unsafe (unsafePerformIO)
 
 -- 1) forever, when
 -- 2) Data.Bits, Database.Blacktip.Types
@@ -35,8 +38,7 @@ import           System.IO.Unsafe        (unsafePerformIO)
 -- c) Control.Monad
 -- Modifying code
 isPalindrome :: String -> Bool
-isPalindrome =
-  (liftA2 (==) reverse id) . filter (flip notElem "' ") . map toLower
+isPalindrome = liftA2 (==) reverse id . filter (`notElem` "' ") . map toLower
 
 palindrome :: IO ()
 palindrome =
@@ -51,8 +53,8 @@ type Name = String
 
 type Age = Integer
 
-data Person =
-  Person Name Age
+data Person
+  = Person Name Age
   deriving (Show)
 
 data PersonInvalid
@@ -65,17 +67,18 @@ mkPerson :: Name -> Age -> Either PersonInvalid Person
 mkPerson name age
   | name /= "" && age > 0 = Right $ Person name age
   | name == "" = Left NameEmpty
-  | not (age > 0) = Left AgeTooLow
+  | age <= 0 = Left AgeTooLow
   | otherwise =
-    Left $
-    PersonInvalidUnknown $ "Name was: " ++ show name ++ " Age was: " ++ show age
+    Left
+      $ PersonInvalidUnknown
+      $ "Name was: " ++ show name ++ " Age was: " ++ show age
 
 gimmePerson :: IO ()
 gimmePerson = do
   hSetBuffering stdout NoBuffering
-  putStrLn $ "Enter a name: "
+  putStrLn "Enter a name: "
   name <- getLine
-  putStrLn $ "Enter an age: "
+  putStrLn "Enter an age: "
   age <- getLine
   case mkPerson name (read age) of
     Left error -> putStrLn $ "Error occured: " ++ show error

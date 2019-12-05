@@ -1,6 +1,6 @@
 module WordNumber where
 
-import           Data.List (intersperse)
+import Data.List (intercalate)
 
 digitToWord :: Int -> String
 digitToWord 0 = "zero"
@@ -20,8 +20,7 @@ digits 0 = []
 digits n = digits (div n 10) ++ [mod n 10]
 
 wordNumber :: Int -> String
-wordNumber = concat . intersperse "-" . map digitToWord . digits
+wordNumber = intercalate "-" . map digitToWord . digits
 
 main :: IO String
-main = do
-  pure $ wordNumber 12324546 -- "one-two-three-two-four-five-four-six" 🎉
+main = pure $ wordNumber 12324546 -- "one-two-three-two-four-five-four-six" 🎉

@@ -1,13 +1,13 @@
-import qualified Test.Chapter14  as Chapter14
-import qualified Test.Chapter15  as Chapter15
-import qualified Test.Chapter16  as Chapter16
-import qualified Test.Chapter17  as Chapter17
-import qualified Test.Chapter18  as Chapter18
-import qualified Test.Chapter20  as Chapter20
-import qualified Test.Chapter21  as Chapter21
-import qualified Test.Chapter8   as Chapter8
-import qualified Test.Cipher     as Cipher
-import           Test.Hspec
+import qualified Test.Chapter14 as Chapter14
+import qualified Test.Chapter15 as Chapter15
+import qualified Test.Chapter16 as Chapter16
+import qualified Test.Chapter17 as Chapter17
+import qualified Test.Chapter18 as Chapter18
+import qualified Test.Chapter20 as Chapter20
+import qualified Test.Chapter21 as Chapter21
+import qualified Test.Chapter8 as Chapter8
+import qualified Test.Cipher as Cipher
+import Test.Hspec
 import qualified Test.WordNumber as WordNumber
 
 main :: IO ()
@@ -23,4 +23,4 @@ main =
     Chapter18.spec
     Chapter20.spec
     Chapter21.spec
-    -- TODO: test Reader and State monads!
+-- TODO: test Reader and State monads!

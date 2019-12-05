@@ -21,10 +21,10 @@ myLines :: String -> [String]
 myLines = split '\n'
 
 shouldEqual =
-  [ "Tyger Tyger, burn it bright"
-  , "In the forests of the night"
-  , "What immortal hand or eye"
-  , "Could frame thy fearful symmetry?"
+  [ "Tyger Tyger, burn it bright",
+    "In the forests of the night",
+    "What immortal hand or eye",
+    "Could frame thy fearful symmetry?"
   ]
 
 main :: IO ()

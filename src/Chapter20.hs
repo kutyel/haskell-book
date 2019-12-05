@@ -1,7 +1,7 @@
 module Chapter20 where
 
-import           Control.Conditional (select)
-import           Data.Monoid
+import Control.Conditional (select)
+import Data.Monoid
 
 -- :t foldr :: Foldable t => (a -> b -> b) -> b -> t a -> b
 -- :t foldMap :: (Foldable t, Monoid m) => (a -> m) -> t a -> m
@@ -22,14 +22,14 @@ elem x = getAny . foldMap (Any . (== x))
 minimum :: (Foldable t, Ord a) => t a -> Maybe a
 minimum = foldr f Nothing
   where
-    f x Nothing  = Just x
+    f x Nothing = Just x
     f x (Just y) = Just (min x y)
 
 -- 5)
 maximum :: (Foldable t, Ord a) => t a -> Maybe a
 maximum = foldr f Nothing
   where
-    f x Nothing  = Just x
+    f x Nothing = Just x
     f x (Just y) = Just (max x y)
 
 -- 6)
@@ -54,40 +54,40 @@ foldMap' f = foldr (mappend . f) mempty
 
 -- Chapter Exercises
 -- 1)
-newtype Constant a b =
-  Constant b
+newtype Constant a b
+  = Constant b
   deriving (Eq, Show)
 
 instance Foldable (Constant a) where
   foldMap f (Constant x) = f x
 
 -- 2)
-data Two a b =
-  Two a b
+data Two a b
+  = Two a b
   deriving (Eq, Show)
 
 instance Foldable (Two a) where
   foldMap f (Two _ x) = f x
 
 -- 3)
-data Three a b c =
-  Three a b c
+data Three a b c
+  = Three a b c
   deriving (Eq, Show)
 
 instance Foldable (Three a b) where
   foldMap f (Three _ _ x) = f x
 
 -- 4)
-data Three' a b =
-  Three' a b b
+data Three' a b
+  = Three' a b b
   deriving (Eq, Show)
 
 instance Foldable (Three' a) where
   foldMap f (Three' _ x y) = f x <> f y
 
 -- 5)
-data Four' a b =
-  Four' a b b b
+data Four' a b
+  = Four' a b b b
   deriving (Eq, Show)
 
 instance Foldable (Four' a) where
@@ -95,5 +95,5 @@ instance Foldable (Four' a) where
 
 -- extra (tip: select = functional if-then-else)
 filterF ::
-     (Applicative f, Foldable t, Monoid (f a)) => (a -> Bool) -> t a -> f a
+  (Applicative f, Foldable t, Monoid (f a)) => (a -> Bool) -> t a -> f a
 filterF f = foldMap (select f pure mempty)

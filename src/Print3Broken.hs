@@ -3,8 +3,7 @@ module Print3Broken where
 greeting = "Yarrrrr"
 
 printSecond :: IO ()
-printSecond = do
-  putStrLn greeting
+printSecond = putStrLn greeting
 
 main :: IO ()
 main = do
@@ -22,7 +21,7 @@ fifthLetter x = x !! 4
 
 -- c)
 lastWord :: String -> String
-lastWord x = drop 9 x
+lastWord = drop 9
 
 thirdLetter :: String -> Char
 thirdLetter x = x !! 2

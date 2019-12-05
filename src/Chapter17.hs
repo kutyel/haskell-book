@@ -1,7 +1,7 @@
 module Chapter17 where
 
-import           Control.Applicative
-import           Data.List           (elemIndex)
+import Control.Applicative
+import Data.List (elemIndex)
 
 f :: (Eq a, Num a) => a -> Maybe String
 f x = lookup x [(3, "hello"), (4, "julie"), (5, "kbai")]
@@ -64,29 +64,33 @@ summed :: Maybe Integer
 summed = fmap sum $ (,) <$> x' <*> y''
 
 -- Identity Instance
-newtype Identity a =
-  Identity a
+newtype Identity a
+  = Identity a
   deriving (Eq, Ord, Show)
 
 instance Functor Identity where
   fmap f (Identity x) = Identity (f x)
 
 instance Applicative Identity where
+
   pure = Identity
+
   Identity f <*> Identity x = Identity (f x)
 
 -- Constant Instance
-newtype Constant a b =
-  Constant
-    { getConstant :: a
-    }
+newtype Constant a b
+  = Constant
+      { getConstant :: a
+      }
   deriving (Eq, Ord, Show)
 
 instance Functor (Constant a) where
   fmap _ (Constant x) = Constant x
 
 instance Monoid a => Applicative (Constant a) where
+
   pure = Constant . mempty
+
   (Constant x) <*> (Constant y) = Constant (x <> y)
 
 -- Fixer Upper
@@ -103,11 +107,13 @@ data Option a
   deriving (Eq, Show)
 
 instance Functor Option where
-  fmap _ None     = None
+  fmap _ None = None
   fmap f (Some x) = Some (f x)
 
 instance Applicative Option where
+
   pure = Some
+
   None <*> _ = None
   _ <*> None = None
   Some f <*> Some x = Some (f x)
@@ -119,22 +125,24 @@ data List a
   deriving (Eq, Show)
 
 instance Functor List where
-  fmap _ Nil         = Nil
+  fmap _ Nil = Nil
   fmap f (Cons x xs) = Cons (f x) (fmap f xs)
 
 instance Applicative List where
+
   pure = flip Cons Nil
+
   Nil <*> _ = Nil
   _ <*> Nil = Nil
   Cons f fs <*> xs = (f <$> xs) `append` (fs <*> xs)
 
 -- hints
 append :: List a -> List a -> List a
-append Nil ys         = ys
+append Nil ys = ys
 append (Cons x xs) ys = Cons x $ xs `append` ys
 
 fold :: (a -> b -> b) -> b -> List a -> b
-fold _ b Nil        = b
+fold _ b Nil = b
 fold f b (Cons h t) = f h (fold f b t)
 
 concat' :: List (List a) -> List a
@@ -147,26 +155,28 @@ toMyList :: Foldable t => t a -> List a
 toMyList = foldr Cons Nil
 
 -- ZipList applicative
-newtype ZipList' a =
-  ZipList' (List a)
+newtype ZipList' a
+  = ZipList' (List a)
   deriving (Eq, Show)
 
 instance Functor ZipList' where
   fmap f (ZipList' xs) = ZipList' $ fmap f xs
 
 instance Applicative ZipList' where
+
   pure x = ZipList' (Cons x Nil)
+
   _ <*> ZipList' Nil = ZipList' Nil
   ZipList' Nil <*> _ = ZipList' Nil
   ZipList' (Cons f Nil) <*> ZipList' (Cons x xs) =
-    ZipList' $ Cons (f x) (pure f <*> xs)
+    ZipList' $ Cons (f x) (f <$> xs)
   ZipList' (Cons f fs) <*> ZipList' (Cons x Nil) =
     ZipList' $ Cons (f x) (fs <*> pure x)
   ZipList' x <*> ZipList' y = ZipList' $ zipWith' ($) x y
 
 zipWith' :: (a -> b -> c) -> List a -> List b -> List c
 zipWith' f (Cons x xs) (Cons y ys) = Cons (f x y) $ zipWith' f xs ys
-zipWith' _ _ _                     = Nil
+zipWith' _ _ _ = Nil
 
 -- Variations on Either
 data Validation e a
@@ -179,7 +189,9 @@ instance Functor (Validation e) where
   fmap f (Success x) = Success (f x)
 
 instance Monoid e => Applicative (Validation e) where
+
   pure = Success
+
   x <*> y =
     case (x, y) of
       (Failure x, Failure y) -> Failure (x <> y)
@@ -227,75 +239,87 @@ apFn = (<*>)
 
 -- Write instances for the following Datatypes
 -- 1) Pair
-data Pair a =
-  Pair a a
+data Pair a
+  = Pair a a
   deriving (Eq, Show)
 
 instance Functor Pair where
   fmap f (Pair x y) = Pair (f x) (f y)
 
 instance Applicative Pair where
+
   pure x = Pair x x
+
   Pair f g <*> Pair x y = Pair (f x) (g y)
 
 -- 2) Two
-data Two a b =
-  Two a b
+data Two a b
+  = Two a b
   deriving (Eq, Show)
 
 instance Functor (Two a) where
   fmap f (Two x y) = Two x (f y)
 
 instance Monoid a => Applicative (Two a) where
+
   pure = Two mempty
+
   Two a f <*> Two b x = Two (a <> b) (f x)
 
 -- 3) Three
-data Three a b c =
-  Three a b c
+data Three a b c
+  = Three a b c
   deriving (Eq, Show)
 
 instance Functor (Three a b) where
   fmap f (Three x y z) = Three x y (f z)
 
 instance (Monoid a, Monoid b) => Applicative (Three a b) where
+
   pure = Three mempty mempty
+
   Three a b f <*> Three c d x = Three (a <> c) (b <> d) (f x)
 
 -- 4) Three'
-data Three' a b =
-  Three' a b b
+data Three' a b
+  = Three' a b b
   deriving (Eq, Show)
 
 instance Functor (Three' a) where
   fmap f (Three' x y z) = Three' x (f y) (f z)
 
 instance Monoid a => Applicative (Three' a) where
+
   pure x = Three' mempty x x
+
   Three' a f g <*> Three' b x y = Three' (a <> b) (f x) (g y)
 
 -- 5) Four
-data Four a b c d =
-  Four a b c d
+data Four a b c d
+  = Four a b c d
   deriving (Eq, Show)
 
 instance Functor (Four a b c) where
   fmap f (Four x y z a) = Four x y z (f a)
 
 instance (Monoid a, Monoid b, Monoid c) => Applicative (Four a b c) where
+
   pure = Four mempty mempty mempty
+
   Four a b c f <*> Four d e i x = Four (a <> d) (b <> e) (c <> i) (f x)
 
 -- 6) Four'
-data Four' a b =
-  Four' a a a b
+data Four' a b
+  = Four' a a a b
   deriving (Eq, Show)
 
 instance Functor (Four' a) where
   fmap f (Four' x y z a) = Four' x y z (f a)
 
 instance Monoid a => Applicative (Four' a) where
+
   pure = Four' mempty mempty mempty
+
   Four' a b c f <*> Four' d e i x = Four' (a <> d) (b <> e) (c <> i) (f x)
 
 -- Combinations

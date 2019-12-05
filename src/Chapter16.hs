@@ -2,7 +2,7 @@
 
 module Chapter16 where
 
-import           GHC.Arr
+import GHC.Arr
 
 -- 1) What is the kind of a? *
 -- f :: a -> a
@@ -20,7 +20,7 @@ b = fmap (fmap (++ "lol")) (Just ["Hi,", "Hello"])
 c = (* 2) . (\x -> x - 2)
 
 -- 4)
-d = ((return '1' ++) . show) . (\x -> [x,1 .. 3])
+d = ((return '1' ++) . show) . (\x -> [x, 1 .. 3])
 
 -- 5)
 e :: IO Integer
@@ -30,12 +30,12 @@ e =
    in fmap (* 3) changed
 
 -- Trivial can't be made into a Functor because -> :k Trivial = * != * -> *
-data Trivial =
-  Trivial
+data Trivial
+  = Trivial
 
 -- Two
-data Two a b =
-  Two a b
+data Two a b
+  = Two a b
   deriving (Eq, Show)
 
 instance Functor (Two a) where
@@ -52,48 +52,48 @@ instance Functor (Or a) where
   fmap f (Snd x) = Snd (f x)
 
 -- Identity
-newtype Identity a =
-  Identity a
+newtype Identity a
+  = Identity a
   deriving (Eq, Show)
 
 instance Functor Identity where
   fmap f (Identity x) = Identity (f x)
 
 -- Pair
-data Pair a =
-  Pair a a
+data Pair a
+  = Pair a a
   deriving (Eq, Show)
 
 instance Functor Pair where
   fmap f (Pair x y) = Pair (f x) (f y)
 
 -- Three
-data Three a b c =
-  Three a b c
+data Three a b c
+  = Three a b c
   deriving (Eq, Show)
 
 instance Functor (Three a b) where
   fmap f (Three x y z) = Three x y (f z)
 
 -- Three'
-data Three' a b =
-  Three' a b b
+data Three' a b
+  = Three' a b b
   deriving (Eq, Show)
 
 instance Functor (Three' a) where
   fmap f (Three' x y z) = Three' x (f y) (f z)
 
 -- Four
-data Four a b c d =
-  Four a b c d
+data Four a b c d
+  = Four a b c d
   deriving (Eq, Show)
 
 instance Functor (Four a b c) where
   fmap f (Four x y z a) = Four x y z (f a)
 
 -- Four'
-data Four' a b =
-  Four' a a a b
+data Four' a b
+  = Four' a a a b
   deriving (Eq, Show)
 
 instance Functor (Four' a) where
@@ -106,7 +106,7 @@ data Possibly a
   deriving (Eq, Show)
 
 instance Functor Possibly where
-  fmap _ LolNope     = LolNope
+  fmap _ LolNope = LolNope
   fmap f (Yeppers x) = Yeppers (f x)
 
 -- Sum (Either)
@@ -116,7 +116,7 @@ data Sum a b
   deriving (Eq, Show)
 
 instance Functor (Sum a) where
-  fmap _ (First x)  = First x
+  fmap _ (First x) = First x
   fmap f (Second x) = Second (f x)
 
 -- Chapter exercises!
@@ -132,14 +132,14 @@ data BoolAndMaybeSomethingElse a
   | Truish a
 
 -- 4) ✅ yes, kind = (* -> *) -> *, but given * will be: * -> *
-newtype Mu f =
-  InF
-    { outF :: f (Mu f)
-    }
+newtype Mu f
+  = InF
+      { outF :: f (Mu f)
+      }
 
 -- 5) 🚫 Cannot be a Functor, kind = *
-data D =
-  D (Array Word Word) Int Int
+data D
+  = D (Array Word Word) Int Int
 
 -- Rearrange Functors!
 -- 1)
@@ -149,7 +149,7 @@ data Sum' b a
   deriving (Eq, Show)
 
 instance Functor (Sum' e) where
-  fmap f (First' a)  = First' (f a)
+  fmap f (First' a) = First' (f a)
   fmap _ (Second' b) = Second' b
 
 -- 2)
@@ -159,7 +159,7 @@ data Company a c b
   deriving (Eq, Show)
 
 instance Functor (Company e e') where
-  fmap f (Something b)  = Something (f b)
+  fmap f (Something b) = Something (f b)
   fmap _ (DeepBlue a c) = DeepBlue a c
 
 -- 3)
@@ -181,61 +181,61 @@ data Quant a b
   deriving (Eq, Show)
 
 instance Functor (Quant e) where
-  fmap _ Finance   = Finance
-  fmap _ (Desk x)  = Desk x
+  fmap _ Finance = Finance
+  fmap _ (Desk x) = Desk x
   fmap f (Bloor y) = Bloor (f y)
 
 -- 2)
-newtype K a b =
-  K a
+newtype K a b
+  = K a
   deriving (Eq, Show)
 
 instance Functor (K e) where
   fmap _ (K x) = K x
 
 -- 3)
-newtype Flip f a b =
-  Flip (f b a)
+newtype Flip f a b
+  = Flip (f b a)
   deriving (Eq, Show)
 
 instance Functor (Flip K a) where
   fmap f (Flip (K x)) = Flip $ K (f x)
 
 -- 4)
-newtype EvilGoateeConst a b =
-  GoatyConst b
+newtype EvilGoateeConst a b
+  = GoatyConst b
   deriving (Eq, Show)
 
 instance Functor (EvilGoateeConst e) where
   fmap f (GoatyConst x) = GoatyConst (f x)
 
 -- 5)
-newtype LiftItOut f a =
-  LiftItOut (f a)
+newtype LiftItOut f a
+  = LiftItOut (f a)
   deriving (Eq, Show)
 
 instance Functor f => Functor (LiftItOut f) where
   fmap f (LiftItOut x) = LiftItOut (fmap f x)
 
 -- 6)
-data Parappa f g a =
-  DaWrappa (f a) (g a)
+data Parappa f g a
+  = DaWrappa (f a) (g a)
   deriving (Eq, Show)
 
 instance (Functor f, Functor g) => Functor (Parappa f g) where
   fmap f (DaWrappa g x) = DaWrappa (fmap f g) (fmap f x)
 
 -- 7)
-data IgnoreOne f g a b =
-  IgnoringSomething (f a) (g b)
+data IgnoreOne f g a b
+  = IgnoringSomething (f a) (g b)
   deriving (Eq, Show)
 
 instance (Functor f, Functor g) => Functor (IgnoreOne f g e) where
   fmap f (IgnoringSomething g x) = IgnoringSomething g (fmap f x)
 
 -- 8)
-data Notorious g o a t =
-  Notorious (g o) (g a) (g t)
+data Notorious g o a t
+  = Notorious (g o) (g a) (g t)
   deriving (Eq, Show)
 
 instance (Functor g) => Functor (Notorious g o a) where
@@ -248,7 +248,7 @@ data List a
   deriving (Eq, Show)
 
 instance Functor List where
-  fmap _ Nil         = Nil
+  fmap _ Nil = Nil
   fmap f (Cons x xs) = Cons (f x) (fmap f xs)
 
 -- 10)
@@ -259,8 +259,8 @@ data GoatLord a
   deriving (Eq, Show)
 
 instance Functor GoatLord where
-  fmap _ NoGoat            = NoGoat
-  fmap f (OneGoat x)       = OneGoat (f x)
+  fmap _ NoGoat = NoGoat
+  fmap f (OneGoat x) = OneGoat (f x)
   fmap f (MoreGoats x y z) = MoreGoats (fmap f x) (fmap f y) (fmap f z)
 
 -- 11)
@@ -270,6 +270,6 @@ data TalkToMe a
   | Read (String -> a)
 
 instance Functor TalkToMe where
-  fmap _ Halt        = Halt
+  fmap _ Halt = Halt
   fmap f (Print s x) = Print s (f x)
-  fmap f (Read g)    = Read (f . g)
+  fmap f (Read g) = Read (f . g)

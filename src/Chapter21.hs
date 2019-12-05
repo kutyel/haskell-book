@@ -1,8 +1,8 @@
 module Chapter21 where
 
 -- Identity
-newtype Identity a =
-  Identity a
+newtype Identity a
+  = Identity a
   deriving (Eq, Ord, Show)
 
 instance Functor Identity where
@@ -15,10 +15,10 @@ instance Traversable Identity where
   traverse f (Identity x) = Identity <$> f x
 
 -- Constant
-newtype Constant a b =
-  Constant
-    { getConstant :: a
-    }
+newtype Constant a b
+  = Constant
+      { getConstant :: a
+      }
   deriving (Eq, Show)
 
 instance Functor (Constant a) where
@@ -37,15 +37,15 @@ data Optional a
   deriving (Eq, Show)
 
 instance Functor Optional where
-  fmap _ Nada    = Nada
+  fmap _ Nada = Nada
   fmap f (Yep x) = Yep $ f x
 
 instance Foldable Optional where
-  foldMap _ Nada    = mempty
+  foldMap _ Nada = mempty
   foldMap f (Yep x) = f x
 
 instance Traversable Optional where
-  traverse _ Nada    = pure Nada
+  traverse _ Nada = pure Nada
   traverse f (Yep x) = Yep <$> f x
 
 -- List
@@ -55,20 +55,20 @@ data List a
   deriving (Eq, Show)
 
 instance Functor List where
-  fmap _ Nil         = Nil
+  fmap _ Nil = Nil
   fmap f (Cons x xs) = Cons (f x) (f <$> xs)
 
 instance Foldable List where
-  foldMap _ Nil         = mempty
+  foldMap _ Nil = mempty
   foldMap f (Cons x xs) = f x <> foldMap f xs
 
 instance Traversable List where
-  traverse _ Nil         = pure Nil
+  traverse _ Nil = pure Nil
   traverse f (Cons x xs) = Cons <$> f x <*> traverse f xs
 
 -- Three
-data Three a b c =
-  Three a b c
+data Three a b c
+  = Three a b c
   deriving (Eq, Show)
 
 instance Functor (Three a b) where
@@ -81,8 +81,8 @@ instance Traversable (Three a b) where
   traverse f (Three x y z) = Three x y <$> f z
 
 -- Pair
-data Pair a b =
-  Pair a b
+data Pair a b
+  = Pair a b
   deriving (Eq, Show)
 
 instance Functor (Pair a) where
@@ -95,8 +95,8 @@ instance Traversable (Pair a) where
   traverse f (Pair x y) = Pair x <$> f y
 
 -- Big
-data Big a b =
-  Big a b b
+data Big a b
+  = Big a b b
   deriving (Eq, Show)
 
 instance Functor (Big a) where
@@ -109,8 +109,8 @@ instance Traversable (Big a) where
   traverse f (Big x y z) = Big x <$> f y <*> f z
 
 -- Bigger
-data Bigger a b =
-  Bigger a b b b
+data Bigger a b
+  = Bigger a b b b
   deriving (Eq, Show)
 
 instance Functor (Bigger a) where
@@ -123,8 +123,8 @@ instance Traversable (Bigger a) where
   traverse f (Bigger w x y z) = Bigger w <$> f x <*> f y <*> f z
 
 -- S
-data S n a =
-  S (n a) a
+data S n a
+  = S (n a) a
   deriving (Eq, Show)
 
 instance Functor n => Functor (S n) where
@@ -144,16 +144,16 @@ data Tree a
   deriving (Eq, Show)
 
 instance Functor Tree where
-  fmap _ Empty        = Empty
-  fmap f (Leaf x)     = Leaf (f x)
+  fmap _ Empty = Empty
+  fmap f (Leaf x) = Leaf (f x)
   fmap f (Node l x r) = Node (fmap f l) (f x) (fmap f r)
 
 instance Foldable Tree where
-  foldMap _ Empty        = mempty
-  foldMap f (Leaf x)     = f x
+  foldMap _ Empty = mempty
+  foldMap f (Leaf x) = f x
   foldMap f (Node l x r) = foldMap f l <> f x <> foldMap f r
 
 instance Traversable Tree where
-  traverse _ Empty        = pure Empty
-  traverse f (Leaf x)     = Leaf <$> f x
+  traverse _ Empty = pure Empty
+  traverse f (Leaf x) = Leaf <$> f x
   traverse f (Node l x r) = Node <$> traverse f l <*> f x <*> traverse f r

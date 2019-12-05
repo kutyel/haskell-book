@@ -1,8 +1,8 @@
 module Test.Cipher where
 
-import           Cipher
-import           Test.Hspec
-import           Test.QuickCheck
+import Cipher
+import Test.Hspec
+import Test.QuickCheck
 
 charGen :: Gen Char
 charGen = elements ['a' .. 'z']

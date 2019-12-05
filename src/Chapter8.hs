@@ -74,6 +74,7 @@ dividedBy num denom = go num denom 0
 -- go 3 2 6
 -- go (3 - 2) 2 (6 + 1)
 -- (n == 1, d == 2, count == 7)
+
 -- | 1 < 2 = (7, 1) 🚀
 -- 2) recursicely sum all numbers
 recSum :: (Eq a, Num a) => a -> a
@@ -83,7 +84,7 @@ recSum n = n + recSum (n - 1)
 -- recSum 5 -> 15 🎉
 -- 3) mult with recursive summation
 mult :: (Eq a, Num a) => a -> a -> a
-mult x y = go x x y
+mult x = go x x
   where
     go acc m count
       | count == 1 = acc

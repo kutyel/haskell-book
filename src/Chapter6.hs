@@ -1,14 +1,12 @@
 module Chapter6 where
 
-import           Data.List (sort)
+import Data.List (sort)
 
 -- 1
-data Person =
-  Person Bool
-  deriving (Show)
+newtype Person = Person Bool deriving (Show)
 
 printPerson :: Person -> IO ()
-printPerson person = putStrLn (show person)
+printPerson = print
 
 -- 2
 data Mood
@@ -32,8 +30,8 @@ type Verb = String
 
 type Object = String
 
-data Sentence =
-  Sentence Subject Verb Object
+data Sentence
+  = Sentence Subject Verb Object
   deriving (Eq, Show)
 
 s1 = Sentence "dogs" "drool"
@@ -42,16 +40,12 @@ s2 = Sentence "Julie" "loves" "dogs"
 
 -- type checks!! s1 :: Object -> Sentence
 -- Given a datatype declaration, what can we do?
-data Rocks =
-  Rocks String
-  deriving (Eq, Show, Ord)
+newtype Rocks = Rocks String deriving (Eq, Show, Ord)
 
-data Yeah =
-  Yeah Bool
-  deriving (Eq, Show, Ord)
+newtype Yeah = Yeah Bool deriving (Eq, Show, Ord)
 
-data Papu =
-  Papu Rocks Yeah
+data Papu
+  = Papu Rocks Yeah
   deriving (Eq, Show, Ord)
 
 -- 1
@@ -125,18 +119,18 @@ sigmund' y = myY
 -- 9
 -- a)
 jung :: [Int] -> Int
-jung xs = head (sort xs)
+jung = minimum
 
 -- b) does work 👌🏼 (although is more specific)
 -- 10
 -- a)
 young :: Ord a => [a] -> a
-young xs = head (sort xs)
+young = minimum
 
 -- b) does work 👌🏼 (although is more general)
 -- 11
 -- a)
-mySort :: [Char] -> [Char]
+mySort :: String -> String
 mySort = sort
 
 signifier :: String -> Char

@@ -1,7 +1,7 @@
 module Chapter14 where
 
-import           Chapter11 (capitalizeWord)
-import           Data.List (sort)
+import Chapter11 (capitalizeWord)
+import Data.List (sort)
 
 {-# ANN module "HLint: ignore" #-}
 
@@ -26,8 +26,8 @@ listOrdered :: (Ord a) => [a] -> Bool
 listOrdered xs = snd $ foldr go (Nothing, True) xs
   where
     go _ status@(_, False) = status
-    go y (Nothing, t)      = (Just y, t)
-    go y (Just x, t)       = (Just y, x >= y)
+    go y (Nothing, t) = (Just y, t)
+    go y (Just x, t) = (Just y, x >= y)
 
 twice :: (a -> a) -> a -> a
 twice f = f . f
@@ -70,8 +70,8 @@ prop_takeLength n xs = length (take n xs) == n
 
 prop_idemCapitalize :: String -> Bool
 prop_idemCapitalize x =
-  (capitalizeWord x == twice capitalizeWord x) &&
-  (capitalizeWord x == fourTimes capitalizeWord x)
+  (capitalizeWord x == twice capitalizeWord x)
+    && (capitalizeWord x == fourTimes capitalizeWord x)
 
 prop_idemSort :: Ord a => [a] -> Bool
 prop_idemSort x = (sort x == twice sort x) && (sort x == fourTimes sort x)

@@ -2,14 +2,14 @@
 
 module Chapter22 where
 
-import           Control.Monad (join)
-import           Data.Char
-import           Data.Maybe    (fromMaybe)
+import Control.Monad (join)
+import Data.Char
+import Data.Maybe (fromMaybe)
 
-newtype Reader r a =
-  Reader
-    { runReader :: r -> a
-    }
+newtype Reader r a
+  = Reader
+      { runReader :: r -> a
+      }
 
 -- warming up!
 cap :: String -> String
@@ -53,42 +53,46 @@ instance Functor (Reader r) where
   fmap f (Reader ra) = Reader (f . ra)
 
 instance Applicative (Reader r) where
+
   pure :: a -> Reader r a
   pure a = Reader $ pure a
+
   (<*>) :: Reader r (a -> b) -> Reader r a -> Reader r b
   Reader rab <*> Reader ra = Reader $ \r -> rab r (ra r)
 
 -- Reader Monad
 instance Monad (Reader r) where
+
   return = pure
+
   (>>=) :: Reader r a -> (a -> Reader r b) -> Reader r b
   Reader ra >>= f = join $ Reader (f . ra)
 
 -- rewrite getDogRM with Reader!
-newtype HumanName =
-  HumanName String
+newtype HumanName
+  = HumanName String
   deriving (Eq, Show)
 
-newtype DogName =
-  DogName String
+newtype DogName
+  = DogName String
   deriving (Eq, Show)
 
-newtype Address =
-  Address String
+newtype Address
+  = Address String
   deriving (Eq, Show)
 
-data Person =
-  Person
-    { humanName :: HumanName
-    , dogName   :: DogName
-    , address   :: Address
-    }
+data Person
+  = Person
+      { humanName :: HumanName,
+        dogName :: DogName,
+        address :: Address
+      }
 
-data Dog =
-  Dog
-    { dogsName    :: DogName
-    , dogsAddress :: Address
-    }
+data Dog
+  = Dog
+      { dogsName :: DogName,
+        dogsAddress :: Address
+      }
 
 getDogRM :: Reader Person Dog
 getDogRM = Reader (Dog <$> dogName <*> address)

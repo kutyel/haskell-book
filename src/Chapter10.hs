@@ -1,6 +1,6 @@
 module Chapter10 where
 
-import           Data.Bool (bool)
+import Data.Bool (bool)
 
 -- foldr f z [1, 2, 3]
 -- 1 `f` (foldr f z [2, 3])
@@ -90,7 +90,7 @@ ex xs ys = [(x, y, z) | x <- xs, y <- ys, z <- xs]
 -- 1)
 a1 = ex stops vowels
 
-b1 = [(x, y, z) | x <- stops, y <- vowels, z <- stops, x == 'p']
+b1 = [(x, y, z) | x <- stops, x == 'p', y <- vowels, z <- stops]
 
 c1 = ex nouns verbs
 
@@ -151,8 +151,8 @@ squishAgain = squishMap id
 
 -- 10)
 myMaximumBy :: (a -> a -> Ordering) -> [a] -> a
-myMaximumBy f (x:xs) = foldr (\a b -> bool b a (f a b == GT)) x xs
+myMaximumBy f (x : xs) = foldr (\a b -> bool b a (f a b == GT)) x xs
 
 -- 11)
 myMinimumBy :: (a -> a -> Ordering) -> [a] -> a
-myMinimumBy f (x:xs) = foldr (\a b -> bool b a (f a b == LT)) x xs
+myMinimumBy f (x : xs) = foldr (\a b -> bool b a (f a b == LT)) x xs
