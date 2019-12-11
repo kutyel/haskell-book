@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.1.
+-- This file has been generated from package.yaml by hpack version 0.31.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1b063f7120a2633ddfcabecc42da9de1a7bc545c6ec9f497806fc3bfa9f5c728
+-- hash: a9ef34de3e41ad050091566810d3a28c444d5e3d77e6bf35a48dd4821ba0c9e0
 
 name:           haskell-book
 version:        0.1.0.0
@@ -44,6 +44,7 @@ library
       Chapter21
       Chapter22
       Chapter23
+      Chapter24
       Chapter6
       Chapter7
       Chapter8
@@ -77,9 +78,11 @@ library
       base >=4.7 && <5
     , cond
     , generic-lens
+    , parsers
     , random
     , split
     , time
+    , trifecta
   default-language: Haskell2010
 
 executable haskell-book-exe
@@ -94,9 +97,11 @@ executable haskell-book-exe
     , cond
     , generic-lens
     , haskell-book
+    , parsers
     , random
     , split
     , time
+    , trifecta
   default-language: Haskell2010
 
 test-suite haskell-book-test
@@ -125,7 +130,9 @@ test-suite haskell-book-test
     , generic-lens
     , haskell-book
     , hspec
+    , parsers
     , random
     , split
     , time
+    , trifecta
   default-language: Haskell2010

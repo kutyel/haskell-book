@@ -1,5 +1,5 @@
 { mkDerivation, base, checkers, cond, generic-lens, hpack, hspec
-, QuickCheck, random, split, stdenv, time
+, parsers, QuickCheck, random, split, stdenv, time, trifecta
 }:
 mkDerivation {
   pname = "haskell-book";
@@ -8,11 +8,11 @@ mkDerivation {
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    base cond generic-lens random split time
+    base cond generic-lens parsers random split time trifecta
   ];
   libraryToolDepends = [ hpack ];
   executableHaskellDepends = [
-    base cond generic-lens random split time
+    base cond generic-lens parsers random split time trifecta
   ];
   testHaskellDepends = [
     base checkers cond generic-lens hspec QuickCheck random split time

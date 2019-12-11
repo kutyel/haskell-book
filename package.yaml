@@ -11,10 +11,12 @@ description: Please see the README on GitHub at <https://github.com/kutyel/haske
 dependencies:
   - base >= 4.7 && < 5
   - cond
-  - time
+  - generic-lens
+  - parsers
   - random
   - split
-  - generic-lens
+  - time
+  - trifecta
 library:
   source-dirs: src
 executables:
