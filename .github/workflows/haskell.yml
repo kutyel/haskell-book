@@ -5,19 +5,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - uses: actions/cache@v1
+    - uses: cachix/install-nix-action@v6
+    - uses: cachix/cachix-action@v2
       with:
-        path: ~/.stack
-        key: ${{ runner.os }}-stack-${{ hashFiles('**/*.cabal') }}
-        restore-keys: |
-          ${{ runner.os }}-stack-
-    - uses: mstksg/setup-stack@v1
-    - name: Install dependencies
-      run: stack --no-terminal setup
-    - name: Build
-      run: stack build
+        name: kutyel
+        signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
     - name: Run tests
-      run: stack --no-terminal test --coverage
+      run: nix-shell --pure shell.nix --run "cabal test"
+    # TODO: run ormolu on CI
+    # TODO: send coverage
     # - name: Send coverage
     #   run: |
     #     stack install stack-hpc-coveralls
