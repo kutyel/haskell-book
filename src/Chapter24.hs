@@ -32,9 +32,9 @@ p123 :: String -> IO ()
 p123 s = testParse' s $ choice [string "123", string "12", string "1"]
 
 -- 3
--- TODO: write a Parser that does what "string" does, but using "char"
-string2 :: Char -> Parser Char
-string2 = undefined
+-- write a Parser that does what "string" does, but using "char"
+string2 :: String -> Parser String
+string2 = traverse char
 
 main = do
   pNL "stop:"
