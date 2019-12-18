@@ -78,3 +78,51 @@ parseFraction = do
 
 intOrFraction :: Parser (Either Rational Integer)
 intOrFraction = try (Left <$> parseFraction) <|> (Right <$> integer)
+
+-- Chapter exercises
+-- 1) Parse Semantic Versioning! http://semver.org
+data NumberOrString
+  = NOSS String
+  | NOSI Integer
+  deriving (Show)
+
+type Major = Integer
+
+type Minor = Integer
+
+type Patch = Integer
+
+type Release = [NumberOrString]
+
+type Metadata = [NumberOrString]
+
+data SemVer
+  = SemVer Major Minor Patch Release Metadata
+  deriving (Show)
+
+parseNOS :: Parser NumberOrString
+parseNOS =
+  skipMany (char '.')
+    >> (NOSI <$> try (decimal <* notFollowedBy letter))
+    <|> (NOSS <$> some (letter <|> digit))
+
+parseSemVer :: Parser SemVer
+parseSemVer =
+  SemVer
+    <$> decimal
+    <*> (char '.' *> decimal)
+    <*> (char '.' *> decimal)
+    <*> (char '-' *> some parseNOS <|> mempty)
+    <*> (char '+' *> some parseNOS <|> mempty)
+
+ps = parseString
+
+psv = ps parseSemVer mempty
+
+test1 = psv "2.1.1" -- ✅
+
+test2 = psv "1.0.0-x.7.z.92" -- ✅
+
+test3 = psv "1.0.0-gamma+002" -- ✅
+
+test4 = psv "1.0.0-beta+oof.sha.41af286" -- ✅
