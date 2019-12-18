@@ -70,11 +70,7 @@ ex3 = parseString myParser mempty "123abc" -- should fail
 
 -- try try
 parseFraction :: Parser Rational
-parseFraction = do
-  numerator <- decimal
-  char '/'
-  denominator <- decimal
-  return (numerator % denominator)
+parseFraction = (%) <$> decimal <*> (char '/' *> decimal)
 
 intOrFraction :: Parser (Either Rational Integer)
 intOrFraction = try (Left <$> parseFraction) <|> (Right <$> integer)
