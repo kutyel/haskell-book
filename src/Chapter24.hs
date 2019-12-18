@@ -1,5 +1,7 @@
 module Chapter24 where
 
+import Control.Applicative ((<|>))
+import Data.Ratio ((%))
 import Text.Parser.Combinators
 import Text.Trifecta
 
@@ -57,3 +59,22 @@ main = do
   p123 "1"
   p123 "12"
   p123 "123"
+
+-- units of success
+myParser :: Parser Integer
+myParser = integer >>= \num -> eof >> return num
+
+ex2 = parseString myParser mempty "123"
+
+ex3 = parseString myParser mempty "123abc" -- should fail
+
+-- try try
+parseFraction :: Parser Rational
+parseFraction = do
+  numerator <- decimal
+  char '/'
+  denominator <- decimal
+  return (numerator % denominator)
+
+intOrFraction :: Parser (Either Rational Integer)
+intOrFraction = try (Left <$> parseFraction) <|> (Right <$> integer)
