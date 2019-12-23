@@ -80,7 +80,7 @@ intOrFraction = try (Left <$> parseFraction) <|> (Right <$> integer)
 data NumberOrString
   = NOSS String
   | NOSI Integer
-  deriving (Show)
+  deriving (Eq, Show)
 
 type Major = Integer
 
@@ -94,7 +94,7 @@ type Metadata = [NumberOrString]
 
 data SemVer
   = SemVer Major Minor Patch Release Metadata
-  deriving (Show)
+  deriving (Eq, Show)
 
 parseNOS :: Parser NumberOrString
 parseNOS =
@@ -122,3 +122,13 @@ test2 = psv "1.0.0-x.7.z.92" -- ✅
 test3 = psv "1.0.0-gamma+002" -- ✅
 
 test4 = psv "1.0.0-beta+oof.sha.41af286" -- ✅
+
+-- Ord instances
+instance Ord NumberOrString where
+  compare (NOSS s) (NOSS s') = compare s s'
+  compare (NOSI i) (NOSI i') = compare i i'
+  compare (NOSS _) (NOSI _) = GT
+  compare (NOSI _) (NOSS _) = LT
+
+instance Ord SemVer where
+  compare (SemVer mm mn pt re _) (SemVer mm' mn' pt' re' _) = compare mm mm' <> compare mn mn' <> compare pt pt' <> compare re re'
