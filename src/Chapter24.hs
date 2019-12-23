@@ -1,6 +1,7 @@
 module Chapter24 where
 
 import Control.Applicative ((<|>))
+import Data.Char (isDigit)
 import Data.Ratio ((%))
 import Text.Parser.Combinators
 import Text.Trifecta
@@ -132,3 +133,14 @@ instance Ord NumberOrString where
 
 instance Ord SemVer where
   compare (SemVer mm mn pt re _) (SemVer mm' mn' pt' re' _) = compare mm mm' <> compare mn mn' <> compare pt pt' <> compare re re'
+
+-- 2) Write a parser for positive integer values
+parseDigit :: Parser Char
+parseDigit = satisfy isDigit
+
+base10Integer :: Parser Integer
+base10Integer = read <$> some parseDigit <?> "integer"
+
+-- 3) Extend the parser to allow negative integers
+base10Integer' :: Parser Integer
+base10Integer' = negate <$> (char '-' *> base10Integer) <|> base10Integer
