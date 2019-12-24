@@ -174,19 +174,13 @@ data PhoneNumber
       LineNumber
   deriving (Eq, Show)
 
-numbers :: (Read b, CharParsing f) => Int -> f b
+numbers :: (Read a, CharParsing f) => Int -> f a
 numbers digits = read <$> count digits digit
-
-parseNumPlan :: Parser NumberingPlanArea
-parseNumPlan = optional (string "1-" <|> string "0-") *> numbers 3
-
-parseParenNPlan :: Parser NumberingPlanArea
-parseParenNPlan = char '(' *> numbers 3 <* char ')'
 
 parsePhone :: Parser PhoneNumber
 parsePhone =
   PhoneNumber
-    <$> (parseNumPlan <|> parseParenNPlan)
+    <$> (optional (string "1-") *> numbers 3 <|> char '(' *> numbers 3 <* char ')')
     <*> (optional (oneOf "- ") *> numbers 3)
     <*> (optional (char '-') *> numbers 4)
 
