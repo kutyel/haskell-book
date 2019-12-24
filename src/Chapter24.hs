@@ -11,12 +11,16 @@ stop = unexpected "stop"
 
 -- Parsing Practice
 
+one :: Parser Char
 one = char '1'
 
+one' :: Parser b
 one' = one >> stop
 
+oneTwo :: Parser Char
 oneTwo = char '1' >> char '2'
 
+oneTwo' :: Parser b
 oneTwo' = oneTwo >> stop
 
 testParse :: Parser Char -> IO ()
@@ -28,6 +32,7 @@ testParse' s p = print $ parseString p mempty s
 testEOF :: Parser () -> IO ()
 testEOF p = print $ parseString p mempty "123"
 
+pNL :: String -> IO ()
 pNL s = putStrLn ('\n' : s)
 
 -- 2
@@ -39,6 +44,7 @@ p123 s = testParse' s $ choice [string "123", string "12", string "1"]
 string2 :: String -> Parser String
 string2 = traverse char
 
+main :: IO ()
 main = do
   pNL "stop:"
   testParse stop
@@ -65,8 +71,10 @@ main = do
 myParser :: Parser Integer
 myParser = integer >>= \num -> eof >> return num
 
+ex2 :: Result Integer
 ex2 = parseString myParser mempty "123"
 
+ex3 :: Result Integer
 ex3 = parseString myParser mempty "123abc" -- should fail
 
 -- try try
@@ -101,7 +109,7 @@ parseNOS :: Parser NumberOrString
 parseNOS =
   skipMany (char '.')
     >> (NOSI <$> try (decimal <* notFollowedBy letter))
-    <|> (NOSS <$> some (letter <|> digit))
+      <|> (NOSS <$> some (letter <|> digit))
 
 parseSemVer :: Parser SemVer
 parseSemVer =
@@ -112,16 +120,19 @@ parseSemVer =
     <*> (char '-' *> some parseNOS <|> mempty)
     <*> (char '+' *> some parseNOS <|> mempty)
 
-ps = parseString
+psv :: String -> Result SemVer
+psv = parseString parseSemVer mempty
 
-psv = ps parseSemVer mempty
-
+test1 :: Result SemVer
 test1 = psv "2.1.1" -- ✅
 
+test2 :: Result SemVer
 test2 = psv "1.0.0-x.7.z.92" -- ✅
 
+test3 :: Result SemVer
 test3 = psv "1.0.0-gamma+002" -- ✅
 
+test4 :: Result SemVer
 test4 = psv "1.0.0-beta+oof.sha.41af286" -- ✅
 
 -- Ord instances
@@ -132,7 +143,11 @@ instance Ord NumberOrString where
   compare (NOSI _) (NOSS _) = LT
 
 instance Ord SemVer where
-  compare (SemVer mm mn pt re _) (SemVer mm' mn' pt' re' _) = compare mm mm' <> compare mn mn' <> compare pt pt' <> compare re re'
+  compare (SemVer mm mn pt re _) (SemVer mm' mn' pt' re' _) =
+    compare mm mm'
+      <> compare mn mn'
+      <> compare pt pt'
+      <> compare re re'
 
 -- 2) Write a parser for positive integer values
 parseDigit :: Parser Char
