@@ -159,3 +159,45 @@ base10Integer = read <$> some parseDigit <?> "integer"
 -- 3) Extend the parser to allow negative integers
 base10Integer' :: Parser Integer
 base10Integer' = negate <$> (char '-' *> base10Integer) <|> base10Integer
+
+-- 4) parser for US/Canada phones
+type NumberingPlanArea = Int
+
+type Exchange = Int
+
+type LineNumber = Int
+
+data PhoneNumber
+  = PhoneNumber
+      NumberingPlanArea
+      Exchange
+      LineNumber
+  deriving (Eq, Show)
+
+numbers :: (Read b, CharParsing f) => Int -> f b
+numbers digits = read <$> count digits digit
+
+parseNumPlan :: Parser NumberingPlanArea
+parseNumPlan = optional (string "1-" <|> string "0-") *> numbers 3
+
+parseParenNPlan :: Parser NumberingPlanArea
+parseParenNPlan = char '(' *> numbers 3 <* char ')'
+
+parsePhone :: Parser PhoneNumber
+parsePhone =
+  PhoneNumber
+    <$> (parseNumPlan <|> parseParenNPlan)
+    <*> (optional (oneOf "- ") *> numbers 3)
+    <*> (optional (char '-') *> numbers 4)
+
+phone1 :: Result PhoneNumber
+phone1 = parseString parsePhone mempty "123-456-7890"
+
+phone2 :: Result PhoneNumber
+phone2 = parseString parsePhone mempty "1234567890"
+
+phone3 :: Result PhoneNumber
+phone3 = parseString parsePhone mempty "(123) 456-7890"
+
+phone4 :: Result PhoneNumber
+phone4 = parseString parsePhone mempty "1-123-456-7890"
