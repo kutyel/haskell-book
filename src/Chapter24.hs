@@ -1,8 +1,10 @@
 module Chapter24 where
 
 import Control.Applicative ((<|>))
+import Data.Bits ((.|.), shiftL)
 import Data.Char (isDigit)
 import Data.Ratio ((%))
+import Data.Word
 import Text.Parser.Combinators
 import Text.Trifecta
 
@@ -195,3 +197,35 @@ phone3 = parseString parsePhone mempty "(123) 456-7890"
 
 phone4 :: Result PhoneNumber
 phone4 = parseString parsePhone mempty "1-123-456-7890"
+
+-- 5) skipped
+
+-- 6) parser for IPv4 addresses
+
+newtype IPAddress
+  = IPAddress Word32
+  deriving (Eq, Ord, Show)
+
+fourOctetsToW32 :: Integer -> Integer -> Integer -> Integer -> Word32
+fourOctetsToW32 a b c d =
+  (fromIntegral a `shiftL` 24)
+    .|. (fromIntegral b `shiftL` 16)
+    .|. (fromIntegral c `shiftL` 8)
+    .|. fromIntegral d
+
+parseWord32 :: Parser Word32
+parseWord32 =
+  fourOctetsToW32
+    <$> (integer <* char '.')
+    <*> (integer <* char '.')
+    <*> (integer <* char '.')
+    <*> integer
+
+parseIPv4 :: Parser IPAddress
+parseIPv4 = IPAddress <$> parseWord32
+
+ip1 :: Result IPAddress
+ip1 = parseString parseIPv4 mempty "172.16.254.1" -- 2886794753
+
+ip2 :: Result IPAddress
+ip2 = parseString parseIPv4 mempty "204.120.0.15" -- 3430416399
