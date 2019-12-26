@@ -5,6 +5,7 @@ import Data.Bits ((.|.), shiftL)
 import Data.Char (isDigit)
 import Data.Ratio ((%))
 import Data.Word
+import Numeric (readHex)
 import Text.Parser.Combinators
 import Text.Trifecta
 
@@ -206,16 +207,17 @@ newtype IPAddress
   = IPAddress Word32
   deriving (Eq, Ord, Show)
 
-fourOctetsToW32 :: Integer -> Integer -> Integer -> Integer -> Word32
-fourOctetsToW32 a b c d =
-  (fromIntegral a `shiftL` 24)
-    .|. (fromIntegral b `shiftL` 16)
-    .|. (fromIntegral c `shiftL` 8)
-    .|. fromIntegral d
+fromOctetsToWord32 :: Integer -> Integer -> Integer -> Integer -> Word32
+fromOctetsToWord32 a b c d =
+  fromIntegral $
+    shiftL a 24
+      .|. shiftL b 16
+      .|. shiftL c 8
+      .|. d
 
 parseWord32 :: Parser Word32
 parseWord32 =
-  fourOctetsToW32
+  fromOctetsToWord32
     <$> (integer <* char '.')
     <*> (integer <* char '.')
     <*> (integer <* char '.')
@@ -229,3 +231,65 @@ ip1 = parseString parseIPv4 mempty "172.16.254.1" -- 2886794753
 
 ip2 :: Result IPAddress
 ip2 = parseString parseIPv4 mempty "204.120.0.15" -- 3430416399
+
+-- 7) parser for IPv6 addresses
+
+newtype IPAddress6
+  = IPAddress6 Word64 -- TODO: Word64, right now I can't support IPs of 128 bits...
+  deriving (Eq, Ord, Show)
+
+hex :: Parser Integer
+hex = fst . head . readHex <$> many (oneOf $ ['0' .. '9'] ++ ['a' .. 'f'])
+
+fromWord16sWord64 ::
+  Integer ->
+  Integer ->
+  Integer ->
+  Integer ->
+  Integer ->
+  Integer ->
+  Integer ->
+  Integer ->
+  Word64
+fromWord16sWord64 a b c d e f g h =
+  fromIntegral $
+    shiftL a 112
+      .|. shiftL b 96
+      .|. shiftL c 80
+      .|. shiftL d 64
+      .|. shiftL e 48
+      .|. shiftL f 32
+      .|. shiftL g 16
+      .|. h
+
+parseWord64 :: Parser Word64
+parseWord64 =
+  fromWord16sWord64
+    <$> (hex <* char ':')
+    <*> (hex <* char ':')
+    <*> (hex <* char ':')
+    <*> (hex <* char ':')
+    <*> (hex <* char ':')
+    <*> (hex <* char ':')
+    <*> (hex <* char ':')
+    <*> hex
+
+parseIPv6 :: Parser IPAddress6
+parseIPv6 = IPAddress6 <$> parseWord64
+
+ip3 :: Result IPAddress6
+ip3 = parseString parseIPv6 mempty "0:0:0:0:0:ffff:ac10:fe01" -- == ip1
+
+ip4 :: Result IPAddress6
+ip4 = parseString parseIPv6 mempty "0:0:0:0:0:ffff:cc78:f" -- == ip2
+
+ip5 :: Result IPAddress6
+ip5 = parseString parseIPv6 mempty "fe80:0:0:0:0202:b3ff:fe1e:8329" -- wrong...
+
+-- 8) write your own Show instance for IPAddress and IPAddress6
+
+-- 9) write a function that converts between IPAddress and IPAddress6
+
+ipV4toV6 :: IPAddress -> IPAddress6
+ipV4toV6 = undefined
+-- 10) parser for DOT language -- SKIPPED
