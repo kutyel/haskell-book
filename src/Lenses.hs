@@ -12,12 +12,7 @@ import Data.Functor.Identity
 import Data.Generics.Product.Fields (field)
 import GHC.Generics
 
-type Lens' s a =
-  forall f.
-  Functor f =>
-  (a -> f a) ->
-  s ->
-  f s
+type Lens' s a = forall f. Functor f => (a -> f a) -> s -> f s
 
 lens :: (s -> a) -> (s -> a -> s) -> Lens' s a
 lens getter setter f = fmap <$> setter <*> (f . getter)
@@ -47,39 +42,40 @@ over l f = set l <$> f . view l <*> id
 -- Usage
 data Haskeller
   = Haskeller
-      { hName :: String,
-        hExperience :: Int,
-        hKnowledge :: Knowledge
+      { name :: String,
+        experience :: Int,
+        knowledge :: Knowledge
       }
   deriving (Generic, Show)
 
 data Knowledge
   = Knowledge
-      { kSyntax :: Bool,
-        kMonads :: Bool,
-        kLens :: Bool,
-        kTypeLevelMagic :: Bool,
-        kNix :: Bool
+      { syntax :: Bool,
+        monads :: Bool,
+        lenses :: Bool,
+        typeLevel :: Bool,
+        nix :: Bool
       }
   deriving (Generic, Show)
 
 me :: Haskeller
 me =
   Haskeller
-    { hName = "Flavio",
-      hExperience = 1,
-      hKnowledge = Knowledge
-        { kSyntax = True,
-          kMonads = True,
-          kLens = False,
-          kTypeLevelMagic = False,
-          kNix = False
+    { name = "Flavio",
+      experience = 1,
+      knowledge = Knowledge
+        { syntax = True,
+          monads = True,
+          lenses = False,
+          typeLevel = False,
+          nix = False
         }
     }
 
 betterMe :: Haskeller
 betterMe =
   me
-    & field @"hName" .~ "Flavio, Haskeller"
-    & field @"hKnowledge" . field @"kLens" .~ True
-    & field @"hKnowledge" . field @"kTypeLevelMagic" .~ True
+    & field @"experience" .~ 2
+    & field @"name" .~ "Flavio, Haskeller"
+    & field @"knowledge" . field @"lenses" .~ True
+    & field @"knowledge" . field @"typeLevel" .~ True

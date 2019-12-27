@@ -271,7 +271,10 @@ ip4 :: Result IPAddress6
 ip4 = parseString parseIPv6 mempty "0000:0000:0000:0000:0000:ffff:cc78:f000" -- == ip2
 
 ip5 :: Result IPAddress6
-ip5 = parseString parseIPv6 mempty "fe80:0000:0000:0000:0202:b3ff:fe1e:8329" -- wrong...
+ip5 = parseString parseIPv6 mempty "fe80:0000:0000:0000:0202:b3ff:fe1e:8329" -- ✅
+
+ip6 :: Result IPAddress6
+ip6 = parseString parseIPv6 mempty "2001:DB80:0000:0000:0008:0800:200C:417A" -- ✅
 
 -- 8) write your own Show instance for IPAddress and IPAddress6
 
@@ -292,4 +295,11 @@ instance Show IPAddress6 where
 
 ipV4toV6 :: IPAddress -> IPAddress6
 ipV4toV6 (IPAddress ip) = IPAddress6 0 (shiftL (2 ^ 16 - 1) 32 .|. fromIntegral ip)
+
 -- 10) parser for DOT language -- SKIPPED
+
+ip1And3AreEqual :: Result Bool
+ip1And3AreEqual = (==) <$> (ipV4toV6 <$> ip1) <*> ip3 -- True 🎉
+
+ip2And4AreEqual :: Result Bool
+ip2And4AreEqual = (==) <$> (ipV4toV6 <$> ip2) <*> ip4 -- True 🎉
