@@ -1,11 +1,12 @@
 module Chapter24 where
 
 import Control.Applicative ((<|>))
-import Data.Bits ((.|.), shiftL)
-import Data.Char (isDigit)
+import Data.Bits ((.&.), (.|.), shiftL, shiftR)
+import Data.Char (digitToInt, isDigit)
+import Data.List (intercalate, intersperse)
 import Data.Ratio ((%))
 import Data.Word
-import Numeric (readHex)
+import Numeric (showHex)
 import Text.Parser.Combinators
 import Text.Trifecta
 
@@ -205,7 +206,7 @@ phone4 = parseString parsePhone mempty "1-123-456-7890"
 
 newtype IPAddress
   = IPAddress Word32
-  deriving (Eq, Ord, Show)
+  deriving (Eq, Ord)
 
 fromOctetsToWord32 :: Integer -> Integer -> Integer -> Integer -> Word32
 fromOctetsToWord32 a b c d =
@@ -234,62 +235,61 @@ ip2 = parseString parseIPv4 mempty "204.120.0.15" -- 3430416399
 
 -- 7) parser for IPv6 addresses
 
-newtype IPAddress6
-  = IPAddress6 Word64 -- TODO: Word64, right now I can't support IPs of 128 bits...
-  deriving (Eq, Ord, Show)
+data IPAddress6
+  = IPAddress6 Word64 Word64
+  deriving (Eq, Ord)
 
-hex :: Parser Integer
-hex = fst . head . readHex <$> many (oneOf $ ['0' .. '9'] ++ ['a' .. 'f'])
+createIPv6 :: [Word16] -> IPAddress6
+createIPv6 xs = IPAddress6 part1 part2
+  where
+    (h, t) = splitAt 4 (take 8 (xs ++ repeat 0))
+    part1 = fromIntegral $ combineBitBlocks 16 h
+    part2 = fromIntegral $ combineBitBlocks 16 t
 
-fromWord16sWord64 ::
-  Integer ->
-  Integer ->
-  Integer ->
-  Integer ->
-  Integer ->
-  Integer ->
-  Integer ->
-  Integer ->
-  Word64
-fromWord16sWord64 a b c d e f g h =
-  fromIntegral $
-    shiftL a 112
-      .|. shiftL b 96
-      .|. shiftL c 80
-      .|. shiftL d 64
-      .|. shiftL e 48
-      .|. shiftL f 32
-      .|. shiftL g 16
-      .|. h
+combineBitBlocks :: Integral a => Int -> [a] -> Integer
+combineBitBlocks x = foldl (\acc d -> fromIntegral d + shiftL acc x) 0
 
-parseWord64 :: Parser Word64
-parseWord64 =
-  fromWord16sWord64
-    <$> (hex <* char ':')
-    <*> (hex <* char ':')
-    <*> (hex <* char ':')
-    <*> (hex <* char ':')
-    <*> (hex <* char ':')
-    <*> (hex <* char ':')
-    <*> (hex <* char ':')
-    <*> hex
+hexToInteger :: String -> Integer
+hexToInteger = foldl (\acc d -> 16 * acc + fromIntegral (digitToInt d)) 0
+
+parseHextet :: Parser Word16
+parseHextet = do
+  hex <- count 4 hexDigit -- this only parses fully expanded IPv6
+  let val = hexToInteger hex
+  return $ fromIntegral val
+
+parseWords16 :: Parser [Word16]
+parseWords16 = (:) <$> parseHextet <*> count 7 (char ':' *> parseHextet)
 
 parseIPv6 :: Parser IPAddress6
-parseIPv6 = IPAddress6 <$> parseWord64
+parseIPv6 = createIPv6 <$> parseWords16
 
 ip3 :: Result IPAddress6
-ip3 = parseString parseIPv6 mempty "0:0:0:0:0:ffff:ac10:fe01" -- == ip1
+ip3 = parseString parseIPv6 mempty "0000:0000:0000:0000:0000:ffff:ac10:fe01" -- == ip1
 
 ip4 :: Result IPAddress6
-ip4 = parseString parseIPv6 mempty "0:0:0:0:0:ffff:cc78:f" -- == ip2
+ip4 = parseString parseIPv6 mempty "0000:0000:0000:0000:0000:ffff:cc78:f000" -- == ip2
 
 ip5 :: Result IPAddress6
-ip5 = parseString parseIPv6 mempty "fe80:0:0:0:0202:b3ff:fe1e:8329" -- wrong...
+ip5 = parseString parseIPv6 mempty "fe80:0000:0000:0000:0202:b3ff:fe1e:8329" -- wrong...
 
 -- 8) write your own Show instance for IPAddress and IPAddress6
+
+splitBitBlocks :: Integral a => Int -> Int -> a -> [Integer]
+splitBitBlocks n b dec = (reverse . map fst . take n . drop 1) bls
+  where
+    bls = iterate (\(_, d) -> (d .&. (2 ^ b - 1), shiftR d b)) (0, fromIntegral dec)
+
+instance Show IPAddress where
+  show (IPAddress n) = intercalate "." (map show $ splitBitBlocks 4 8 n)
+
+instance Show IPAddress6 where
+  show (IPAddress6 n1 n2) = (foldr ($) "" . intersperse (":" ++) . map showHex) hs
+    where
+      hs = splitBitBlocks 4 16 n1 ++ splitBitBlocks 4 16 n2
 
 -- 9) write a function that converts between IPAddress and IPAddress6
 
 ipV4toV6 :: IPAddress -> IPAddress6
-ipV4toV6 = undefined
+ipV4toV6 (IPAddress ip) = IPAddress6 0 (shiftL (2 ^ 16 - 1) 32 .|. fromIntegral ip)
 -- 10) parser for DOT language -- SKIPPED
