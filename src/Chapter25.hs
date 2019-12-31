@@ -28,3 +28,31 @@ instance (Foldable f, Foldable g) => Foldable (Compose f g) where
 
 instance (Traversable f, Traversable g) => Traversable (Compose f g) where
   traverse f (Compose fga) = Compose <$> (traverse . traverse) f fga
+
+-- TODO: Bifunctors here
+
+-- my first Monad Transformer
+newtype IdentityT f a
+  = IdentityT
+      { runIdentityT :: f a
+      }
+  deriving (Eq, Show)
+
+instance Functor m => Functor (IdentityT m) where
+  fmap f (IdentityT ma) = IdentityT $ f <$> ma
+
+instance Applicative m => Applicative (IdentityT m) where
+
+  pure :: a -> IdentityT m a
+  pure a = IdentityT $ pure a
+
+  (<*>) :: IdentityT m (a -> b) -> IdentityT m a -> IdentityT m b
+  IdentityT mf <*> IdentityT ma = IdentityT $ mf <*> ma
+
+instance Monad m => Monad (IdentityT m) where
+
+  return :: a -> IdentityT m a
+  return = pure
+
+  (>>=) :: IdentityT m a -> (a -> IdentityT m b) -> IdentityT m b
+  IdentityT ma >>= f = IdentityT $ ma >>= runIdentityT . f
