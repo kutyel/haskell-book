@@ -4,6 +4,8 @@ module Chapter15 where
 
 import Data.Monoid
 
+{-# ANN module "HLint: ignore" #-}
+
 -- Trivial
 data Trivial
   = Trivial

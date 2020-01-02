@@ -3,6 +3,8 @@ module Chapter9 where
 import Data.Bool (bool)
 import Data.Char
 
+{-# ANN module "HLint: ignore" #-}
+
 safeHead :: [a] -> Maybe a
 safeHead [] = Nothing
 safeHead (x : _) = Just x

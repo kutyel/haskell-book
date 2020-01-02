@@ -2,6 +2,8 @@
 
 module Chapter25 where
 
+{-# ANN module "HLint: ignore" #-}
+
 -- twinplicative
 
 newtype Compose f g a

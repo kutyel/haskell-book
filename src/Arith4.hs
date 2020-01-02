@@ -1,5 +1,7 @@
 module Arith4 where
 
+{-# ANN module "HLint: ignore" #-}
+
 -- id :: a -> a
 -- id x = x
 roundTrip :: (Show a, Read a) => a -> a

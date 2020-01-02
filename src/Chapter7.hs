@@ -1,5 +1,7 @@
 module Chapter7 where
 
+{-# ANN module "HLint: ignore" #-}
+
 -- Grab bag
 -- 1) all of them are equivalent!
 mTh :: Integer -> Integer -> Integer -> Integer

@@ -2,6 +2,8 @@ module Chapter10 where
 
 import Data.Bool (bool)
 
+{-# ANN module "HLint: ignore" #-}
+
 -- foldr f z [1, 2, 3]
 -- 1 `f` (foldr f z [2, 3])
 -- 1 `f` (2 `f` (foldr f z [3]))

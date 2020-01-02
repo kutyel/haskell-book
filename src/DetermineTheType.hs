@@ -16,6 +16,7 @@ b = head [(0, "doge"), (1, "kitteh")]
 c = head [(0 :: Integer, "doge"), (1, "kitteh")]
 
 -- d) Bool
+{-# ANN d "HLint: ignore" #-}
 d = if False then True else False
 
 -- e) Int

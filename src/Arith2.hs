@@ -6,6 +6,7 @@ add x y = x + y
 addPF :: Int -> Int -> Int
 addPF = (+)
 
+{-# ANN addOne "HLint: ignore" #-}
 addOne :: Int -> Int
 addOne = \x -> x + 1
 
