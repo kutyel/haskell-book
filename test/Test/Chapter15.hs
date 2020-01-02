@@ -5,6 +5,8 @@ import Data.Monoid
 import Test.Hspec
 import Test.QuickCheck hiding (Failure, Success)
 
+{-# ANN module "HLint: ignore" #-}
+
 instance Arbitrary Bull where
   arbitrary = elements [Fools, Twoo]
 

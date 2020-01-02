@@ -127,7 +127,7 @@ spec =
     it "own version of ZipList' should work" $
       let z = ZipList' $ toMyList [(+ 9), (* 2), (+ 8)]
           z' = ZipList' $ toMyList [1 .. 3]
-       in z <*> z' `shouldBe` (ZipList' $ toMyList [10, 4, 11])
+       in z <*> z' `shouldBe` ZipList' (toMyList [10, 4, 11])
     it "own version of flatMap for custom List should work" $
       let f x = Cons x (Cons 9 Nil)
           xs = toMyList [1 .. 3]
