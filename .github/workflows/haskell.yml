@@ -10,9 +10,6 @@ jobs:
       with:
         name: kutyel
         signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
-    - name: Run tests
-      run: nix-shell --pure shell.nix --run "cabal test"
-    # TODO: run ormolu on CI
     # TODO: send coverage
     # - name: Send coverage
     #   run: |
