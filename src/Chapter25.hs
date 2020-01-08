@@ -18,7 +18,7 @@ instance (Functor f, Functor g) => Functor (Compose f g) where
 instance (Applicative f, Applicative g) => Applicative (Compose f g) where
 
   pure :: a -> Compose f g a
-  pure = pure
+  pure = Compose . pure . pure
 
   (<*>) :: Compose f g (a -> b) -> Compose f g a -> Compose f g b
   Compose f <*> Compose a = Compose $ ((<*>) <$> f) <*> a
