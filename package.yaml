@@ -1,0 +1,44 @@
+name: haskell-book
+version: 0.1.0.0
+github: "kutyel/haskell-book"
+license: BSD3
+author: "Flavio Corpa"
+maintainer: "flaviocorpa@gmail.com"
+copyright: "MIT"
+extra-source-files:
+  - README.md
+description: Please see the README on GitHub at <https://github.com/kutyel/haskell-book#readme>
+dependencies:
+  - base >= 4.7 && < 5
+  - cond
+  - generic-lens
+  - parsers
+  - random
+  - split
+  - time
+  - trifecta
+library:
+  source-dirs: src
+executables:
+  haskell-book-exe:
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - haskell-book
+tests:
+  haskell-book-test:
+    main: Spec.hs
+    source-dirs: test
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - haskell-book
+      - hspec
+      - QuickCheck
+      - checkers
