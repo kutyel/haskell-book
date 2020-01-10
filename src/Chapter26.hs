@@ -1,5 +1,7 @@
 module Chapter26 where
 
+import Control.Arrow (first)
+
 newtype MaybeT m a
   = MaybeT
       { runMaybeT :: m (Maybe a)
@@ -67,3 +69,55 @@ eitherT f g (EitherT me) = do
   case m of
     Left e -> f e
     Right a -> g a
+
+-- ReaderT
+newtype ReaderT r m a
+  = ReaderT
+      { runReaderT :: r -> m a
+      }
+
+instance (Functor m) => Functor (ReaderT r m) where
+  fmap f (ReaderT rma) = ReaderT $ (fmap . fmap) f rma
+
+instance (Applicative m) => Applicative (ReaderT r m) where
+
+  pure = ReaderT . pure . pure
+
+  ReaderT fmab <*> ReaderT rma = ReaderT $ (<*>) <$> fmab <*> rma
+
+instance (Monad m) => Monad (ReaderT r m) where
+
+  return = pure
+
+  ReaderT rma >>= f = ReaderT $ \r -> do
+    a <- rma r
+    runReaderT (f a) r
+
+-- exercises: StateT
+newtype StateT s m a
+  = StateT
+      { runStateT :: s -> m (a, s)
+      }
+
+-- 1)
+instance (Functor m) => Functor (StateT s m) where
+  fmap f (StateT sma) = StateT $ (fmap . fmap) (first f) sma
+
+-- 2)
+instance (Monad m) => Applicative (StateT s m) where
+
+  pure a = StateT $ \s -> pure (a, s)
+
+  StateT g <*> StateT h = StateT $ \s -> do
+    (f, s') <- g s
+    (a, s'') <- h s'
+    pure (f a, s'')
+
+-- 3)
+instance (Monad m) => Monad (StateT s m) where
+
+  return = pure
+
+  StateT sma >>= f = StateT $ \s -> do
+    (a, s') <- sma s
+    runStateT (f a) s'

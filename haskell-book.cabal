@@ -1,19 +1,13 @@
-cabal-version: 1.12
-
--- This file has been generated from package.yaml by hpack version 0.31.2.
---
--- see: https://github.com/sol/hpack
---
--- hash: b77a458887aad6ee6360646ad87bafb9a3f7f914d09f9367465e8f3d96a8eb3a
-
 name:           haskell-book
 version:        0.1.0.0
 description:    Please see the README on GitHub at <https://github.com/kutyel/haskell-book#readme>
 homepage:       https://github.com/kutyel/haskell-book#readme
 bug-reports:    https://github.com/kutyel/haskell-book/issues
+cabal-version:  1.12
 author:         Flavio Corpa
 maintainer:     flaviocorpa@gmail.com
-copyright:      MIT
+copyright:      Flavio Corpa © 2020
+category:       Education
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
