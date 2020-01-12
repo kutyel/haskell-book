@@ -121,3 +121,19 @@ instance (Monad m) => Monad (StateT s m) where
   StateT sma >>= f = StateT $ \s -> do
     (a, s') <- sma s
     runStateT (f a) s'
+
+-- exercise: wrap it up
+embedded :: MaybeT (EitherT String (ReaderT () IO)) Int
+embedded = return 1
+
+maybeUnwrap :: EitherT String (ReaderT () IO) (Maybe Int)
+maybeUnwrap = runMaybeT embedded
+
+eitherUnwrap :: ReaderT () IO (Either String (Maybe Int))
+eitherUnwrap = runEitherT maybeUnwrap
+
+readerUnwrap :: () -> IO (Either String (Maybe Int))
+readerUnwrap = runReaderT eitherUnwrap
+
+embedded' :: MaybeT (EitherT String (ReaderT () IO)) Int
+embedded' = (MaybeT . EitherT . ReaderT) . const . pure . Right $ Just 1
