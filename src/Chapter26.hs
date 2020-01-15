@@ -137,3 +137,21 @@ readerUnwrap = runReaderT eitherUnwrap
 
 embedded' :: MaybeT (EitherT String (ReaderT () IO)) Int
 embedded' = (MaybeT . EitherT . ReaderT) . const . pure . Right $ Just 1
+
+-- exercises: Lift More
+class MonadTrans t where
+  lift :: Monad m => m a -> t m a
+
+instance MonadTrans MaybeT where
+  lift = MaybeT . fmap Just
+
+instance MonadTrans (EitherT e) where
+  lift = EitherT . fmap Right
+
+instance MonadTrans (ReaderT r) where
+  lift = ReaderT . const
+
+instance MonadTrans (StateT s) where
+  lift m = StateT $ \s -> do
+    a <- m
+    pure (a, s)
