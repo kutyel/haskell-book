@@ -155,3 +155,22 @@ instance MonadTrans (StateT s) where
   lift m = StateT $ \s -> do
     a <- m
     pure (a, s)
+
+-- exercises: Some Instances
+class (Monad m) => MonadIO m where
+  liftIO :: IO a -> m a
+
+-- 1)
+instance (MonadIO m) => MonadIO (MaybeT m) where
+  liftIO = lift . liftIO
+
+instance (MonadIO m) => MonadIO (EitherT e m) where
+  liftIO = lift . liftIO
+
+-- 2)
+instance (MonadIO m) => MonadIO (ReaderT r m) where
+  liftIO = lift . liftIO
+
+-- 3)
+instance (MonadIO m) => MonadIO (StateT s m) where
+  liftIO = lift . liftIO
