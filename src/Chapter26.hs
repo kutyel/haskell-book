@@ -1,6 +1,5 @@
 module Chapter26 where
 
-import Chapter22 (Reader (..))
 import Control.Arrow (first)
 import Data.Functor.Identity
 
@@ -179,8 +178,8 @@ instance (MonadIO m) => MonadIO (StateT s m) where
 
 -- chapter exercises
 -- 1) 2)
-rDec :: Num a => Reader a a
-rDec = Reader $ flip (-) 1
+rDec :: (Monad m, Num a) => ReaderT a m a
+rDec = ReaderT $ pure . flip (-) 1
 
 -- 3) 4)
 rShow :: Show a => ReaderT a Identity String
