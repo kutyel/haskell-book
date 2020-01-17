@@ -126,7 +126,7 @@ instance (Monad m) => Monad (StateT s m) where
 
 -- exercise: wrap it up
 embedded :: MaybeT (EitherT String (ReaderT () IO)) Int
-embedded = return 1
+embedded = pure 1
 
 maybeUnwrap :: EitherT String (ReaderT () IO) (Maybe Int)
 maybeUnwrap = runMaybeT embedded
@@ -182,6 +182,12 @@ instance (MonadIO m) => MonadIO (StateT s m) where
 rDec :: Num a => Reader a a
 rDec = Reader $ flip (-) 1
 
--- 3)
+-- 3) 4)
 rShow :: Show a => ReaderT a Identity String
 rShow = ReaderT $ Identity . show
+
+-- 5)
+rPrintAndInc :: (Num a, Show a) => ReaderT a IO a
+rPrintAndInc = do
+  ReaderT $ putStrLn . ("Hi: " ++) . show
+  ReaderT $ pure . (+ 1)
