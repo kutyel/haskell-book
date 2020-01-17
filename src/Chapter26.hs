@@ -1,6 +1,8 @@
 module Chapter26 where
 
+import Chapter22 (Reader (..))
 import Control.Arrow (first)
+import Data.Functor.Identity
 
 newtype MaybeT m a
   = MaybeT
@@ -174,3 +176,12 @@ instance (MonadIO m) => MonadIO (ReaderT r m) where
 -- 3)
 instance (MonadIO m) => MonadIO (StateT s m) where
   liftIO = lift . liftIO
+
+-- chapter exercises
+-- 1) 2)
+rDec :: Num a => Reader a a
+rDec = Reader $ flip (-) 1
+
+-- 3)
+rShow :: Show a => ReaderT a Identity String
+rShow = ReaderT $ Identity . show
