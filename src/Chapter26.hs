@@ -1,6 +1,8 @@
 module Chapter26 where
 
+import Control.Applicative (Alternative (..))
 import Control.Arrow (first)
+import Control.Monad (guard)
 import Data.Functor.Identity
 
 newtype MaybeT m a
@@ -190,3 +192,41 @@ rPrintAndInc :: (Num a, Show a) => ReaderT a IO a
 rPrintAndInc = do
   ReaderT $ putStrLn . ("Hi: " ++) . show
   ReaderT $ pure . (+ 1)
+
+-- 6)
+instance MonadIO IO where
+  liftIO = id
+
+sPrintIncAccum :: (Num a, Show a) => StateT a IO String
+sPrintIncAccum = StateT $ \s -> do
+  liftIO . putStrLn $ "Hi: " ++ show s
+  pure (show s, s + 1)
+
+-- fix the code
+{- This instance is here so that I can use `guard` with MaybeT -}
+instance (Monad m) => Alternative (MaybeT m) where
+
+  empty = MaybeT $ pure Nothing
+
+  x <|> y = MaybeT $ do
+    v <- runMaybeT x
+    case v of
+      Nothing -> runMaybeT y
+      Just _ -> pure v
+
+isValid :: String -> Bool
+isValid = elem '!'
+
+maybeExcite :: MaybeT IO String
+maybeExcite = do
+  v <- liftIO getLine
+  guard $ isValid v
+  pure v
+
+doExcite :: IO ()
+doExcite = do
+  putStrLn "say something excite!"
+  excite <- runMaybeT maybeExcite
+  case excite of
+    Nothing -> putStrLn "MOAR EXCITE"
+    Just e -> putStrLn ("Good, was very excite: " ++ e)
