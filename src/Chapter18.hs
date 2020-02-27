@@ -26,7 +26,6 @@ instance Functor (Sum a) where
   fmap f (Second x) = Second $ f x
 
 instance Applicative (Sum a) where
-
   pure = Second
 
   First x <*> _ = First x
@@ -34,7 +33,6 @@ instance Applicative (Sum a) where
   Second f <*> Second x = Second $ f x
 
 instance Monad (Sum a) where
-
   return = pure
 
   First x >>= _ = First x
@@ -50,13 +48,11 @@ instance Functor Nope where
   fmap _ _ = NopeDotJpg
 
 instance Applicative Nope where
-
   pure = const NopeDotJpg
 
   _ <*> _ = NopeDotJpg
 
 instance Monad Nope where
-
   return = pure
 
   _ >>= _ = NopeDotJpg
@@ -72,7 +68,6 @@ instance Functor (BahEither b) where
   fmap f (PLeft x) = PLeft $ f x
 
 instance Applicative (BahEither b) where
-
   pure = PLeft
 
   PRight x <*> _ = PRight x
@@ -80,7 +75,6 @@ instance Applicative (BahEither b) where
   PLeft f <*> PLeft x = PLeft $ f x
 
 instance Monad (BahEither b) where
-
   return = pure
 
   PRight x >>= _ = PRight x
@@ -95,13 +89,11 @@ instance Functor Identity where
   fmap f (Identity x) = Identity $ f x
 
 instance Applicative Identity where
-
   pure = Identity
 
   Identity f <*> Identity x = Identity $ f x
 
 instance Monad Identity where
-
   return = pure
 
   Identity x >>= f = f x
@@ -121,7 +113,6 @@ instance Functor List where
   fmap f (Cons x xs) = Cons (f x) (fmap f xs)
 
 instance Applicative List where
-
   pure = flip Cons Nil
 
   Nil <*> _ = Nil
@@ -129,7 +120,6 @@ instance Applicative List where
   Cons f fs <*> xs = (f <$> xs) `append` (fs <*> xs)
 
 instance Monad List where
-
   return = pure
 
   Nil >>= _ = Nil

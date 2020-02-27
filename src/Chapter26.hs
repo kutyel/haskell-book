@@ -14,13 +14,11 @@ instance (Functor f) => Functor (MaybeT f) where
   fmap f (MaybeT fma) = MaybeT $ (fmap . fmap) f fma
 
 instance (Applicative f) => Applicative (MaybeT f) where
-
   pure = MaybeT . pure . pure
 
   MaybeT f <*> MaybeT a = MaybeT $ (<*>) <$> f <*> a
 
 instance Monad m => Monad (MaybeT m) where
-
   return = pure
 
   MaybeT ma >>= f = MaybeT $ do
@@ -41,14 +39,12 @@ instance (Functor m) => Functor (EitherT e m) where
 
 -- 2)
 instance (Applicative m) => Applicative (EitherT e m) where
-
   pure = EitherT . pure . pure
 
   EitherT f <*> EitherT a = EitherT $ (<*>) <$> f <*> a
 
 -- 3)
 instance Monad m => Monad (EitherT e m) where
-
   return = pure
 
   EitherT me >>= f = EitherT $ do
@@ -83,13 +79,11 @@ instance (Functor m) => Functor (ReaderT r m) where
   fmap f (ReaderT rma) = ReaderT $ (fmap . fmap) f rma
 
 instance (Applicative m) => Applicative (ReaderT r m) where
-
   pure = ReaderT . pure . pure
 
   ReaderT fmab <*> ReaderT rma = ReaderT $ (<*>) <$> fmab <*> rma
 
 instance (Monad m) => Monad (ReaderT r m) where
-
   return = pure
 
   ReaderT rma >>= f = ReaderT $ \r -> do
@@ -108,7 +102,6 @@ instance (Functor m) => Functor (StateT s m) where
 
 -- 2)
 instance (Monad m) => Applicative (StateT s m) where
-
   pure a = StateT $ \s -> pure (a, s)
 
   StateT g <*> StateT h = StateT $ \s -> do
@@ -118,7 +111,6 @@ instance (Monad m) => Applicative (StateT s m) where
 
 -- 3)
 instance (Monad m) => Monad (StateT s m) where
-
   return = pure
 
   StateT sma >>= f = StateT $ \s -> do
@@ -205,7 +197,6 @@ sPrintIncAccum = StateT $ \s -> do
 -- fix the code
 {- This instance is here so that I can use `guard` with MaybeT -}
 instance (Monad m) => Alternative (MaybeT m) where
-
   empty = MaybeT $ pure Nothing
 
   x <|> y = MaybeT $ do

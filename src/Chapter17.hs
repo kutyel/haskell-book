@@ -72,7 +72,6 @@ instance Functor Identity where
   fmap f (Identity x) = Identity (f x)
 
 instance Applicative Identity where
-
   pure = Identity
 
   Identity f <*> Identity x = Identity (f x)
@@ -88,7 +87,6 @@ instance Functor (Constant a) where
   fmap _ (Constant x) = Constant x
 
 instance Monoid a => Applicative (Constant a) where
-
   pure = Constant . mempty
 
   (Constant x) <*> (Constant y) = Constant (x <> y)
@@ -111,7 +109,6 @@ instance Functor Option where
   fmap f (Some x) = Some (f x)
 
 instance Applicative Option where
-
   pure = Some
 
   None <*> _ = None
@@ -129,7 +126,6 @@ instance Functor List where
   fmap f (Cons x xs) = Cons (f x) (fmap f xs)
 
 instance Applicative List where
-
   pure = flip Cons Nil
 
   Nil <*> _ = Nil
@@ -163,7 +159,6 @@ instance Functor ZipList' where
   fmap f (ZipList' xs) = ZipList' $ fmap f xs
 
 instance Applicative ZipList' where
-
   pure x = ZipList' (Cons x Nil)
 
   _ <*> ZipList' Nil = ZipList' Nil
@@ -189,7 +184,6 @@ instance Functor (Validation e) where
   fmap f (Success x) = Success (f x)
 
 instance Monoid e => Applicative (Validation e) where
-
   pure = Success
 
   x <*> y =
@@ -247,7 +241,6 @@ instance Functor Pair where
   fmap f (Pair x y) = Pair (f x) (f y)
 
 instance Applicative Pair where
-
   pure x = Pair x x
 
   Pair f g <*> Pair x y = Pair (f x) (g y)
@@ -261,7 +254,6 @@ instance Functor (Two a) where
   fmap f (Two x y) = Two x (f y)
 
 instance Monoid a => Applicative (Two a) where
-
   pure = Two mempty
 
   Two a f <*> Two b x = Two (a <> b) (f x)
@@ -275,7 +267,6 @@ instance Functor (Three a b) where
   fmap f (Three x y z) = Three x y (f z)
 
 instance (Monoid a, Monoid b) => Applicative (Three a b) where
-
   pure = Three mempty mempty
 
   Three a b f <*> Three c d x = Three (a <> c) (b <> d) (f x)
@@ -289,7 +280,6 @@ instance Functor (Three' a) where
   fmap f (Three' x y z) = Three' x (f y) (f z)
 
 instance Monoid a => Applicative (Three' a) where
-
   pure x = Three' mempty x x
 
   Three' a f g <*> Three' b x y = Three' (a <> b) (f x) (g y)
@@ -303,7 +293,6 @@ instance Functor (Four a b c) where
   fmap f (Four x y z a) = Four x y z (f a)
 
 instance (Monoid a, Monoid b, Monoid c) => Applicative (Four a b c) where
-
   pure = Four mempty mempty mempty
 
   Four a b c f <*> Four d e i x = Four (a <> d) (b <> e) (c <> i) (f x)
@@ -317,7 +306,6 @@ instance Functor (Four' a) where
   fmap f (Four' x y z a) = Four' x y z (f a)
 
 instance Monoid a => Applicative (Four' a) where
-
   pure = Four' mempty mempty mempty
 
   Four' a b c f <*> Four' d e i x = Four' (a <> d) (b <> e) (c <> i) (f x)

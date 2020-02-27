@@ -69,7 +69,6 @@ instance Functor (State s) where
   fmap f (State g) = State (first f . g)
 
 instance Applicative (State s) where
-
   pure :: a -> State s a
   pure a = State (a,)
 
@@ -81,7 +80,6 @@ instance Applicative (State s) where
        in (fab x, s'')
 
 instance Monad (State s) where
-
   return = pure
 
   (>>=) :: State s a -> (a -> State s b) -> State s b

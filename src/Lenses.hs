@@ -63,13 +63,14 @@ me =
   Haskeller
     { name = "Flavio",
       experience = 1,
-      knowledge = Knowledge
-        { syntax = True,
-          monads = True,
-          lenses = False,
-          typeLevel = False,
-          nix = False
-        }
+      knowledge =
+        Knowledge
+          { syntax = True,
+            monads = True,
+            lenses = False,
+            typeLevel = False,
+            nix = False
+          }
     }
 
 betterMe :: Haskeller

@@ -49,6 +49,7 @@ library
       Database
       DetermineTheType
       EqInstances
+      GADTs
       GreetIfCool1
       GreetIfCool2
       Hutton

@@ -53,7 +53,6 @@ instance Functor (Reader r) where
   fmap f (Reader ra) = Reader (f . ra)
 
 instance Applicative (Reader r) where
-
   pure :: a -> Reader r a
   pure a = Reader $ pure a
 
@@ -62,7 +61,6 @@ instance Applicative (Reader r) where
 
 -- Reader Monad
 instance Monad (Reader r) where
-
   return = pure
 
   (>>=) :: Reader r a -> (a -> Reader r b) -> Reader r b

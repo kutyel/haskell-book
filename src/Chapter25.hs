@@ -16,7 +16,6 @@ instance (Functor f, Functor g) => Functor (Compose f g) where
   fmap f (Compose fga) = Compose $ (fmap . fmap) f fga
 
 instance (Applicative f, Applicative g) => Applicative (Compose f g) where
-
   pure :: a -> Compose f g a
   pure = Compose . pure . pure
 
@@ -33,7 +32,6 @@ instance (Traversable f, Traversable g) => Traversable (Compose f g) where
 
 -- Bifunctors here
 class Bifunctor p where
-
   {-# MINIMAL bimap | first, second #-}
 
   bimap :: (a -> b) -> (c -> d) -> p a c -> p b d
@@ -97,7 +95,6 @@ instance Functor m => Functor (IdentityT m) where
   fmap f (IdentityT ma) = IdentityT $ f <$> ma
 
 instance Applicative m => Applicative (IdentityT m) where
-
   pure :: a -> IdentityT m a
   pure a = IdentityT $ pure a
 
@@ -105,7 +102,6 @@ instance Applicative m => Applicative (IdentityT m) where
   IdentityT mf <*> IdentityT ma = IdentityT $ mf <*> ma
 
 instance Monad m => Monad (IdentityT m) where
-
   return :: a -> IdentityT m a
   return = pure
 
