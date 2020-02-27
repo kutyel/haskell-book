@@ -1,77 +1,78 @@
-name:           haskell-book
-version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/kutyel/haskell-book#readme>
-homepage:       https://github.com/kutyel/haskell-book#readme
-bug-reports:    https://github.com/kutyel/haskell-book/issues
-cabal-version:  1.12
-author:         Flavio Corpa
-maintainer:     flaviocorpa@gmail.com
-copyright:      Flavio Corpa © 2020
-category:       Education
-license:        BSD3
-license-file:   LICENSE
-build-type:     Simple
-extra-source-files:
-    README.md
+name:               haskell-book
+version:            0.1.0.0
+description:
+  Please see the README on GitHub at <https://github.com/kutyel/haskell-book#readme>
+
+homepage:           https://github.com/kutyel/haskell-book#readme
+bug-reports:        https://github.com/kutyel/haskell-book/issues
+cabal-version:      1.12
+author:             Flavio Corpa
+maintainer:         flaviocorpa@gmail.com
+copyright:          Flavio Corpa © 2020
+category:           Education
+license:            BSD3
+license-file:       LICENSE
+build-type:         Simple
+extra-source-files: README.md
 
 source-repository head
-  type: git
+  type:     git
   location: https://github.com/kutyel/haskell-book
 
 library
   exposed-modules:
-      Ackermann
-      Arith2
-      Arith3
-      Arith4
-      BinaryTrees
-      Chapter10
-      Chapter11
-      Chapter12
-      Chapter13
-      Chapter14
-      Chapter15
-      Chapter16
-      Chapter17
-      Chapter18
-      Chapter20
-      Chapter21
-      Chapter22
-      Chapter23
-      Chapter24
-      Chapter25
-      Chapter26
-      Chapter6
-      Chapter7
-      Chapter8
-      Chapter9
-      Cipher
-      Database
-      DetermineTheType
-      EqInstances
-      GADTs
-      GreetIfCool1
-      GreetIfCool2
-      Hutton
-      Lenses
-      Lib
-      Mood
-      Phone
-      PoemLines
-      Print3Broken
-      Print3Flipped
-      ReplaceExperiment
-      Reverse
-      Sing
-      TopOrLocal
-      TypeKwonDo
-      TypeKwonDo2
-      WordNumber
+    Ackermann
+    Arith2
+    Arith3
+    Arith4
+    BinaryTrees
+    Chapter10
+    Chapter11
+    Chapter12
+    Chapter13
+    Chapter14
+    Chapter15
+    Chapter16
+    Chapter17
+    Chapter18
+    Chapter20
+    Chapter21
+    Chapter22
+    Chapter23
+    Chapter24
+    Chapter25
+    Chapter26
+    Chapter6
+    Chapter7
+    Chapter8
+    Chapter9
+    Cipher
+    Database
+    DetermineTheType
+    EqInstances
+    GADTs
+    GreetIfCool1
+    GreetIfCool2
+    Hutton
+    Lenses
+    Lib
+    Mood
+    Phone
+    PoemLines
+    Print3Broken
+    Print3Flipped
+    ReplaceExperiment
+    Reverse
+    Sing
+    TopOrLocal
+    TypeKwonDo
+    TypeKwonDo2
+    WordNumber
+
   -- other-modules:
-  hs-source-dirs:
-      src
+  hs-source-dirs:   src
   build-depends:
-      base >=4.7 && <5
+      base          >=4.7 && <5
     , cond
     , generic-lens
     , parsers
@@ -79,35 +80,38 @@ library
     , split
     , time
     , trifecta
+
   default-language: Haskell2010
 
 test-suite haskell-book-test
-  type: exitcode-stdio-1.0
-  main-is: Spec.hs
+  type:             exitcode-stdio-1.0
+  main-is:          Spec.hs
   other-modules:
-      Test.Chapter14
-      Test.Chapter15
-      Test.Chapter16
-      Test.Chapter17
-      Test.Chapter18
-      Test.Chapter20
-      Test.Chapter21
-      Test.Chapter8
-      Test.Cipher
-      Test.WordNumber
-  hs-source-dirs:
-      test
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+    Test.Chapter14Spec
+    Test.Chapter15Spec
+    Test.Chapter16Spec
+    Test.Chapter17Spec
+    Test.Chapter18Spec
+    Test.Chapter20Spec
+    Test.Chapter21Spec
+    Test.Chapter8Spec
+    Test.CipherSpec
+    Test.WordNumberSpec
+
+  hs-source-dirs:   test
+  ghc-options:      -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      QuickCheck
-    , base >=4.7 && <5
+      base            >=4.7 && <5
     , checkers
     , cond
     , generic-lens
     , haskell-book
     , hspec
+    , hspec-discover
     , parsers
+    , QuickCheck
     , random
     , split
     , time
+
   default-language: Haskell2010

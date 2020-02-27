@@ -1,4 +1,4 @@
-module Test.Cipher where
+module Test.CipherSpec where
 
 import Cipher
 import Test.Hspec

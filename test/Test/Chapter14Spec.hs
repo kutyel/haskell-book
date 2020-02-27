@@ -1,4 +1,4 @@
-module Test.Chapter14 where
+module Test.Chapter14Spec where
 
 import Chapter14
 import Data.List (sort)

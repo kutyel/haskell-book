@@ -1,4 +1,4 @@
-module Test.Chapter18 where
+module Test.Chapter18Spec where
 
 import Chapter17 (pureList)
 import Chapter18

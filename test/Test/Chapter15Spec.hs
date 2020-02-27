@@ -1,4 +1,4 @@
-module Test.Chapter15 where
+module Test.Chapter15Spec where
 
 import Chapter15
 import Data.Monoid

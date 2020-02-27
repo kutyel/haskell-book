@@ -1,4 +1,4 @@
-module Test.Chapter17 where
+module Test.Chapter17Spec where
 
 import Chapter17
 import Control.Applicative (liftA2)

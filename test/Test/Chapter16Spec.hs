@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleInstances #-}
 
-module Test.Chapter16 where
+module Test.Chapter16Spec where
 
 import Chapter16
 import Test.Hspec

@@ -1,4 +1,4 @@
-module Test.Chapter8 where
+module Test.Chapter8Spec where
 
 import Chapter8 (dividedBy, mult)
 import Test.Hspec
