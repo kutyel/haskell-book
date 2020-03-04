@@ -1,4 +1,9 @@
+{-# LANGUAGE BangPatterns #-}
+{-# LANGUAGE ImplicitParams #-}
+
 module Chapter27 where
+
+import Debug.Trace
 
 {-# ANN module "HLint: ignore" #-}
 
@@ -25,6 +30,7 @@ ex4 = flip const 1 undefined
 ex5 :: a
 ex5 = const undefined undefined
 
+-- Note on foldr: remember that `foldr` replaces `:` by `f`s and `[]` with `z`! (2nd argument)
 -- 6) 'a' : 'b' : 'c' : 'd' : 'e' : [] -> 'a' `const` 'b' `const` 'c' `const` 'd' `const` 'e' `const` 'z' -> 'a'
 ex6 :: Char
 ex6 = foldr const 'z' ['a' .. 'e']
@@ -32,4 +38,35 @@ ex6 = foldr const 'z' ['a' .. 'e']
 -- 7) 'a' : 'b' : 'c' : 'd' : 'e' : [] -> 'a' `fconst` 'b' `fconst` 'c' `fconst` 'd' `fconst` 'e' `fconst` 'z' -> 'z'
 ex7 :: Char
 ex7 = foldr (flip const) 'z' ['a' .. 'e']
--- Note on foldr: remember that `foldr` replaces `:` by `f`s and `[]` with `z`! (2nd argument)
+
+-- Implicit Parameters (language extension)
+
+add :: (?x :: Int) => Int
+add = trace "add" 1 + ?x
+
+-- * Chapter27 Data.List Debug.Trace> let ?x = 2 in add
+-- add
+-- 3
+
+-- Forcing sharing (Control.Monad.forever)
+forever :: (Monad m) => m a -> m b
+forever a = let a' = a >> a' in a'
+
+-- Lazy patterns
+
+strictPattern :: (a, b) -> String
+strictPattern (a, b) = const "Cousing It" a
+
+-- * Chapter27 Data.List Debug.Trace> strictPattern undefined
+-- "*** Exception: Prelude.undefined
+
+lazyPattern :: (a, b) -> String
+lazyPattern ~(a, b) = const "Cousing It" a
+
+-- * Chapter27 Data.List Debug.Trace> lazyPattern undefined
+-- "Cousing It"
+
+-- Bang patterns
+
+banging :: Bool -> Int
+banging !b = 1 -- `b` always gets evaluated! (like with `seq`)
