@@ -11,10 +11,10 @@ mkDerivation {
     base cond generic-lens parsers random split time trifecta
   ];
   executableHaskellDepends = [
-    base cond generic-lens parsers random split time trifecta
+    base cond parsers random split time trifecta
   ];
   testHaskellDepends = [
-    base checkers cond generic-lens hspec QuickCheck random split time
+    base checkers cond hspec QuickCheck
   ];
   homepage = "https://github.com/kutyel/haskell-book#readme";
   license = stdenv.lib.licenses.bsd3;
