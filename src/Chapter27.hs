@@ -111,6 +111,23 @@ main = print $ take' 10 $ map' (+ 1) (repeat' 1)
 -- 5) let f :: Int -> Int; f = \x -> x
 --    let x = f 1 => x = _
 
+-- Will printing this expression result in bottom?
+
+-- 1) snd (undefined, 1) ✅
+
+-- 2) let x = undefined
+--    let y = x `seq` 1 in snd (x, y) 🚫
+
+-- 3) length $ [1..5] ++ undefined 🚫
+
+-- 4) length $ [1..5] ++ [undefined] ✅
+
+-- 5) const 1 undefined ✅
+
+-- 6) const 1 (undefined `seq` 1) ✅
+
+-- 7) const undefined 1 🚫
+
 -- Make the expression bottom
 
 bot :: IO ()
