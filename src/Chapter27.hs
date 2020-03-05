@@ -130,8 +130,16 @@ main = print $ take' 10 $ map' (+ 1) (repeat' 1)
 
 -- Make the expression bottom
 
+-- with bang patterns
 bot :: IO ()
 bot =
   let !x = undefined
       y = "blah"
+   in print $ snd (x, y)
+
+-- or optionally, with seq!
+bot' :: IO ()
+bot' =
+  let x = undefined
+      y = x `seq` "blah"
    in print $ snd (x, y)
