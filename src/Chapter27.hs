@@ -70,3 +70,27 @@ lazyPattern ~(a, b) = const "Cousing It" a
 
 banging :: Bool -> Int
 banging !b = 1 -- `b` always gets evaluated! (like with `seq`)
+
+-- Chapter exercises
+
+-- Strict list: LANGUAGE Strict == Cons !a !(List a)
+
+data List a
+  = Nil
+  | Cons a (List a)
+  deriving (Show)
+
+take' :: (Ord n, Num n) => n -> List a -> List a
+take' n _ | n <= 0 = Nil
+take' _ Nil = Nil
+take' n (Cons x xs) = Cons x (take' (n -1) xs)
+
+map' :: (a -> b) -> List a -> List b
+map' _ Nil = Nil
+map' f (Cons x xs) = Cons (f x) (map' f xs)
+
+repeat' :: a -> List a
+repeat' x = xs where xs = Cons x xs
+
+main :: IO ()
+main = print $ take' 10 $ map' (+ 1) (repeat' 1)
