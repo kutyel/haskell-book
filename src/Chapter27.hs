@@ -94,3 +94,11 @@ repeat' x = xs where xs = Cons x xs
 
 main :: IO ()
 main = print $ take' 10 $ map' (+ 1) (repeat' 1)
+
+-- Make the expression bottom
+
+bot :: IO ()
+bot =
+  let !x = undefined
+      y = "blah"
+   in print $ snd (x, y)
