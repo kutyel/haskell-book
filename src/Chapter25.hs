@@ -20,7 +20,7 @@ instance (Applicative f, Applicative g) => Applicative (Compose f g) where
   pure = Compose . pure . pure
 
   (<*>) :: Compose f g (a -> b) -> Compose f g a -> Compose f g b
-  Compose f <*> Compose a = Compose $ ((<*>) <$> f) <*> a
+  Compose f <*> Compose a = Compose $ (<*>) <$> f <*> a
 
 -- compose instances
 
