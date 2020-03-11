@@ -43,6 +43,7 @@ library
     Chapter25
     Chapter26
     Chapter27
+    Chapter28
     Chapter6
     Chapter7
     Chapter8
@@ -75,12 +76,15 @@ library
   build-depends:
       base          >=4.7 && <5
     , cond
+    , containers
+    , criterion
     , generic-lens
     , parsers
     , random
     , split
     , time
     , trifecta
+    , vector
 
   default-language: Haskell2010
 
