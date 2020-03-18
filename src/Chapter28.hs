@@ -4,6 +4,7 @@ module Chapter28 where
 
 import Criterion.Main
 import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- safe access operator
 infixl 0 !?
@@ -41,6 +42,39 @@ pairList = genList 9001
 testMap :: M.Map String Int
 testMap = M.fromList pairList
 
+-- Set
+
+m :: M.Map Int Int
+m = M.fromList $ take 10000 stream
+  where
+    stream = iterate bumpIt (0, 0)
+    bumpIt (i, v) = (i + 1, v + 1)
+
+s :: S.Set Int
+s = S.fromList $ take 10000 stream
+  where
+    stream = iterate (+ 1) 0
+
+membersMap :: Int -> Bool
+membersMap i = M.member i m
+
+membersSet :: Int -> Bool
+membersSet i = S.member i s
+
+-- Exercise: benchmark practice
+
+insertionMap :: Int -> M.Map Int Int
+insertionMap i = M.insert i i m
+
+insertionSet :: Int -> S.Set Int
+insertionSet i = S.insert i s
+
+unionMap :: M.Map Int Int -> M.Map Int Int
+unionMap = M.union m
+
+unionSet :: S.Set Int -> S.Set Int
+unionSet = S.union s
+
 main :: IO ()
 main =
   defaultMain
@@ -49,5 +83,12 @@ main =
       bench "index list maybe index" $ whnf (myList !?) 9998,
       -- benchmark maps against lists
       bench "lookup one thing, list" $ whnf (lookup "notfound") pairList,
-      bench "lookup one thing, map" $ whnf (M.lookup "notfound") testMap
+      bench "lookup one thing, map" $ whnf (M.lookup "notfound") testMap,
+      -- benchmark maps against sets
+      bench "member check map" $ whnf membersMap 9999,
+      bench "member check set" $ whnf membersSet 9999,
+      bench "insert check map" $ whnf insertionMap 9999,
+      bench "insert check set" $ whnf insertionSet 9999,
+      bench "union check map" $ whnf unionMap m,
+      bench "union check set" $ whnf unionSet s
     ]
