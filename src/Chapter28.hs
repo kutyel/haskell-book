@@ -75,6 +75,56 @@ unionMap = M.union m
 unionSet :: S.Set Int -> S.Set Int
 unionSet = S.union s
 
+-- Exercise: vectors TODO:
+
+-- Chapter exercises
+
+-- DList!
+newtype DList a
+  = DL
+      { unDL :: [a] -> [a]
+      }
+
+empty :: DList a
+empty = DL id
+{-# INLINE empty #-}
+
+singleton :: a -> DList a
+singleton = DL . (:)
+{-# INLINE singleton #-}
+
+toList :: DList a -> [a]
+toList = ($ []) . unDL
+{-# INLINE toList #-}
+
+infixr 9 `cons`
+
+cons :: a -> DList a -> DList a
+cons x xs = DL ((x :) . unDL xs)
+{-# INLINE cons #-}
+
+infixl 9 `snoc`
+
+snoc :: DList a -> a -> DList a
+snoc xs x = DL (unDL xs . (x :))
+{-# INLINE snoc #-}
+
+append :: DList a -> DList a -> DList a
+append xs ys = DL (unDL xs . unDL ys)
+{-# INLINE append #-}
+
+schlemiel :: Int -> [Int]
+schlemiel i = go i []
+  where
+    go 0 xs = xs
+    go n xs = go (n - 1) (n : xs)
+
+constructDlist :: Int -> [Int]
+constructDlist i = toList $ go i empty
+  where
+    go 0 xs = xs
+    go n xs = go (n - 1) (singleton n `append` xs)
+
 main :: IO ()
 main =
   defaultMain
@@ -90,5 +140,8 @@ main =
       bench "insert check map" $ whnf insertionMap 9999,
       bench "insert check set" $ whnf insertionSet 9999,
       bench "union check map" $ whnf unionMap m,
-      bench "union check set" $ whnf unionSet s
+      bench "union check set" $ whnf unionSet s,
+      -- benchmark lists aganst dlists!
+      bench "concat list" $ whnf schlemiel 123456,
+      bench "concat dlist" $ whnf constructDlist 123456
     ]
