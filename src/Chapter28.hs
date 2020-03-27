@@ -4,8 +4,9 @@ module Chapter28 where
 
 import Criterion.Main
 import qualified Data.Map as M
-import qualified Data.Sequence as Seq
+import qualified Data.Sequence as SQ
 import qualified Data.Set as S
+import qualified Data.Vector as V
 
 -- safe access operator
 infixl 0 !?
@@ -81,11 +82,19 @@ unionSet = S.union s
 lists :: [[Int]]
 lists = replicate 10 myList
 
-seqs :: [Seq.Seq Int]
-seqs = replicate 10 (Seq.fromList myList)
+seqs :: [SQ.Seq Int]
+seqs = replicate 10 (SQ.fromList myList)
 
-seq' :: Seq.Seq Int
-seq' = Seq.fromList myList
+seq' :: SQ.Seq Int
+seq' = SQ.fromList myList
+
+-- Vectors
+
+slice :: Int -> Int -> [a] -> [a]
+slice from len xs = take len (drop from xs)
+
+v :: V.Vector Int
+v = V.fromList myList
 
 -- Exercise: vectors TODO:
 
@@ -177,8 +186,11 @@ main =
       bench "concatenate lists" $ nf mconcat lists,
       bench "concatenate sequences" $ nf mconcat seqs,
       bench "indexing list" $ whnf (!! 9001) myList,
-      bench "indexing sequence" $ whnf (`Seq.index` 9001) seq',
-      -- benchmark lists aganst dlists!
+      bench "indexing sequence" $ whnf (`SQ.index` 9001) seq',
+      -- benchmark lists against vectors!
+      bench "slicing list" $ whnf (head . slice 100 900) myList,
+      bench "slicing vector" $ whnf (V.head . V.slice 100 900) v,
+      -- benchmark lists against dlists!
       bench "concat list" $ whnf schlemiel 123456,
       bench "concat dlist" $ whnf constructDlist 123456
     ]
