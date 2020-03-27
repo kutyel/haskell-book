@@ -76,6 +76,17 @@ unionMap = M.union m
 unionSet :: S.Set Int -> S.Set Int
 unionSet = S.union s
 
+-- Sequence
+
+lists :: [[Int]]
+lists = replicate 10 myList
+
+seqs :: [Seq.Seq Int]
+seqs = replicate 10 (Seq.fromList myList)
+
+seq' :: Seq.Seq Int
+seq' = Seq.fromList myList
+
 -- Exercise: vectors TODO:
 
 -- Chapter exercises
@@ -162,6 +173,11 @@ main =
       bench "insert check set" $ whnf insertionSet 9999,
       bench "union check map" $ whnf unionMap m,
       bench "union check set" $ whnf unionSet s,
+      -- benchmark lists against sequences
+      bench "concatenate lists" $ nf mconcat lists,
+      bench "concatenate sequences" $ nf mconcat seqs,
+      bench "indexing list" $ whnf (!! 9001) myList,
+      bench "indexing sequence" $ whnf (`Seq.index` 9001) seq',
       -- benchmark lists aganst dlists!
       bench "concat list" $ whnf schlemiel 123456,
       bench "concat dlist" $ whnf constructDlist 123456
