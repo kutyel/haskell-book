@@ -4,6 +4,7 @@ module Chapter28 where
 
 import Criterion.Main
 import qualified Data.Map as M
+import qualified Data.Sequence as Seq
 import qualified Data.Set as S
 
 -- safe access operator
@@ -124,6 +125,26 @@ constructDlist i = toList $ go i empty
   where
     go 0 xs = xs
     go n xs = go (n - 1) (singleton n `append` xs)
+
+-- Queue!
+data Queue a
+  = Queue
+      { enqueue :: [a],
+        dequeue :: [a]
+      }
+  deriving (Eq, Show)
+
+newQ :: Queue a
+newQ = Queue [] []
+
+-- adds an item
+push :: a -> Queue a -> Queue a
+push x (Queue xs ys) = Queue xs (x : ys)
+
+pop :: Queue a -> Maybe (a, Queue a)
+pop (Queue [] []) = Nothing
+pop (Queue [] xs) = pop (Queue (reverse xs) [])
+pop (Queue (x : xs) ys) = Just (x, Queue xs ys)
 
 main :: IO ()
 main =

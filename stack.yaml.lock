@@ -3,24 +3,10 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
-packages:
-- completed:
-    size: 15667
-    url: https://github.com/kutyel/stack-hpc-coveralls/archive/842a15c64fd9410f10bd9f4fa8cf52779091418c.tar.gz
-    cabal-file:
-      size: 3176
-      sha256: 60fde3cd463b425a595efa54b621dba483e5c80d11b7c99cf57488b0fb6de1a7
-    name: stack-hpc-coveralls
-    version: 0.0.4.0
-    sha256: a3395934a469f55d732d133db043b94a6f52f3a56bacc9a77fe81cc92c30d087
-    pantry-tree:
-      size: 1300
-      sha256: e7f9975809b2aa1581e8cfdac112ee32df78c7473307827d85d9671cf3886257
-  original:
-    url: https://github.com/kutyel/stack-hpc-coveralls/archive/842a15c64fd9410f10bd9f4fa8cf52779091418c.tar.gz
+packages: []
 snapshots:
 - completed:
-    size: 499461
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/13/25.yaml
-    sha256: aed98969628e20615e96b06083c933c7e3354ae56b08b75e607a26569225d6c0
-  original: lts-13.25
+    size: 491372
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/15/5.yaml
+    sha256: 1b549cfff328040c382a70a84a2087aac8dab6d778bf92f32a93a771a1980dfc
+  original: lts-15.5
