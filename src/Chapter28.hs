@@ -159,7 +159,7 @@ newQ = Queue [] []
 
 -- adds an item
 push :: a -> Queue a -> Queue a
-push x (Queue xs ys) = Queue (x : ys) xs
+push x (Queue xs ys) = Queue (x : xs) ys
 
 -- removes an item from the queue
 pop :: Queue a -> Maybe (a, Queue a)
