@@ -26,12 +26,8 @@ data SomeError
 
 discriminateError :: MyException -> SomeError
 discriminateError (MyException e) =
-  case cast e of
-    Just arith -> Arith arith
-    Nothing ->
-      case cast e of
-        Just async -> Async async
-        Nothing -> SomethingElse
+  maybe (maybe SomethingElse Async (cast e)) Arith (cast e)
 
 runDisc :: Int -> SomeError
-runDisc n = either discriminateError (const SomethingElse) (multiError n)
+runDisc n =
+  either discriminateError (const SomethingElse) (multiError n)

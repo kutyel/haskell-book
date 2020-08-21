@@ -5,11 +5,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - uses: cachix/install-nix-action@v6
-    - uses: cachix/cachix-action@v3
+    - uses: cachix/install-nix-action@v10
+    - uses: cachix/cachix-action@v6
       with:
         name: kutyel
         signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
+    - run: nix-build
     # TODO: send coverage
     # - name: Send coverage
     #   run: |
