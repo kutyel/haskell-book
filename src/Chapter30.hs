@@ -5,8 +5,8 @@ module Chapter30 where
 import Control.Exception (ArithException (..), AsyncException (..))
 import Data.Typeable
 
-data MyException
-  = forall e. (Show e, Typeable e) => MyException e
+data MyException where
+  MyException :: (Show e, Typeable e) => e -> MyException
 
 instance Show MyException where
   showsPrec p (MyException e) = showsPrec p e
