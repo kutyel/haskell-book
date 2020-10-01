@@ -29,5 +29,4 @@ discriminateError (MyException e) =
   maybe (maybe SomethingElse Async (cast e)) Arith (cast e)
 
 runDisc :: Int -> SomeError
-runDisc n =
-  either discriminateError (const SomethingElse) (multiError n)
+runDisc = either discriminateError (const SomethingElse) . multiError
