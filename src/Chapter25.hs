@@ -6,10 +6,9 @@ module Chapter25 where
 
 -- twinplicative
 
-newtype Compose f g a
-  = Compose
-      { getCompose :: f (g a)
-      }
+newtype Compose f g a = Compose
+  { getCompose :: f (g a)
+  }
   deriving (Eq, Show)
 
 instance (Functor f, Functor g) => Functor (Compose f g) where
@@ -85,10 +84,9 @@ instance Bifunctor Either where
   bimap _ g (Right x) = Right $ g x
 
 -- my first Monad Transformer
-newtype IdentityT f a
-  = IdentityT
-      { runIdentityT :: f a
-      }
+newtype IdentityT f a = IdentityT
+  { runIdentityT :: f a
+  }
   deriving (Eq, Show)
 
 instance Functor m => Functor (IdentityT m) where

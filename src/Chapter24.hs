@@ -1,14 +1,31 @@
 module Chapter24 where
 
 import Control.Applicative ((<|>))
-import Data.Bits ((.&.), (.|.), shiftL, shiftR)
+import Data.Bits (shiftL, shiftR, (.&.), (.|.))
 import Data.Char (digitToInt, isDigit)
 import Data.List (intercalate, intersperse)
 import Data.Ratio ((%))
-import Data.Word
+import Data.Word (Word16, Word32, Word64)
 import Numeric (showHex)
 import Text.Parser.Combinators
+  ( Parsing (eof, notFollowedBy, skipMany, try, unexpected, (<?>)),
+    choice,
+    count,
+    optional,
+    some,
+  )
 import Text.Trifecta
+  ( CharParsing (char, satisfy, string),
+    Parser,
+    Result,
+    decimal,
+    digit,
+    hexDigit,
+    integer,
+    letter,
+    oneOf,
+    parseString,
+  )
 
 stop :: Parser a
 stop = unexpected "stop"

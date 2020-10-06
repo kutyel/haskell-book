@@ -4,7 +4,7 @@
 module Chapter11 where
 
 import Data.Char (toUpper)
-import Data.Int
+import Data.Int (Int8)
 import Data.List (intercalate)
 import Data.List.Split (splitOn)
 
@@ -157,11 +157,10 @@ data ProgLang
   | PureScript
   deriving (Eq, Show)
 
-data Programmer
-  = Programmer
-      { os :: OperatingSystem,
-        lang :: ProgLang
-      }
+data Programmer = Programmer
+  { os :: OperatingSystem,
+    lang :: ProgLang
+  }
   deriving (Eq, Show)
 
 allOperatingSystems :: [OperatingSystem]

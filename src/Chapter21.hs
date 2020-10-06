@@ -15,10 +15,9 @@ instance Traversable Identity where
   traverse f (Identity x) = Identity <$> f x
 
 -- Constant
-newtype Constant a b
-  = Constant
-      { getConstant :: a
-      }
+newtype Constant a b = Constant
+  { getConstant :: a
+  }
   deriving (Eq, Show)
 
 instance Functor (Constant a) where

@@ -5,7 +5,7 @@
 module Chapter23 where
 
 import Control.Arrow (first)
-import System.Random
+import System.Random (Random (randomR), StdGen)
 
 data Die
   = DieOne
@@ -59,10 +59,9 @@ rollsCountLogged n = go 0 (0, [])
          in go (sum + die) (c + 1, intToDie die : cs) nextGen
 
 -- write State yourself
-newtype State s a
-  = State
-      { runState :: s -> (a, s)
-      }
+newtype State s a = State
+  { runState :: s -> (a, s)
+  }
 
 instance Functor (State s) where
   fmap :: (a -> b) -> State s a -> State s b

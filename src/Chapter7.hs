@@ -175,4 +175,5 @@ foldBool' x y z
 -- 3)
 g :: (a -> b) -> (a, c) -> (b, c)
 g f (x, y) = (f x, y)
+
 -- 4, 5, 6) see -> Arith4.hs!

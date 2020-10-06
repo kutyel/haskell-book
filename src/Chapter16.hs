@@ -2,7 +2,7 @@
 
 module Chapter16 where
 
-import GHC.Arr
+import GHC.Arr (Array)
 
 -- 1) What is the kind of a? *
 -- f :: a -> a
@@ -132,10 +132,9 @@ data BoolAndMaybeSomethingElse a
   | Truish a
 
 -- 4) ✅ yes, kind = (* -> *) -> *, but given * will be: * -> *
-newtype Mu f
-  = InF
-      { outF :: f (Mu f)
-      }
+newtype Mu f = InF
+  { outF :: f (Mu f)
+  }
 
 -- 5) 🚫 Cannot be a Functor, kind = *
 data D

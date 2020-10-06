@@ -1,6 +1,6 @@
 module Chapter17 where
 
-import Control.Applicative
+import Control.Applicative (liftA3)
 import Data.List (elemIndex)
 
 f :: (Eq a, Num a) => a -> Maybe String
@@ -77,10 +77,9 @@ instance Applicative Identity where
   Identity f <*> Identity x = Identity (f x)
 
 -- Constant Instance
-newtype Constant a b
-  = Constant
-      { getConstant :: a
-      }
+newtype Constant a b = Constant
+  { getConstant :: a
+  }
   deriving (Eq, Ord, Show)
 
 instance Functor (Constant a) where

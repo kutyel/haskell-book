@@ -7,10 +7,10 @@
 module Lenses where
 
 import Data.Function ((&))
-import Data.Functor.Const
-import Data.Functor.Identity
+import Data.Functor.Const (Const (Const, getConst))
+import Data.Functor.Identity (Identity (Identity, runIdentity))
 import Data.Generics.Product.Fields (field)
-import GHC.Generics
+import GHC.Generics (Generic)
 
 type Lens' s a = forall f. Functor f => (a -> f a) -> s -> f s
 
@@ -40,22 +40,20 @@ over :: Lens' s a -> (a -> a) -> s -> s
 over l f = set l <$> f . view l <*> id
 
 -- Usage
-data Haskeller
-  = Haskeller
-      { name :: String,
-        experience :: Int,
-        knowledge :: Knowledge
-      }
+data Haskeller = Haskeller
+  { name :: String,
+    experience :: Int,
+    knowledge :: Knowledge
+  }
   deriving (Generic, Show)
 
-data Knowledge
-  = Knowledge
-      { syntax :: Bool,
-        monads :: Bool,
-        lenses :: Bool,
-        typeLevel :: Bool,
-        nix :: Bool
-      }
+data Knowledge = Knowledge
+  { syntax :: Bool,
+    monads :: Bool,
+    lenses :: Bool,
+    typeLevel :: Bool,
+    nix :: Bool
+  }
   deriving (Generic, Show)
 
 me :: Haskeller

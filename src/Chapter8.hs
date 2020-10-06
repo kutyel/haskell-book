@@ -2,7 +2,7 @@ module Chapter8 where
 
 -- Intermission
 applyTimes :: (Eq a, Num a) => a -> (b -> b) -> b -> b
-applyTimes 0 f b = b
+applyTimes 0 _ b = b
 applyTimes n f b = (f . applyTimes (n - 1) f) b
 
 -- applyTimes 5 (+1) 5 <- start!

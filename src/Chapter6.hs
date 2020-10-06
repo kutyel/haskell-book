@@ -135,5 +135,6 @@ mySort = sort
 
 signifier :: String -> Char
 signifier xs = head (mySort xs)
+
 -- b) [signifier :: Ord a => [a] -> a] <- does not work!
 -- (`mySort` is more specific than `sort`!)

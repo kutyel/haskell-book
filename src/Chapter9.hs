@@ -1,7 +1,7 @@
 module Chapter9 where
 
 import Data.Bool (bool)
-import Data.Char
+import Data.Char (isUpper, toUpper)
 
 {-# ANN module "HLint: ignore" #-}
 

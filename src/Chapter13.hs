@@ -1,21 +1,14 @@
 module Chapter13 where
 
 import Control.Applicative (liftA2)
-import qualified Control.Concurrent as CC
-import qualified Control.Concurrent.MVar as MV
-import Control.Exception (mask, try)
-import Control.Monad (forever, when)
-import Data.Bits
+import Control.Monad (forever)
 import Data.Char (toLower)
-import Data.List.Split (chunksOf)
-import qualified Data.Time.Clock.POSIX as PSX
 import System.Exit (exitSuccess)
 import System.IO
   ( BufferMode (NoBuffering),
     hSetBuffering,
     stdout,
   )
-import System.IO.Unsafe (unsafePerformIO)
 
 -- 1) forever, when
 -- 2) Data.Bits, Database.Blacktip.Types
@@ -69,9 +62,9 @@ mkPerson name age
   | name == "" = Left NameEmpty
   | age <= 0 = Left AgeTooLow
   | otherwise =
-    Left
-      $ PersonInvalidUnknown
-      $ "Name was: " ++ show name ++ " Age was: " ++ show age
+    Left $
+      PersonInvalidUnknown $
+        "Name was: " ++ show name ++ " Age was: " ++ show age
 
 gimmePerson :: IO ()
 gimmePerson = do

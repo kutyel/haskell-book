@@ -2,8 +2,6 @@
 
 module Chapter15 where
 
-import Data.Monoid
-
 {-# ANN module "HLint: ignore" #-}
 
 -- Trivial
@@ -88,10 +86,9 @@ instance Semigroup (Or a b) where
       (Snd x, Snd _) -> Snd x
 
 -- First'
-newtype First' a
-  = First'
-      { getFirst' :: Optional a
-      }
+newtype First' a = First'
+  { getFirst' :: Optional a
+  }
   deriving (Eq, Show)
 
 instance Semigroup (First' a) where
@@ -173,10 +170,9 @@ instance Monoid BoolDisj where
   mempty = BoolDisj False
 
 -- Combine
-newtype Combine a b
-  = Combine
-      { unCombine :: a -> b
-      }
+newtype Combine a b = Combine
+  { unCombine :: a -> b
+  }
 
 instance Show (Combine a b) where
   show _ = "Combine"
@@ -188,10 +184,9 @@ instance Monoid b => Monoid (Combine a b) where
   mempty = Combine mempty
 
 -- Comp
-newtype Comp a
-  = Comp
-      { unComp :: a -> a
-      }
+newtype Comp a = Comp
+  { unComp :: a -> a
+  }
 
 instance Show (Comp a) where
   show _ = "Comp"
@@ -217,10 +212,9 @@ instance Semigroup a => Semigroup (Validation a b) where
       (Failure x, Failure y) -> Failure (x <> y)
 
 -- Mem
-newtype Mem s a
-  = Mem
-      { runMem :: s -> (a, s)
-      }
+newtype Mem s a = Mem
+  { runMem :: s -> (a, s)
+  }
 
 instance Semigroup a => Semigroup (Mem s a) where
   Mem f <> Mem g =

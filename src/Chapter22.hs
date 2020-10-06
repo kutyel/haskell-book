@@ -3,13 +3,12 @@
 module Chapter22 where
 
 import Control.Monad (join)
-import Data.Char
+import Data.Char (toUpper)
 import Data.Maybe (fromMaybe)
 
-newtype Reader r a
-  = Reader
-      { runReader :: r -> a
-      }
+newtype Reader r a = Reader
+  { runReader :: r -> a
+  }
 
 -- warming up!
 cap :: String -> String
@@ -79,18 +78,16 @@ newtype Address
   = Address String
   deriving (Eq, Show)
 
-data Person
-  = Person
-      { humanName :: HumanName,
-        dogName :: DogName,
-        address :: Address
-      }
+data Person = Person
+  { humanName :: HumanName,
+    dogName :: DogName,
+    address :: Address
+  }
 
-data Dog
-  = Dog
-      { dogsName :: DogName,
-        dogsAddress :: Address
-      }
+data Dog = Dog
+  { dogsName :: DogName,
+    dogsAddress :: Address
+  }
 
 getDogRM :: Reader Person Dog
 getDogRM = Reader (Dog <$> dogName <*> address)
