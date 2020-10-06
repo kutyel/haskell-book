@@ -45,6 +45,7 @@ add :: (?x :: Int) => Int
 add = trace "add" 1 + ?x
 
 -- * Chapter27 Data.List Debug.Trace> let ?x = 2 in add
+
 -- add
 -- 3
 
@@ -58,12 +59,14 @@ strictPattern :: (a, b) -> String
 strictPattern (a, b) = const "Cousing It" a
 
 -- * Chapter27 Data.List Debug.Trace> strictPattern undefined
+
 -- "*** Exception: Prelude.undefined
 
 lazyPattern :: (a, b) -> String
 lazyPattern ~(a, b) = const "Cousing It" a
 
 -- * Chapter27 Data.List Debug.Trace> lazyPattern undefined
+
 -- "Cousing It"
 
 -- Bang patterns
