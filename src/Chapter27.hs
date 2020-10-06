@@ -3,7 +3,7 @@
 
 module Chapter27 where
 
-import Debug.Trace
+import Debug.Trace (trace)
 
 {-# ANN module "HLint: ignore" #-}
 
@@ -56,14 +56,14 @@ forever a = let a' = a >> a' in a'
 -- Lazy patterns
 
 strictPattern :: (a, b) -> String
-strictPattern (a, b) = const "Cousing It" a
+strictPattern (a) = const "Cousing It" a
 
 -- * Chapter27 Data.List Debug.Trace> strictPattern undefined
 
 -- "*** Exception: Prelude.undefined
 
 lazyPattern :: (a, b) -> String
-lazyPattern ~(a, b) = const "Cousing It" a
+lazyPattern ~(a) = const "Cousing It" a
 
 -- * Chapter27 Data.List Debug.Trace> lazyPattern undefined
 
@@ -72,7 +72,7 @@ lazyPattern ~(a, b) = const "Cousing It" a
 -- Bang patterns
 
 banging :: Bool -> Int
-banging !b = 1 -- `b` always gets evaluated! (like with `seq`)
+banging !_ = 1 -- `b` always gets evaluated! (like with `seq`)
 
 -- Chapter exercises
 

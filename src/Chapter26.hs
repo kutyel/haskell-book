@@ -3,12 +3,11 @@ module Chapter26 where
 import Control.Applicative (Alternative (..))
 import Control.Arrow (first)
 import Control.Monad (guard)
-import Data.Functor.Identity
+import Data.Functor.Identity (Identity (Identity))
 
-newtype MaybeT m a
-  = MaybeT
-      { runMaybeT :: m (Maybe a)
-      }
+newtype MaybeT m a = MaybeT
+  { runMaybeT :: m (Maybe a)
+  }
 
 instance (Functor f) => Functor (MaybeT f) where
   fmap f (MaybeT fma) = MaybeT $ (fmap . fmap) f fma
@@ -28,10 +27,9 @@ instance Monad m => Monad (MaybeT m) where
       Just x -> runMaybeT (f x)
 
 -- exercises: EitherT
-newtype EitherT e m a
-  = EitherT
-      { runEitherT :: m (Either e a)
-      }
+newtype EitherT e m a = EitherT
+  { runEitherT :: m (Either e a)
+  }
 
 -- 1)
 instance (Functor m) => Functor (EitherT e m) where
@@ -70,10 +68,9 @@ eitherT f g (EitherT me) = do
     Right a -> g a
 
 -- ReaderT
-newtype ReaderT r m a
-  = ReaderT
-      { runReaderT :: r -> m a
-      }
+newtype ReaderT r m a = ReaderT
+  { runReaderT :: r -> m a
+  }
 
 instance (Functor m) => Functor (ReaderT r m) where
   fmap f (ReaderT rma) = ReaderT $ (fmap . fmap) f rma
@@ -91,10 +88,9 @@ instance (Monad m) => Monad (ReaderT r m) where
     runReaderT (f a) r
 
 -- exercises: StateT
-newtype StateT s m a
-  = StateT
-      { runStateT :: s -> m (a, s)
-      }
+newtype StateT s m a = StateT
+  { runStateT :: s -> m (a, s)
+  }
 
 -- 1)
 instance (Functor m) => Functor (StateT s m) where

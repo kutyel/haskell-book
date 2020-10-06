@@ -3,7 +3,7 @@
 module Chapter30 where
 
 import Control.Exception (ArithException (..), AsyncException (..))
-import Data.Typeable
+import Data.Typeable (Typeable, cast)
 
 data MyException where
   MyException :: (Show e, Typeable e) => e -> MyException

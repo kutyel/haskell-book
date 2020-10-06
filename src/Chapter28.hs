@@ -2,7 +2,7 @@ module Chapter28 where
 
 -- Basic libraries
 
-import Criterion.Main
+import Criterion.Main (bench, defaultMain, nf, whnf)
 import qualified Data.Map as M
 import qualified Data.Sequence as SQ
 import qualified Data.Set as S
@@ -101,10 +101,9 @@ v = V.fromList myList
 -- Chapter exercises
 
 -- DList!
-newtype DList a
-  = DL
-      { unDL :: [a] -> [a]
-      }
+newtype DList a = DL
+  { unDL :: [a] -> [a]
+  }
 
 empty :: DList a
 empty = DL id
@@ -147,11 +146,10 @@ constructDlist i = toList $ go i empty
     go n xs = go (n - 1) (singleton n `append` xs)
 
 -- Queue!
-data Queue a
-  = Queue
-      { enqueue :: [a],
-        dequeue :: [a]
-      }
+data Queue a = Queue
+  { enqueue :: [a],
+    dequeue :: [a]
+  }
   deriving (Eq, Show)
 
 newQ :: Queue a

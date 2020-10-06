@@ -1,7 +1,7 @@
 module Chapter29 where
 
 import Data.Char (chr, isUpper, ord)
-import System.IO
+import System.IO (BufferMode (NoBuffering), hSetBuffering, stdout)
 
 offset :: Char -> Int
 offset x = ord $ if isUpper x then 'A' else 'a'
