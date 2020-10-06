@@ -10,4 +10,7 @@ pkgs.stdenv.mkDerivation {
   buildInputs = main.project.env.nativeBuildInputs ++ [
     haskellPackages.cabal-install
   ];
+  shellHook = ''
+    ${(import ./default.nix).pre-commit-check.shellHook}
+  '';
 }
