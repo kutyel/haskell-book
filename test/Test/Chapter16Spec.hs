@@ -183,72 +183,72 @@ spec =
     it "c 1 should be -2" $ c 1 `shouldBe` -2
     it "d 0 should be 1[0,1,2,3]" $ d 0 `shouldBe` "1[0,1,2,3]"
     it "e should be 3693" $ e `shouldReturn` 3693
-    it "Two -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: Two String Types)
-    it "Or -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: Or String Types)
-    it "Identity -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: Identity Types)
-    it "Pair -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: Pair Types)
-    it "Three -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: Three String Int Types)
-    it "Three' -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: Three' Int Types)
-    it "Four -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: Four String Int Int Types)
-    it "Four' -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: Four' Int Types)
-    it "More -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: More Int Types)
-    it "Quant -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: Quant Int Types)
-    it "K -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: K Int Types)
-    it "Flip -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: Flip K Int Types)
-    it "EvilGoateeConst -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: EvilGoateeConst Int Types)
-    it "LiftItOut -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: LiftItOut Identity Types)
-    it "Parappa -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: Parappa Identity Identity Types)
-    it "IgnoreOne -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: IgnoreOne Identity Identity Int Types)
-    it "Notorious -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: Notorious Identity Int Int Types)
-    it "List -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: List Types)
-    it "GoatLord -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: GoatLord Types)
-    it "Possibly -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: Possibly Types)
-    it "Sum -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: Sum Int Types)
-    it "Sum' -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: Sum' Int Types)
-    it "Company -> functor laws should hold!"
-      $ quickBatch
-      $ functor (undefined :: Company Int Int Types)
+    it "Two -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: Two String Types)
+    it "Or -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: Or String Types)
+    it "Identity -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: Identity Types)
+    it "Pair -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: Pair Types)
+    it "Three -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: Three String Int Types)
+    it "Three' -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: Three' Int Types)
+    it "Four -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: Four String Int Int Types)
+    it "Four' -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: Four' Int Types)
+    it "More -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: More Int Types)
+    it "Quant -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: Quant Int Types)
+    it "K -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: K Int Types)
+    it "Flip -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: Flip K Int Types)
+    it "EvilGoateeConst -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: EvilGoateeConst Int Types)
+    it "LiftItOut -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: LiftItOut Identity Types)
+    it "Parappa -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: Parappa Identity Identity Types)
+    it "IgnoreOne -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: IgnoreOne Identity Identity Int Types)
+    it "Notorious -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: Notorious Identity Int Int Types)
+    it "List -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: List Types)
+    it "GoatLord -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: GoatLord Types)
+    it "Possibly -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: Possibly Types)
+    it "Sum -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: Sum Int Types)
+    it "Sum' -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: Sum' Int Types)
+    it "Company -> functor laws should hold!" $
+      quickBatch $
+        functor (undefined :: Company Int Int Types)

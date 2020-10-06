@@ -136,39 +136,39 @@ spec =
       property (prop_apList (+ 1) :: [Int] -> Bool)
     it "specialized ap methods for tuples should work" $
       property (prop_apTuple ("", (+ 1)) :: (String, Int) -> Bool)
-    it "Identity -> applicative laws should hold!"
-      $ quickBatch
-      $ applicative (undefined :: Identity Types)
-    it "Constant -> applicative laws should hold!"
-      $ quickBatch
-      $ applicative (undefined :: Constant String Types)
-    it "Option -> applicative laws should hold!"
-      $ quickBatch
-      $ applicative (undefined :: Option Types)
-    it "List -> applicative laws should hold!"
-      $ quickBatch
-      $ applicative (undefined :: List Types)
-    it "ZipList' -> applicative laws should hold!"
-      $ quickBatch
-      $ applicative (undefined :: ZipList' Types)
-    it "Validation -> applicative laws should hold!"
-      $ quickBatch
-      $ applicative (undefined :: Validation String Types)
-    it "Pair -> applicative laws should hold!"
-      $ quickBatch
-      $ applicative (undefined :: Pair Types)
-    it "Two -> applicative laws should hold!"
-      $ quickBatch
-      $ applicative (undefined :: Two String Types)
-    it "Three -> applicative laws should hold!"
-      $ quickBatch
-      $ applicative (undefined :: Three String String Types)
-    it "Three' -> applicative laws should hold!"
-      $ quickBatch
-      $ applicative (undefined :: Three' String Types)
-    it "Four -> applicative laws should hold!"
-      $ quickBatch
-      $ applicative (undefined :: Four String String String Types)
-    it "Four' -> applicative laws should hold!"
-      $ quickBatch
-      $ applicative (undefined :: Four' String Types)
+    it "Identity -> applicative laws should hold!" $
+      quickBatch $
+        applicative (undefined :: Identity Types)
+    it "Constant -> applicative laws should hold!" $
+      quickBatch $
+        applicative (undefined :: Constant String Types)
+    it "Option -> applicative laws should hold!" $
+      quickBatch $
+        applicative (undefined :: Option Types)
+    it "List -> applicative laws should hold!" $
+      quickBatch $
+        applicative (undefined :: List Types)
+    it "ZipList' -> applicative laws should hold!" $
+      quickBatch $
+        applicative (undefined :: ZipList' Types)
+    it "Validation -> applicative laws should hold!" $
+      quickBatch $
+        applicative (undefined :: Validation String Types)
+    it "Pair -> applicative laws should hold!" $
+      quickBatch $
+        applicative (undefined :: Pair Types)
+    it "Two -> applicative laws should hold!" $
+      quickBatch $
+        applicative (undefined :: Two String Types)
+    it "Three -> applicative laws should hold!" $
+      quickBatch $
+        applicative (undefined :: Three String String Types)
+    it "Three' -> applicative laws should hold!" $
+      quickBatch $
+        applicative (undefined :: Three' String Types)
+    it "Four -> applicative laws should hold!" $
+      quickBatch $
+        applicative (undefined :: Four String String String Types)
+    it "Four' -> applicative laws should hold!" $
+      quickBatch $
+        applicative (undefined :: Four' String Types)

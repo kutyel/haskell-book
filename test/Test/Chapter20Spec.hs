@@ -76,18 +76,18 @@ spec =
       property (prop_eq_fn F.fold fold :: [String] -> Bool)
     it "custom foldMap should work like the one in Prelude" $
       property (prop_eq_fn (foldMap Sum) (foldMap' Sum) :: [Int] -> Bool)
-    it "Constant -> all foldable functions should be derivable"
-      $ quickBatch
-      $ foldable (undefined :: Constant String Types)
-    it "Two -> all foldable functions should be derivable"
-      $ quickBatch
-      $ foldable (undefined :: Two String Types)
-    it "Three -> all foldable functions should be derivable"
-      $ quickBatch
-      $ foldable (undefined :: Three String String Types)
-    it "Three' -> all foldable functions should be derivable"
-      $ quickBatch
-      $ foldable (undefined :: Three' String Types)
-    it "Four' -> all foldable functions should be derivable"
-      $ quickBatch
-      $ foldable (undefined :: Four' String Types)
+    it "Constant -> all foldable functions should be derivable" $
+      quickBatch $
+        foldable (undefined :: Constant String Types)
+    it "Two -> all foldable functions should be derivable" $
+      quickBatch $
+        foldable (undefined :: Two String Types)
+    it "Three -> all foldable functions should be derivable" $
+      quickBatch $
+        foldable (undefined :: Three String String Types)
+    it "Three' -> all foldable functions should be derivable" $
+      quickBatch $
+        foldable (undefined :: Three' String Types)
+    it "Four' -> all foldable functions should be derivable" $
+      quickBatch $
+        foldable (undefined :: Four' String Types)

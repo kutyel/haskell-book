@@ -97,59 +97,59 @@ type CompStr = Comp String
 -- Tests
 spec :: Spec
 spec = do
-  describe "Chapter 15 exercises"
-    $ it "madlibbin should work"
-    $ madlibbin "damn" "quickly" "Jim" "beautiful"
-      `shouldBe` "damn! he said quickly as he jumped into his car Jim and drove off with his beautiful wife."
+  describe "Chapter 15 exercises" $
+    it "madlibbin should work" $
+      madlibbin "damn" "quickly" "Jim" "beautiful"
+        `shouldBe` "damn! he said quickly as he jumped into his car Jim and drove off with his beautiful wife."
   describe "Semigroups" $ do
-    describe "Trivial"
-      $ it "semigroup associativity should work"
-      $ property (semigroupAssoc :: Trivial -> Trivial -> Trivial -> Bool)
-    describe "Identity"
-      $ it "semigroup associativity should work"
-      $ property (semigroupAssoc :: IdentStr -> IdentStr -> IdentStr -> Bool)
-    describe "Two"
-      $ it "semigroup associativity should work"
-      $ property (semigroupAssoc :: TwoStr -> TwoStr -> TwoStr -> Bool)
-    describe "Three"
-      $ it "semigroup associativity should work"
-      $ property (semigroupAssoc :: ThreeStr -> ThreeStr -> ThreeStr -> Bool)
-    describe "Four"
-      $ it "semigroup associativity should work"
-      $ property (semigroupAssoc :: FourStr -> FourStr -> FourStr -> Bool)
-    describe "BoolConj"
-      $ it "semigroup associativity should work"
-      $ property (semigroupAssoc :: BoolConj -> BoolConj -> BoolConj -> Bool)
-    describe "BoolDisj"
-      $ it "semigroup associativity should work"
-      $ property (semigroupAssoc :: BoolDisj -> BoolDisj -> BoolDisj -> Bool)
-    describe "Combine"
-      $ it "semigroup associativity should work"
-      $ property
-        (fAssoc unCombine :: String -> CombStr -> CombStr -> CombStr -> Bool)
-    describe "Comp"
-      $ it "semigroup associativity should work"
-      $ property
-        (fAssoc unComp :: String -> CompStr -> CompStr -> CompStr -> Bool)
-    describe "Or"
-      $ it "semigroup associativity should work"
-      $ property (semigroupAssoc :: StrOrStr -> StrOrStr -> StrOrStr -> Bool)
-    describe "Optional"
-      $ it "semigroup associativity should work"
-      $ property (semigroupAssoc :: OprtStr -> OprtStr -> OprtStr -> Bool)
-    describe "Validation"
-      $ it "semigroup associativity should work"
-      $ property (semigroupAssoc :: ValidStr -> ValidStr -> ValidStr -> Bool)
+    describe "Trivial" $
+      it "semigroup associativity should work" $
+        property (semigroupAssoc :: Trivial -> Trivial -> Trivial -> Bool)
+    describe "Identity" $
+      it "semigroup associativity should work" $
+        property (semigroupAssoc :: IdentStr -> IdentStr -> IdentStr -> Bool)
+    describe "Two" $
+      it "semigroup associativity should work" $
+        property (semigroupAssoc :: TwoStr -> TwoStr -> TwoStr -> Bool)
+    describe "Three" $
+      it "semigroup associativity should work" $
+        property (semigroupAssoc :: ThreeStr -> ThreeStr -> ThreeStr -> Bool)
+    describe "Four" $
+      it "semigroup associativity should work" $
+        property (semigroupAssoc :: FourStr -> FourStr -> FourStr -> Bool)
+    describe "BoolConj" $
+      it "semigroup associativity should work" $
+        property (semigroupAssoc :: BoolConj -> BoolConj -> BoolConj -> Bool)
+    describe "BoolDisj" $
+      it "semigroup associativity should work" $
+        property (semigroupAssoc :: BoolDisj -> BoolDisj -> BoolDisj -> Bool)
+    describe "Combine" $
+      it "semigroup associativity should work" $
+        property
+          (fAssoc unCombine :: String -> CombStr -> CombStr -> CombStr -> Bool)
+    describe "Comp" $
+      it "semigroup associativity should work" $
+        property
+          (fAssoc unComp :: String -> CompStr -> CompStr -> CompStr -> Bool)
+    describe "Or" $
+      it "semigroup associativity should work" $
+        property (semigroupAssoc :: StrOrStr -> StrOrStr -> StrOrStr -> Bool)
+    describe "Optional" $
+      it "semigroup associativity should work" $
+        property (semigroupAssoc :: OprtStr -> OprtStr -> OprtStr -> Bool)
+    describe "Validation" $
+      it "semigroup associativity should work" $
+        property (semigroupAssoc :: ValidStr -> ValidStr -> ValidStr -> Bool)
   describe "Monoids" $ do
     describe "Bull" $ do
       it "monoid associativity should work" $
         property (semigroupAssoc :: Bull -> Bull -> Bull -> Bool)
-      it "monoid left identity should fail"
-        $ expectFailure
-        $ property (monoidLeftIdentity :: Bull -> Bool)
-      it "monoid right identity should fail"
-        $ expectFailure
-        $ property (monoidRightIdentity :: Bull -> Bool)
+      it "monoid left identity should fail" $
+        expectFailure $
+          property (monoidLeftIdentity :: Bull -> Bool)
+      it "monoid right identity should fail" $
+        expectFailure $
+          property (monoidRightIdentity :: Bull -> Bool)
     describe "First'" $ do
       it "monoid associativity should work" $
         property (semigroupAssoc :: FirstStr -> FirstStr -> FirstStr -> Bool)

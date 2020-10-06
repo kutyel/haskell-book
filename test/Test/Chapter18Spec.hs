@@ -2,7 +2,7 @@ module Test.Chapter18Spec where
 
 import Chapter17 (pureList)
 import Chapter18
-import Control.Applicative ((<**>), liftA2, liftA3)
+import Control.Applicative (liftA2, liftA3, (<**>))
 import Control.Monad (join, liftM2)
 import Data.Traversable (for)
 import Test.Hspec

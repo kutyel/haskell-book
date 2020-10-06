@@ -87,33 +87,33 @@ instance Eq a => EqProp (Tree a) where
 spec :: Spec
 spec =
   describe "Chapter 20:" $ do
-    it "Identity -> should be traversable"
-      $ quickBatch
-      $ traversable (undefined :: Identity Types)
-    it "Constant -> should be traversable"
-      $ quickBatch
-      $ traversable (undefined :: Constant String Types)
-    it "Optional -> should be traversable"
-      $ quickBatch
-      $ traversable (undefined :: Optional Types)
-    it "List -> should be traversable"
-      $ quickBatch
-      $ traversable (undefined :: List Types)
-    it "Three -> should be traversable"
-      $ quickBatch
-      $ traversable (undefined :: Three Int Bool Types)
-    it "Pair -> should be traversable"
-      $ quickBatch
-      $ traversable (undefined :: Pair Int Types)
-    it "Big -> should be traversable"
-      $ quickBatch
-      $ traversable (undefined :: Big Int Types)
-    it "Bigger -> should be traversable"
-      $ quickBatch
-      $ traversable (undefined :: Bigger Int Types)
-    it "S -> should be traversable"
-      $ quickBatch
-      $ traversable (undefined :: S [] Types)
-    it "Tree -> should be traversable"
-      $ quickBatch
-      $ traversable (undefined :: Tree Types)
+    it "Identity -> should be traversable" $
+      quickBatch $
+        traversable (undefined :: Identity Types)
+    it "Constant -> should be traversable" $
+      quickBatch $
+        traversable (undefined :: Constant String Types)
+    it "Optional -> should be traversable" $
+      quickBatch $
+        traversable (undefined :: Optional Types)
+    it "List -> should be traversable" $
+      quickBatch $
+        traversable (undefined :: List Types)
+    it "Three -> should be traversable" $
+      quickBatch $
+        traversable (undefined :: Three Int Bool Types)
+    it "Pair -> should be traversable" $
+      quickBatch $
+        traversable (undefined :: Pair Int Types)
+    it "Big -> should be traversable" $
+      quickBatch $
+        traversable (undefined :: Big Int Types)
+    it "Bigger -> should be traversable" $
+      quickBatch $
+        traversable (undefined :: Bigger Int Types)
+    it "S -> should be traversable" $
+      quickBatch $
+        traversable (undefined :: S [] Types)
+    it "Tree -> should be traversable" $
+      quickBatch $
+        traversable (undefined :: Tree Types)
