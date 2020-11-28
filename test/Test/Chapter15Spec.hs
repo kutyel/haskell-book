@@ -1,7 +1,6 @@
 module Test.Chapter15Spec where
 
 import Chapter15
-import Data.Monoid
 import Test.Hspec
 import Test.QuickCheck hiding (Failure, Success)
 

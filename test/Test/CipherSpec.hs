@@ -1,8 +1,16 @@
 module Test.CipherSpec where
 
-import Cipher
-import Test.Hspec
+import Cipher (fromCaesar, fromVigenere, toCaesar, toVigenere)
+import Test.Hspec (Spec, describe, it)
 import Test.QuickCheck
+  ( Gen,
+    Property,
+    Testable (property),
+    elements,
+    forAll,
+    listOf,
+    listOf1,
+  )
 
 charGen :: Gen Char
 charGen = elements ['a' .. 'z']

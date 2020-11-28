@@ -3,10 +3,10 @@ module Test.Chapter17Spec where
 import Chapter17
 import Control.Applicative (liftA2)
 import Data.Maybe (catMaybes)
-import Test.Hspec
-import Test.QuickCheck hiding (Failure, Success)
-import Test.QuickCheck.Checkers
-import Test.QuickCheck.Classes
+import Test.Hspec (Spec, describe, it, shouldBe)
+import Test.QuickCheck (Arbitrary (arbitrary), Testable (property), frequency, oneof)
+import Test.QuickCheck.Checkers (EqProp (..), eq, quickBatch)
+import Test.QuickCheck.Classes (applicative)
 
 type Types = (Int, Bool, Double) -- this will be used to generate random values!
 

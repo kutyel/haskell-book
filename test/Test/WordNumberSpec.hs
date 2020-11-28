@@ -1,6 +1,6 @@
 module Test.WordNumberSpec where
 
-import Test.Hspec
+import Test.Hspec (Spec, describe, it, shouldBe, shouldReturn)
 import WordNumber (digitToWord, digits, main, wordNumber)
 
 spec :: Spec

@@ -5,10 +5,10 @@ import Control.Applicative (liftA2)
 import qualified Data.Foldable as F
 import Data.Maybe (fromMaybe)
 import Data.Monoid (Sum (..))
-import Test.Hspec
-import Test.QuickCheck
-import Test.QuickCheck.Checkers
-import Test.QuickCheck.Classes
+import Test.Hspec (Spec, describe, it)
+import Test.QuickCheck (Arbitrary (arbitrary), Testable (property))
+import Test.QuickCheck.Checkers (EqProp (..), eq, quickBatch)
+import Test.QuickCheck.Classes (foldable)
 
 type Types = (Int, Bool, String, Int, Bool)
 

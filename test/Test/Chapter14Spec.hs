@@ -2,8 +2,16 @@ module Test.Chapter14Spec where
 
 import Chapter14
 import Data.List (sort)
-import Test.Hspec
+import Test.Hspec (Spec, describe, it)
 import Test.QuickCheck
+  ( Gen,
+    NonZero (NonZero),
+    Positive (Positive),
+    Testable (property),
+    elements,
+    expectFailure,
+    frequency,
+  )
 
 genFoolEqual :: Gen Fool
 genFoolEqual = elements [Fulse, Frue]

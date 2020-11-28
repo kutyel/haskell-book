@@ -1,11 +1,7 @@
 module Chapter20 where
 
 import Control.Conditional (select)
-import Data.Monoid
-  ( Any (Any, getAny),
-    Product (Product, getProduct),
-    Sum (Sum, getSum),
-  )
+import Data.Monoid (Any (Any, getAny), Product (Product, getProduct), Sum (Sum, getSum))
 
 -- :t foldr :: Foldable t => (a -> b -> b) -> b -> t a -> b
 -- :t foldMap :: (Foldable t, Monoid m) => (a -> m) -> t a -> m

@@ -1,14 +1,9 @@
 module Chapter13 where
 
-import Control.Applicative (liftA2)
 import Control.Monad (forever)
 import Data.Char (toLower)
 import System.Exit (exitSuccess)
-import System.IO
-  ( BufferMode (NoBuffering),
-    hSetBuffering,
-    stdout,
-  )
+import System.IO (BufferMode (NoBuffering), hSetBuffering, stdout)
 
 -- 1) forever, when
 -- 2) Data.Bits, Database.Blacktip.Types
@@ -31,7 +26,7 @@ import System.IO
 -- c) Control.Monad
 -- Modifying code
 isPalindrome :: String -> Bool
-isPalindrome = liftA2 (==) reverse id . filter (`notElem` "' ") . map toLower
+isPalindrome = ((==) <*> reverse) . map toLower
 
 palindrome :: IO ()
 palindrome =

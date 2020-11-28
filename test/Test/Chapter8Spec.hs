@@ -1,8 +1,8 @@
 module Test.Chapter8Spec where
 
 import Chapter8 (dividedBy, mult)
-import Test.Hspec
-import Test.QuickCheck
+import Test.Hspec (Spec, describe, it, shouldBe)
+import Test.QuickCheck (Testable (property))
 
 spec :: Spec
 spec =

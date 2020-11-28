@@ -3,10 +3,10 @@
 module Test.Chapter16Spec where
 
 import Chapter16
-import Test.Hspec
-import Test.QuickCheck
-import Test.QuickCheck.Checkers
-import Test.QuickCheck.Classes
+import Test.Hspec (Spec, describe, it, shouldBe, shouldReturn)
+import Test.QuickCheck (Arbitrary (arbitrary), frequency, oneof)
+import Test.QuickCheck.Checkers (EqProp (..), eq, quickBatch)
+import Test.QuickCheck.Classes (functor)
 
 type Types = (Int, Bool, Double)
 
