@@ -1,0 +1,6 @@
+cradle:
+  stack:
+    - path: "./src"
+      component: "haskell-book:lib"
+    - path: "./test"
+      component: "haskell-book:test:haskell-book-test"

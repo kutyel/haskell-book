@@ -2,13 +2,13 @@ module Test.Chapter18Spec where
 
 import Chapter17 (pureList)
 import Chapter18
-import Control.Applicative (liftA2, liftA3, (<**>))
+import Control.Applicative (liftA2, (<**>))
 import Control.Monad (join, liftM2)
 import Data.Traversable (for)
-import Test.Hspec
-import Test.QuickCheck
-import Test.QuickCheck.Checkers
-import Test.QuickCheck.Classes hiding (bind)
+import Test.Hspec (Spec, describe, it, shouldBe)
+import Test.QuickCheck (Arbitrary (arbitrary), Testable (property), frequency, oneof)
+import Test.QuickCheck.Checkers (EqProp (..), eq, quickBatch)
+import Test.QuickCheck.Classes (applicative, monad)
 
 type Types = (Int, Bool, Double) -- this will be used to generate random values!
 
