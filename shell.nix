@@ -11,6 +11,7 @@ pkgs.stdenv.mkDerivation {
     haskellPackages.cabal-install
   ];
   shellHook = ''
-    ${(import ./default.nix).pre-commit-check.shellHook}
+    ${main.pre-commit-check.shellHook}
+    ${main.hpc-coveralls} --repo-token=ny8sIrhwenvlvccqT6BKmzE0KZEtqKuZh haskell-book-test
   '';
 }

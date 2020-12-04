@@ -4,3 +4,4 @@ dist
 dist-newstyle
 .pre-commit-config.yaml
 result*
+.DS_Store
