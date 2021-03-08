@@ -13,9 +13,8 @@ jobs:
           name: kutyel
           signingKey: "${{ secrets.CACHIX_SIGNING_KEY }}"
       - run: nix-build
-      - name: Setup stack
-        uses: mstksg/setup-stack@v2
-      - name: Send coverage
+      - name: Setup stack & Send coverage
+        use: mstksg/setup-stack@v2
         run: |
           stack install stack-hpc-coveralls
           shc haskell-book haskell-book-test
