@@ -13,11 +13,8 @@ jobs:
           name: kutyel
           signingKey: "${{ secrets.CACHIX_SIGNING_KEY }}"
       - run: nix-build
-      - uses: actions/setup-haskell@v1.1
-        with:
-          ghc-version: "8.8.3" # Exact version of ghc to use
-          enable-stack: true
-          stack-version: "latest"
+      - name: Setup stack
+        uses: mstksg/setup-stack@v2
       - name: Send coverage
         run: |
           stack install stack-hpc-coveralls
