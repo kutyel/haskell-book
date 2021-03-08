@@ -14,7 +14,7 @@ jobs:
           signingKey: "${{ secrets.CACHIX_SIGNING_KEY }}"
       - run: nix-build
       - name: Setup stack & Send coverage
-        use: mstksg/setup-stack@v2
+        uses: mstksg/setup-stack@v2
         run: |
           stack install stack-hpc-coveralls
           shc haskell-book haskell-book-test
